@@ -11,6 +11,44 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+/* ----------------------
+                            For everyone
+                                        ---------------------- */
+Route::get('/', 'PageController@index');
+
+
+
+/* ----------------------
+                        Not connected :
+                                        ---------------------- */
+Route::group(['middleware' => 'guest'], function() {
+    Route::post('index', 'LoginController@signIn');
+    Route::post('signup', 'LoginController@signUp');
+});
+
+
+/* ----------------------
+                      connected as a Tenant :
+                                        ---------------------- */
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('logout', 'LoginController@logOut');
+
+});
+
+
+/* ----------------------
+                         connected as a Landlord :
+                                        ---------------------- */
+Route::group(['middleware' => 'landlord'], function() {
+    Route::get('logout', 'LoginController@logOut');
+});
+
+
+/* ----------------------
+                      connected as an Admin :
+                                        ---------------------- */
+
+Route::group(['middleware' => 'admin'], function() {
+    Route::get('logout', 'LoginController@logOut');
 });
