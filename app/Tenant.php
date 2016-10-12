@@ -8,7 +8,7 @@ class Tenant extends Model
 {
     protected $table= 'tenant';
 
-    protected $primaryKey = 'idPerson';
+    protected $primaryKey = 'idTenant';
 
     protected $fillable = [
         'idTenant', 'student', 'account_state', 'about', 'spoken_languages', 'nationality', 'idPerson'

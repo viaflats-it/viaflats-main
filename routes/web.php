@@ -15,7 +15,7 @@
 /* ----------------------
                             For everyone
                                         ---------------------- */
-Route::get('/', 'PageController@index');
+Route::get('index', 'PageController@index');
 
 
 
@@ -23,7 +23,7 @@ Route::get('/', 'PageController@index');
                         Not connected :
                                         ---------------------- */
 Route::group(['middleware' => 'guest'], function() {
-    Route::post('index', 'LoginController@signIn');
+    Route::post('login', 'LoginController@signIn');
     Route::post('signup', 'LoginController@signUp');
 });
 
@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth'], function() {
                          connected as a Landlord :
                                         ---------------------- */
 Route::group(['middleware' => 'landlord'], function() {
-    Route::get('logout', 'LoginController@logOut');
+    Route::get('landlord', 'Pagecontroller@landlord');
 });
 
 
@@ -50,5 +50,5 @@ Route::group(['middleware' => 'landlord'], function() {
                                         ---------------------- */
 
 Route::group(['middleware' => 'admin'], function() {
-    Route::get('logout', 'LoginController@logOut');
+
 });

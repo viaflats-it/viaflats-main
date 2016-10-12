@@ -23,18 +23,14 @@
                             <div class="col-md-4">
 
                                 <div class="form-group">
-                                    {!! Form::open(['url' => 'index']) !!}
+                                    {!! Form::open(['url' => 'login']) !!}
                                     {!! Form::label('login', 'Login') !!}
-                                    {!! Form::text('login', null, ['class' => 'form-control']) !!}
+                                    {!! Form::text('login', null, ['class' => 'form-control ']) !!}
                                     {!! Form::label('password', 'Password') !!}
                                     {!! Form::password('password', ['class' => 'form-control']) !!}
                                     {!! Form::submit('Signin', ['class' => 'btn btn-default']) !!}
                                     {!! Form::close() !!}
-                                    @if(Auth::check())
-                                        <a href="logout">
-                                            <button class="btn btn-danger">Logout</button>
-                                        </a>
-                                    @endif
+
 
                                 </div>
                             </div>

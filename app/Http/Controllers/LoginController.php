@@ -27,7 +27,7 @@ class LoginController extends Controller
         'password'=> \Hash::make(\Input::get('password'))
     ]);
 
-    return \Redirect::to('/');
+    return \Redirect::to('index');
 }
     public function signIn()
     {
@@ -38,17 +38,16 @@ class LoginController extends Controller
         ]);
 
         if ($validator->fails()){
-            return \Redirect::to('/')->withErrors($validator)->withinput();
+            return \Redirect::to('index')->withErrors($validator)->withinput();
         }
 
 
         if(\Auth::attempt(array('login' => \Input::get('login'), 'password' => \Input::get('password')))) {
             $id = \Auth::user()->idPerson;
 
-
             if (!empty(Tenant::where('idPerson', '=' ,$id)->first()))
             {
-                return \Redirect::to('/');
+                return \Redirect::to('index');
             }
             elseif (!empty(Landlord::where('idPerson', '=', $id)))
             {
@@ -61,7 +60,7 @@ class LoginController extends Controller
 //            }
         }
 
-        return \Redirect::to('/');
+        return \Redirect::to('index');
     }
 
 
@@ -80,6 +79,6 @@ class LoginController extends Controller
 
     public function logOut(){
         \Auth::logout();
-        return \Redirect::to('/');
+        return \Redirect::to('index');
     }
 }

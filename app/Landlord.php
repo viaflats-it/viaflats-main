@@ -8,7 +8,7 @@ class Landlord extends Model
 {
     protected $table= 'landlord';
 
-    protected $primaryKey = 'idPerson';
+    protected $primaryKey = 'idLandlord';
 
     protected $fillable = [
         'idLandlord', 'corporate', 'account_state', 'about', 'verified', 'idPerson'

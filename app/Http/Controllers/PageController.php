@@ -11,6 +11,17 @@ class PageController extends Controller
 {
     public function index()
     {
-        return view('index');
+        if (\Auth::check())
+        {
+            $confirmed = false;
+            if (\Auth::user()->confirmed) {
+                $confirmed = true;
+            }
+        }
+        return view('index', compact('confirmed'));
+    }
+
+    public function landlord(){
+        return view('landlord/profil_landlord');
     }
 }
