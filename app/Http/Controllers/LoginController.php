@@ -68,10 +68,14 @@ class LoginController extends Controller
 
     public function signUpFacebook()
     {
+
+        //To change if the used app changes
         $fb = new Facebook\Facebook(['app_id' => '220761998341263',
             'app_secret' => 'ed4cb1999a7d9ff37b4054c7befb282f',
             'default_graph_version' => 'v2.5',]);
         
+        //Get the token after the user clicked on the button
+        //Displays errors
         if(!isset($_SESSION['facebook_access_token']))
         {
           $helper = $fb->getRedirectLoginHelper();
@@ -87,6 +91,7 @@ class LoginController extends Controller
             exit;
         }
 
+        //Put the token into a session variable
         if (isset($accessToken)) {
             // Logged in!
             $_SESSION['facebook_access_token'] = (string) $accessToken;
@@ -95,33 +100,37 @@ class LoginController extends Controller
             // access token from $_SESSION['facebook_access_token']
         }
 
+        //Get user data
         $response = $fb->get('/me?fields=id,first_name, last_name,link,email,age_range', $_SESSION['facebook_access_token']);
         $userNode = $response->getGraphUser();
         $id=$userNode['id'];
-    }
 
-    if(!User::where('login', $userNode['id'])->first())
-    {
-        User::create([
-            'login' => $userNode['id'],
-            'email'=> $userNode['email'],
-            'first_name' => $userNode['first_name'],
-            'last_name' => $userNode['last_name'],
-            ]);
-    }
-    else
-    {
-        $user=User::where('login', $userNode['id'])->first();
-        if($user->email != $userNode['email'])
-            $user->email = $userNode['email'];
-        if($user->first_name != $userNode['first_name'])
-            $user->first_name = $userNode['first_name'];
-        if($user->last_name != $userNode['last_name'])
-            $user->last_name = $userNode['last_name'];
-        $user->save();
+    //Creates the user or modifies it if the user changed his facebook data since the last connection
+        if(!User::where('login', $userNode['id'])->first())
+        {
+            User::create([
+                'login' => $userNode['id'],
+                'email'=> $userNode['email'],
+                'first_name' => $userNode['first_name'],
+                'last_name' => $userNode['last_name'],
+                ]);
+        }
+        else
+        {
+            $user=User::where('login', $userNode['id'])->first();
+            if($user->email != $userNode['email'])
+                $user->email = $userNode['email'];
+            if($user->first_name != $userNode['first_name'])
+                $user->first_name = $userNode['first_name'];
+            if($user->last_name != $userNode['last_name'])
+                $user->last_name = $userNode['last_name'];
+            $user->save();
+
+        }
+        \Auth::attempt(array('login' => $id, 'password' => null));
 
     }
-
+    //Once finished, return to index
     return \Redirect::to('index');
 }
 
@@ -145,6 +154,7 @@ public function logOut(){
 
 public function logOutFb(){
     \Auth::logout();
+    //Destroying the session
     $_SESSION['facebook_access_token'] = null;
     return \Redirect::to('index');
 }
