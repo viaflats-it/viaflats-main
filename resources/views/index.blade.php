@@ -86,7 +86,11 @@
         <div class="row">
             <div class="col-md-2 col-md-push-1">
                 <p>
-                    connexion : {{Auth::user()}}
+                    @if(Auth::check())
+                    connexion :{{Auth::user()->account}}
+                    {{Auth::user()}}
+
+                        @endif
                 </p>
             </div>
         </div>

@@ -47,6 +47,7 @@ class LoginController extends Controller
 
             if (!empty(Tenant::where('idPerson', '=' ,$id)->first()))
             {
+
                 return \Redirect::to('index');
             }
             elseif (!empty(Landlord::where('idPerson', '=', $id)))

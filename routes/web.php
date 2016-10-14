@@ -41,7 +41,23 @@ Route::group(['middleware' => 'auth'], function() {
                          connected as a Landlord :
                                         ---------------------- */
 Route::group(['middleware' => 'landlord'], function() {
-    Route::get('landlord', 'Pagecontroller@landlord');
+    Route::get('landlord', 'LandlordController@showProfile');
+
+    Route::get('profile', 'LandlordController@showProfile');
+    Route::post('profile', 'LandlordController@updateProfile');
+
+    Route::post('landlord_picture', 'LandlordController@updatePicture');
+    Route::post('updatePassword', 'LandlordController@updatePassword');
+    Route::post('updateInformation', 'LandlordController@updateInformation');
+
+    Route::get('add_property', 'LandlordController@showAddProperty');
+    Route::get('my_properties', 'LandlordController@showProperties');
+    Route::get('my_booking', 'LandlordController@showBooking');
+    Route::get('update_availabilities', 'LandlordController@showUpdateAvailabilities');
+    Route::get('invoices', 'LandlordController@showInvoices');
+    Route::get('messages', 'LandlordController@showMessages');
+
+
 });
 
 
