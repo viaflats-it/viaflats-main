@@ -1,7 +1,6 @@
 const elixir = require('laravel-elixir');
 
-require('laravel-elixir-vue-2');
-
+require('laravel-elixir-browsersync');
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -13,6 +12,10 @@ require('laravel-elixir-vue-2');
  |
  */
 
-elixir(mix => {
-    mix.sass('app.scss');
-});
+ elixir(function(mix) {
+   mix.sass('app.scss');
+   mix.browserSync({
+         online: false,
+         proxy : 'localhost:8000'
+   });
+ });

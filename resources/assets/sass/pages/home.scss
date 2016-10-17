@@ -1,0 +1,11 @@
+.home-container{
+  @include flexbox;
+  @include flex-direction(column);
+  .nav-container{
+    padding: 0;
+    margin: 0;
+  }
+  .search-container{
+
+  }
+}
