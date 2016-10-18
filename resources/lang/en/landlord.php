@@ -21,6 +21,8 @@ return [
     'phone' => 'Phone',
     'login' => 'Log in',
     'changePassword' => 'Change password',
+    'password' => 'Password',
+    'password_confirmation' => 'Password Confirmation',
     'actual_password' => 'Actual password',
     'new_password' => 'New password',
     'new_password_confirmation' => 'New password confirmation',
@@ -35,6 +37,8 @@ return [
     'update' => 'Update',
     'send' => 'Send',
     'weekday' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    'read_accept' => 'I read and accept',
+    'terms_condition' => 'Terms & Condition',
 
             /*----------------------------
                                             MENU

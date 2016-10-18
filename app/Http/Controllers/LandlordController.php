@@ -53,7 +53,7 @@ class LandlordController extends Controller
         $weekday = trans('landlord.weekday');
 
         $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
-        return view('landlord/profile_landlord', compact('landlord' , 'weekday'));
+        return view('landlord/profile_landlord', compact('landlord', 'weekday'));
 
     }
 
@@ -70,29 +70,34 @@ class LandlordController extends Controller
 
     public function updatePassword()
     {
-        $validator = \Validator::make(\Input::all(), [
+        $inputData = \Input::get('data');
+        parse_str($inputData, $formFields);
+
+
+        $validator = \Validator::make($formFields, [
             'actual_password' => 'required|min:5',
-            'new_password' => 'required|min:5|confirmed|different:Apassword',
+            'new_password' => 'required|min:5|confirmed|different:actual_password',
             'new_password_confirmation' => 'required|min:5'
         ]);
 
-        if ($validator->fails())
-        {
-            return \Redirect::to('profile#changePassword')->withErrors($validator);
-        }
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
 
-        $now_password   = \Input::get('Apassword');
-        $check = \Hash::check($now_password, \Auth::user()->password);
-
-        if(\Hash::check($now_password, \Auth::user()->password)){
+            if (\Hash::check($formFields['actual_password'], \Auth::user()->password)) {
                 $user = User::find(\Auth::user()->idPerson);
-                $user->password = \Hash::make(\Input::get('new_password'));
+                $user->password = \Hash::make($formFields['new_password']);
                 $user->save();
-            return \Redirect::to('profile');
-
-        }
-        else {
-            return \Redirect::to('profile#changePassword')->withErrors(array('ApassWrong' => 'Mot de passe incorrect'));
+            } else {
+                $error = 'Wrong password';
+                return \Response::json(array(
+                    'fail' => true,
+                    'errors_auth' => $error
+                ));
+            }
         }
 
 
@@ -100,12 +105,11 @@ class LandlordController extends Controller
 
     public function updatePicture()
     {
-        $user = Landlord::where('idPerson','=',\Auth::user()->idPerson)->first();
-        if(\Input::file('image'))
-        {
+        $user = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
+        if (\Input::file('image')) {
 
             $image = \Input::file('image');
-            $filename  = \Auth::user()->idPerson . '.' . $image->getClientOriginalExtension();
+            $filename = \Auth::user()->idPerson . '.' . $image->getClientOriginalExtension();
 
             $path = public_path('profilepics/' . $filename);
 
@@ -120,54 +124,111 @@ class LandlordController extends Controller
 
     public function updateProfile()
     {
-        $validator = \Validator::make(\Input::all(), [
+        $inputData = \Input::get('data');
+        parse_str($inputData, $formFields);
+
+
+        $validator = \Validator::make($formFields, [
             'first_name' => 'required|alpha',
             'last_name' => 'required|alpha',
-            'email' => 'required|unique:person,email,'.\Auth::user()->idPerson.',idPerson',
+            'email' => 'required|unique:person,email,' . \Auth::user()->idPerson . ',idPerson',
             'phone_indicator' => 'required|numeric',
             'phone' => 'required|numeric',
-            'login' => 'required|min:5'
         ]);
 
         if ($validator->fails()) {
-            return \Redirect::to('profile')->withErrors($validator)->withinput();
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
+
+            $user = User::find(\Auth::user()->idPerson);
+
+            $user->first_name = $formFields['first_name'];
+            $user->last_name = $formFields['last_name'];
+            $user->email = $formFields['email'];
+            $user->phone_indicator = $formFields['phone_indicator'];
+            $user->phone = $formFields['phone'];
+            $user->save();
+        }
+    }
+
+    public function updateInformation()
+    {
+
+
+        $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
+
+        $inputData = \Input::get('data');
+        parse_str($inputData, $formFields);
+
+        $userData = array(
+            'about' => $formFields['about'],
+            'company_web' => $formFields['company_web'],
+            'contact_preference' => $formFields['contact_preference'],
+            'corporate' => $formFields['corporate'],
+        );
+
+
+        $landlord->about = $userData['about'];
+        $landlord->contact_preference = $userData['contact_preference'];
+        $landlord->corporate = $userData['corporate'];
+        $landlord->company_website = $userData['company_web'];
+        $landlord->save();
+
+
+//        }
+    }
+
+    public function verifyAccount($code)
+    {
+        $user = User::where('confirmation_code', '=', $code)->first();
+
+        if (!$user) {
+            return \Redirect::to('index')->withErrors('Error');
+        }
+        if (!\Auth::attempt(array('confirmation_code' => $code, 'password' => $code))) {
+            return \Redirect::to('index')->withErrors('Error');
+        }
+
+        $user->confirmed = 1;
+        $user->save();
+
+        return \Redirect::to('complete_profile');
+
+    }
+
+    public function completeProfile()
+    {
+        return view('landlord/complete_profile');
+    }
+
+    public function doCompleteProfile()
+    {
+        $validator = \Validator::make(\Input::all(), [
+            'login' => 'required|min:5|unique:person',
+            'password' => 'required|min:5|confirmed',
+            'terms' => 'accepted'
+        ]);
+
+        if ($validator->fails()) {
+            return \Redirect::to('complete_profile')->withErrors($validator);
         }
 
         $user = User::find(\Auth::user()->idPerson);
 
-        $user->first_name = \Input::get('first_name');
-        $user->last_name = \Input::get('last_name');
-        $user->email = \Input::get('email');
-        $user->phone_indicator = \Input::get('phone_indicator');
-        $user->phone = \Input::get('phone');
         $user->login = \Input::get('login');
+        $user->password = \Hash::make(\Input::get('password'));
 
         $user->save();
 
         return \Redirect::to('profile');
     }
 
-    public function updateInformation()
+    public function autoSave($data)
     {
 
-        $validator = \Validator::make(\Input::all(), [
-            'about' => 'min:2'
-        ]);
-        if ($validator->fails())
-        {
-            return \Redirect::to('profile#moreInformation')->withErrors($validator);
-        }
-
-
-        $landlord = Landlord::where('idPerson', '=',\Auth::user()->idPerson)->first();
-
-        $landlord->about = \Input::get('about');
-        $landlord->contact_preference = \Input::get('contact_preference');
-        $landlord->corporate = \Input::get('corporate');
-        $landlord->company_website = \Input::get('company_web');
-        $landlord->save();
-
-        return \Redirect::to('profile#moreInformation');
     }
 
 }

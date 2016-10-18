@@ -17,8 +17,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="datepair.js"></script>
-    <script type="text/javascript" src="jquery.datepair.js"></script>
 
 
 </head>
@@ -56,7 +54,7 @@
             </li>
             @if(Auth::user()->admin == 1)
                 <li>
-                    <span class="adminAddlandlord"><a href="#">@lang('landlord.adminAddlandlord')</a></span>
+                    <span class="adminAddlandlord"><a href="addLandlord">@lang('landlord.adminAddlandlord')</a></span>
                 </li>
                 @endif
         </ul>
@@ -107,10 +105,8 @@
 
 
 <!-- jQuery -->
-<script src="js/jquery.js"></script>
+<script src="{{URL::asset('js/app.js')}}"></script>
 
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>

@@ -16,6 +16,7 @@
                             For everyone
                                         ---------------------- */
 Route::get('index', 'PageController@index');
+Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
 
 
 
@@ -57,6 +58,9 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::get('invoices', 'LandlordController@showInvoices');
     Route::get('messages', 'LandlordController@showMessages');
 
+    Route::get('complete_profile' , 'LandlordController@completeProfile');
+    Route::post('complete_profile' , 'LandlordController@doCompleteProfile');
+
 
 });
 
@@ -66,5 +70,6 @@ Route::group(['middleware' => 'landlord'], function() {
                                         ---------------------- */
 
 Route::group(['middleware' => 'admin'], function() {
-
+        Route::get('addLandlord', 'AdminController@showAddLandlord');
+        Route::post('addLandlord', 'AdminController@doAddLandlord');
 });
