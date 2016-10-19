@@ -15,7 +15,7 @@ class photographer
      */
     public function handle($request, Closure $next)
     {
-//        if(!Photographer::where('idPerson', '=', \Auth::user()->idPerson))
+//        if(Auth::user()->account != 'photographer'))
 //        {
 //            return \Redirect::to('/');
 //        }

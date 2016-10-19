@@ -99,12 +99,16 @@
         </div>
     </div>
 
+        <div class="row">
+            <div class="col-md-2 col-md-push-1">
+                <p>
+                    @if(Auth::check())
+                    connexion :{{Auth::user()->account}}
+                    {{Auth::user()}}
 
-    <div class="row">
-        <div class="col-md-2 col-md-push-1">
-            <p>
-                connexion : {{Auth::user()}}
-            </p>
+                        @endif
+                </p>
+            </div>
         </div>
     </div>
 

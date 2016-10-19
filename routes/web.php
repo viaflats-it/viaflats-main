@@ -16,6 +16,7 @@
                             For everyone
                                         ---------------------- */
 Route::get('index', 'PageController@index');
+Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
 
 
 
@@ -50,7 +51,26 @@ Route::get('logoutgoogle', 'LoginController@logOutGoogle');
                          connected as a Landlord :
                                         ---------------------- */
 Route::group(['middleware' => 'landlord'], function() {
-    Route::get('landlord', 'Pagecontroller@landlord');
+    Route::get('landlord', 'LandlordController@showProfile');
+
+    Route::get('profile', 'LandlordController@showProfile');
+    Route::post('profile', 'LandlordController@updateProfile');
+
+    Route::post('landlord_picture', 'LandlordController@updatePicture');
+    Route::post('updatePassword', 'LandlordController@updatePassword');
+    Route::post('updateInformation', 'LandlordController@updateInformation');
+
+    Route::get('add_property', 'LandlordController@showAddProperty');
+    Route::get('my_properties', 'LandlordController@showProperties');
+    Route::get('my_booking', 'LandlordController@showBooking');
+    Route::get('update_availabilities', 'LandlordController@showUpdateAvailabilities');
+    Route::get('invoices', 'LandlordController@showInvoices');
+    Route::get('messages', 'LandlordController@showMessages');
+
+    Route::get('complete_profile' , 'LandlordController@completeProfile');
+    Route::post('complete_profile' , 'LandlordController@doCompleteProfile');
+
+
 });
 
 
@@ -59,5 +79,6 @@ Route::group(['middleware' => 'landlord'], function() {
                                         ---------------------- */
 
 Route::group(['middleware' => 'admin'], function() {
-
+        Route::get('addLandlord', 'AdminController@showAddLandlord');
+        Route::post('addLandlord', 'AdminController@doAddLandlord');
 });
