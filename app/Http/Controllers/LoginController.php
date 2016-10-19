@@ -11,6 +11,8 @@ use Illuminate\Support;
 use App\User;
 
 use Facebook;
+use Google_Client;
+use Google_Service_Oauth2;
 
 class LoginController extends Controller
 {
@@ -66,6 +68,69 @@ class LoginController extends Controller
         return \Redirect::to('index');
     }
 
+    public function signUpGoogle()
+    {
+        $client = new Google_Client();
+        $client->setAuthConfig('C:\wamp\www\Viaflats\config\credentials.json');
+        $client->setScopes(['profile', 'email']);
+        $client->setAccessType('offline');
+        $client->setApplicationName('Viaflats');
+
+        if (isset($_GET['code'])) {
+            $client->authenticate($_GET['code']);
+            $_SESSION['google_access_token'] = $client->getAccessToken();
+            //var_dump($client->getAccessToken());
+        }
+
+        $client->setAccessToken($_SESSION['google_access_token']);
+
+        $oauth = new Google_Service_Oauth2($client);
+        $picture = $oauth->userinfo->get()->picture;
+        $fname = $oauth->userinfo->get()->givenName;
+        $lname = $oauth->userinfo->get()->familyName;
+        $email = $oauth->userinfo->get()->email;
+        $id = $oauth->userinfo->get()->id;
+
+
+        //Creates the user or modifies it if the user changed his google data since the last connection
+        if(!User::where('email', $email)->first())
+        {
+            User::create([
+                'login' => $id,
+                'email'=> $email,
+                'password' => \Hash::make('google_'.$email.$fname.$lname),
+                'first_name' => $fname,
+                'last_name' => $lname,
+                ]);
+        }
+        else
+        {
+
+            if(User::where('login', $id)->first())
+            {
+                $user=User::where('login', $id)->first();
+            }
+            else
+            {
+                $user=User::where('email', $email)->first();
+                $user->login = $id;
+            }
+
+            if($user->email != $email)
+                $user->email = $email;
+            if($user->first_name != $fname)
+                $user->first_name = $fname;
+            if($user->last_name != $lname)
+                $user->last_name = $lname;
+            $user->password = \Hash::make('google_'.$email.$fname.$lname);
+            $user->save();
+
+        }
+        \Auth::attempt(['login' => $id, 'password' => 'google_'.$email.$fname.$lname]);
+        //Once finished, return to index
+        return \Redirect::to('index');
+    }
+
     public function signUpFacebook()
     {
 
@@ -106,29 +171,37 @@ class LoginController extends Controller
         $id=$userNode['id'];
 
     //Creates the user or modifies it if the user changed his facebook data since the last connection
-        if(!User::where('login', $userNode['id'])->first())
+        if(!User::where('email', $userNode['email'])->first())
         {
             User::create([
                 'login' => $userNode['id'],
                 'email'=> $userNode['email'],
+                'password' => \Hash::make('facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']),
                 'first_name' => $userNode['first_name'],
                 'last_name' => $userNode['last_name'],
                 ]);
         }
         else
         {
-            $user=User::where('login', $userNode['id'])->first();
-            if($user->email != $userNode['email'])
-                $user->email = $userNode['email'];
-            if($user->first_name != $userNode['first_name'])
-                $user->first_name = $userNode['first_name'];
-            if($user->last_name != $userNode['last_name'])
-                $user->last_name = $userNode['last_name'];
+            if(User::where('login', $userNode['id'])->first())
+            {
+                $user=User::where('login', $userNode['id'])->first();
+            }
+            else
+            {
+                $user=User::where('email', $userNode['email'])->first();
+                $user->login = $userNode['id'];
+            }
+                if($user->email != $userNode['email'])
+                    $user->email = $userNode['email'];
+                if($user->first_name != $userNode['first_name'])
+                    $user->first_name = $userNode['first_name'];
+                if($user->last_name != $userNode['last_name'])
+                    $user->last_name = $userNode['last_name'];
             $user->save();
 
         }
-        \Auth::attempt(array('login' => $id, 'password' => null));
-
+        \Auth::attempt(['login' => $userNode['id'], 'password' => 'facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']]);
     }
     //Once finished, return to index
     return \Redirect::to('index');
@@ -156,6 +229,13 @@ public function logOutFb(){
     \Auth::logout();
     //Destroying the session
     $_SESSION['facebook_access_token'] = null;
+    return \Redirect::to('index');
+}
+
+public function logOutGoogle(){
+    \Auth::logout();
+    //Destroying the session
+    $_SESSION['google_access_token'] = null;
     return \Redirect::to('index');
 }
 }

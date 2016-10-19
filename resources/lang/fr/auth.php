@@ -16,6 +16,10 @@ return [
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
-    'fb_disconnect' => 'se déconnecter',
+    'button_facebook' => 'Connexion Facebook',
+    'button_google' => 'Connexion Google',
+    'social_disconnect' => 'se déconnecter',
+    'fblogin' => 'Connexion via Facebook',
+    'googlelogin' => 'Ou via Google',
 
 ];

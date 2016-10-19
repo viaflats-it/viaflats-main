@@ -20,6 +20,6 @@
 
         //Create the link and the button
         $loginUrl = $helper->getLoginUrl($url.'/fbsignup', $permissions);
-        echo '<a href="' . $loginUrl . '"><button class="btn-info" style="border-radius:20px;">Log in with Facebook !</button></a>';
+        echo '<a href="' . $loginUrl . '"><button class="btn-info" style="border-radius:20px;">'.trans('auth.button_facebook').'</button></a>';
         
   
