@@ -22,7 +22,6 @@ class AdminController extends Controller
         $validator = \Validator::make(\Input::all(), [
             'email' => 'required|unique:person',
             'phone' => 'numeric',
-            'phone_indicator' => 'numeric',
             'first_name' => 'alpha',
             'last_name' => 'alpha'
         ]);
@@ -42,11 +41,11 @@ class AdminController extends Controller
         $user->create([
             'email' => \Input::get('email'),
             'phone' => \Input::get('phone'),
-            'phone_indicator' => \Input::get('phone_indicator'),
             'first_name' => \Input::get('first_name'),
             'last_name' => \Input::get('last_name'),
             'confirmation_code' => $code,
             'password' => $mdp,
+            'type_person' => 1,
         ]);
 
         $user = User::where('confirmation_code', '=', $code)->first();

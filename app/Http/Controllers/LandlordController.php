@@ -15,7 +15,7 @@ class LandlordController extends Controller
 {
     public function showAddProperty()
     {
-        return view('landlord/add_property');
+        return view('landlord/add_property/details_properties');
     }
 
     public function showProperties()
@@ -126,14 +126,13 @@ class LandlordController extends Controller
     {
         $inputData = \Input::get('data');
         parse_str($inputData, $formFields);
-
+        $formFields['phone'] = \Input::get('phone');
 
         $validator = \Validator::make($formFields, [
             'first_name' => 'required|alpha',
             'last_name' => 'required|alpha',
             'email' => 'required|unique:person,email,' . \Auth::user()->idPerson . ',idPerson',
-            'phone_indicator' => 'required|numeric',
-            'phone' => 'required|numeric',
+            'phone' => 'required|regex:/[0-9]+/',
         ]);
 
         if ($validator->fails()) {
@@ -148,7 +147,6 @@ class LandlordController extends Controller
             $user->first_name = $formFields['first_name'];
             $user->last_name = $formFields['last_name'];
             $user->email = $formFields['email'];
-            $user->phone_indicator = $formFields['phone_indicator'];
             $user->phone = $formFields['phone'];
             $user->save();
         }
@@ -192,7 +190,7 @@ class LandlordController extends Controller
             return \Redirect::to('index')->withErrors('Error');
         }
 
-        $user->confirmed = 1;
+        $user->status = 1;
         $user->save();
 
         return \Redirect::to('complete_profile');
@@ -226,9 +224,5 @@ class LandlordController extends Controller
         return \Redirect::to('profile');
     }
 
-    public function autoSave($data)
-    {
-
-    }
 
 }

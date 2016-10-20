@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'Wrong login or password',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'error' => 'Error: ',
+    'errorPhone' => 'Phone number not correct',
+    'success' => 'Login complete successfully ',
 ];

@@ -53,8 +53,17 @@ return [
     'invoices' => 'My Invoices',
     'messages' => 'Messages',
     'adminAddlandlord' => 'Add a Landlord',
-    'menu-toggle' => 'Toggle Menu'
+    'menu-toggle' => 'Toggle Menu',
 
 
+                    /*----------------------------
+                                           ADD A PROPERTY
+                                                         ----------------------------*/
+
+    'details' => 'About the property',
+    'type' => 'Property\'s type',
+    'home' => 'Home',
+    'apartment' => 'Apartment',
+    'studio' => 'Studio',
 
 ];

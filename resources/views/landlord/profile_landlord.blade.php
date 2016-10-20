@@ -38,17 +38,19 @@
                             </div>
                             <div class="form-group" id="phone_has_error">
                                 <label for="phone">@lang('landlord.phone')</label>
-                                <div style="display:flex;">
-                                    <div class="input-group" style="width: 35%">
-                                        <div class="input-group-addon">+</div>
-                                        <input type="text" class="form-control" name="phone_indicator"
-                                               id="phone_indicator"
-                                               value="{{Auth::user()->phone_indicator ? Auth::user()->phone_indicator: '' }}">
-                                    </div>
-                                    <input type="number" name="phone" id="phone" class="form-control"
-                                           style="width: 65%; float: right"
-                                           value="{{Auth::user()->phone ? Auth::user()->phone: ''}}"/>
-                                </div>
+                                {{--<div style="display:flex;">--}}
+                                    {{--<div class="input-group" style="width: 35%">--}}
+                                        {{--<div class="input-group-addon">+</div>--}}
+                                        {{--<input type="text" class="form-control" name="phone_indicator"--}}
+                                               {{--id="phone_indicator"--}}
+                                               {{--value="{{Auth::user()->phone_indicator ? Auth::user()->phone_indicator: '' }}">--}}
+                                    {{--</div>--}}
+                                    {{--<input type="tel" name="phone" id="phone" class="form-control"--}}
+                                           {{--style="width: 65%; float: right"--}}
+                                           {{--value="{{Auth::user()->phone ? Auth::user()->phone: ''}}"/>--}}
+                                {{--</div>--}}
+                                <input type="tel" class="form-control" id="phone"
+                                       value="{{Auth::user()->phone ? Auth::user()->phone: ''}}" />
                                 <div id="phone_error"></div>
                                 <div id="phone_indicator_error"></div>
 
@@ -199,23 +201,26 @@
         </div>
     </div>
 
-
+    <script>
+        $("#phone").intlTelInput();
+    </script>
     <script>
         /*UPDATE PROFILES */
         function saveProfile() {
 
             var $form = $("#updateProfile"),
-                    url = "profile";
+                    url = "profile",
+                    phone = $('#phone').intlTelInput('getNumber');
 
             var posting = $.ajax({
                 method: "POST",
                 url: url,
                 data: {
                     'data': $form.serialize(),
+                    "phone" : phone,
                     "_token": "{{ csrf_token() }}"
                 }
             });
-
             posting.done(function (data) {
 
                 if (data.fail) {
@@ -353,7 +358,10 @@
             saveInformation();
         });
 
+
     </script>
+
+
 
 
 
