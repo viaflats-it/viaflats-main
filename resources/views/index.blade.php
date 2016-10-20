@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 @extends('layout.app')
 
 @section('contenu')
@@ -20,27 +19,31 @@
                     <div class="modal-body">
                         <div class="row">
 
+                            <div id="successMessageSignin"></div>
                             <div class="col-md-4">
-
-                                <div class="form-group">
-                                    {!! Form::open(['url' => 'login']) !!}
+                                <div class="form-group" id="login_has_error">
+                                    {!! Form::open(['id' => 'signin']) !!}
                                     {!! Form::label('login', 'Login') !!}
                                     {!! Form::text('login', null, ['class' => 'form-control ']) !!}
+                                    <div id="login_error"></div>
                                     {!! Form::label('password', 'Password') !!}
                                     {!! Form::password('password', ['class' => 'form-control']) !!}
+                                    <div id="password_error"></div>
                                     {!! Form::submit('Signin', ['class' => 'btn btn-default']) !!}
                                     {!! Form::close() !!}
-
-
                                 </div>
                             </div>
 
 
-                            <div style="position:relative; valign:middle; transform:translateY(200%);" class="col-md-4">
-                                @if(!isset($_SESSION['facebook_access_token']))
-                                    @include('facebooklogin')
-                                @endif
-
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @if(!isset($_SESSION['facebook_access_token']) && !isset($_SESSION['google_access_token']))
+                                        {!! Form::label(trans('auth.fblogin')) !!}
+                                        @include('facebooklogin')
+                                        {!! Form::label(trans('auth.googlelogin')) !!}
+                                        @include('googlelogin')
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,8 +72,8 @@
 
                                 <div class="form-group">
 
-                                    <div id ='phone' class="col-md-6 form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-                                        {!! Form::text('phone', null, ['class' => 'form-control','placeholder'=>'Phone']) !!}
+                                    <div class="col-md-6 form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                                        {!! Form::text('phone', null, ['class' => 'form-control','id'=>'phone']) !!}
                                         @if ($errors->has('phone'))
                                             <span class="help-block">
                                                     <strong>{{ $errors->first('phone') }}</strong>
@@ -180,11 +183,14 @@
 
 
                         </div>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                    <div class="modal-footer">
+                        {!! Form::submit('Signup', ['class' => 'btn btn-default submit','style'=>'display:none']) !!}
+                        {!! Form::close() !!}
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
             </div>
 
             </div>
@@ -206,6 +212,10 @@
 
     </div>
 
+
+    <script>
+        $("#phone").intlTelInput();
+    </script>
     <script>
 
 
@@ -230,6 +240,38 @@
 
         $('#login').click(function () {
             $('#loginModal').modal();
+        });
+
+
+        /* LOGING */
+        $("#signin").submit(function (event) {
+            event.preventDefault();
+            var successContent = '<div class="alert alert-info"><span>Checking for Authentification</span></div>';
+            $('#successMessageSignin').html(successContent);
+            var $form = $(this),
+                    url = "login";
+            var posting = $.ajax({
+                method: "POST",
+                url: url,
+                data: {
+                    'data': $form.serialize(),
+                    "_token": "{{ csrf_token() }}"
+                }
+            });
+            posting.done(function (data) {
+                if (data.fail) {
+                    $.each(data.errors, function (index, value) {
+                        var successContent = '<div class="alert alert-danger"><span>{{trans('auth.error')}}'+ value+'</span></div>';
+                        $('#successMessageSignin').html(successContent);
+                    });
+                }
+                if (data.success){
+                    var success = "{{trans('auth.success')}}";
+                    var successContent = '<div class="alert alert-success"><span>'+success+'</span></div>';
+                    $('#successMessageSignin').html(successContent);
+                    window.location.replace(data.url_return);
+                }
+            });
         });
     </script>
 

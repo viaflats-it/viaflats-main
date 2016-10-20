@@ -9,13 +9,22 @@
 
     <!-- Fonts -->
 
-    <link href="{!! URL::asset('css/custom.css') !!}" rel="stylesheet">
+{{ Html::style('css/app.css') }}
+{{ Html::style('css/custom.css') }}
+{{ Html::style('css/boostrap.min.css') }}
 
-    {{ Html::style('css/app.css') }}
-    {{ Html::style('css/custom.css') }}
+<!-- jQuery -->
+    <script src="{{URL::asset('js/app.js')}}"></script>
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+    <script src="../node_modules/intl-tel-input/build/js/intlTelInput.js"></script>
+
+
+    <link rel="stylesheet" href="../node_modules/intl-tel-input/build/css/intlTelInput.css">
 
 </head>
 <body>
@@ -51,7 +60,7 @@
         $userNode = $response->getGraphUser();
 
 
-        echo "<div style='float:right;'><a href='/logoutfb'><p style='float:top-right;display:inline;margin-right:10px'>".$userNode['first_name']." ".$userNode['last_name']." (".trans('auth.social_disconnect').")</p></a><img src='http://graph.facebook.com/".$userNode['id']."/picture'/></div>";
+        echo "<div style='float:right;'><a href='/logoutfb'><p style='float;top-right;display:inline;margin-right:10px'>".$userNode['first_name']." ".$userNode['last_name']." (".trans('auth.social_disconnect').")</p></a><img src='http://graph.facebook.com/".$userNode['id']."/picture'/></div>";
 
         ?>
         @elseif(isset($_SESSION['google_access_token']))
@@ -71,7 +80,7 @@
         $lname = $oauth->userinfo->get()->familyName;
 
 
-        echo "<div style='float:right;'><a href='/logoutgoogle'><p style='float:top-right;display:inline;margin-right:10px'>".$fname." ".$lname." (".trans('auth.social_disconnect').")</p></a><img src='".$picture." width='50' height='50' border='0'/></div>";
+        echo "<div style='float:right;'><a href='/logoutgoogle'><p style='float;top-right;display:inline;margin-right:10px'>".$fname." ".$lname." (".trans('auth.social_disconnect').")</p></a><img src='".$picture." width='50' height='50' border='0'/></div>";
 
             ?>
             @endif

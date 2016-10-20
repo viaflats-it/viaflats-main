@@ -18,6 +18,8 @@
 Route::get('index', 'PageController@index');
 Route::get('confirmation/mail/{confirmationCode}','MailController@confirm');
 Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
+Route::get('logoutfb', 'LoginController@logOutFb');
+Route::get('logoutgoogle', 'LoginController@logOutGoogle');
 
 
 
@@ -27,6 +29,12 @@ Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
 Route::group(['middleware' => 'guest'], function() {
     Route::post('login', 'LoginController@signIn');
     Route::post('signup', 'LoginController@signUp');
+
+
+    Route::get('fbsignup', 'LoginController@signUpFacebook');
+    Route::get('logingoogle', 'LoginController@signUpGoogle');
+
+
 });
 
 
@@ -36,16 +44,6 @@ Route::group(['middleware' => 'guest'], function() {
 Route::group(['middleware' => 'auth'], function() {
     Route::get('logout', 'LoginController@logOut');
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index');
-
-Route::get('logoutfb', 'LoginController@logOutFb');
-Route::get('fbsignup', 'LoginController@signUpFacebook');
-Route::get('logingoogle', 'LoginController@signUpGoogle');
-Route::get('logoutgoogle', 'LoginController@logOutGoogle');
-
 
 
 /* ----------------------
