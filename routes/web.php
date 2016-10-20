@@ -16,7 +16,7 @@
                             For everyone
                                         ---------------------- */
 Route::get('index', 'PageController@index');
-
+Route::get('confirmation/mail/{confirmationCode}','MailController@confirm');
 
 
 /* ----------------------

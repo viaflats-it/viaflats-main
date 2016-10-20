@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 </head>
 <body>
-<h2>Verify Your Email Address</h2>
+<h2>Verify Your Email Address Tenant </h2>
 
 <div>
     Hi {{$user->first_name}} !
