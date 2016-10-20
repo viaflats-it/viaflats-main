@@ -51,7 +51,6 @@
 
             </div>
         </div>
-
         <div id="signupModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
 
@@ -166,21 +165,27 @@
 
                                 </div>
 
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @if(!isset($_SESSION['facebook_access_token']) && !isset($_SESSION['google_access_token']))
+                                {!! Form::label(trans('auth.fblogin')) !!}
+                                @include('facebooklogin')
+                                {!! Form::label(trans('auth.googlelogin')) !!}
+                                @include('googlelogin')
+                                @endif
+
                             </div>
 
-                            <div style="position:relative; valign:middle; transform:translateY(200%);" class="col-md-4">
-                                @if(!isset($_SESSION['facebook_access_token']))
-                                    @include('facebooklogin')
-                                @endif
-                            </div>
+
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        {!! Form::submit('Signup', ['class' => 'btn btn-default submit','style'=>'display:none']) !!}
-                        {!! Form::close() !!}
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
 
             </div>
         </div>
@@ -189,10 +194,16 @@
         <div class="row">
             <div class="col-md-2 col-md-push-1">
                 <p>
-                    connexion : {{Auth::user()}}
+                    @if(Auth::check())
+                    connexion :{{Auth::user()->account}}
+                    {{Auth::user()}}
+
+                        @endif
                 </p>
             </div>
         </div>
+
+
     </div>
 
     <script>

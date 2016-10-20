@@ -35,7 +35,6 @@ Route::group(['middleware' => 'guest'], function() {
                                         ---------------------- */
 Route::group(['middleware' => 'auth'], function() {
     Route::get('logout', 'LoginController@logOut');
-
 });
 
 Auth::routes();
@@ -44,6 +43,8 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('logoutfb', 'LoginController@logOutFb');
 Route::get('fbsignup', 'LoginController@signUpFacebook');
+Route::get('logingoogle', 'LoginController@signUpGoogle');
+Route::get('logoutgoogle', 'LoginController@logOutGoogle');
 
 
 
