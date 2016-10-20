@@ -13,4 +13,4 @@ $client->setApplicationName('Viaflats');
 $client->setRedirectUri($redirect_uri);
 $auth_url = $client->createAuthUrl();
 
-echo '<a href="' . $auth_url . '"><button class="btn-warning" style="border-radius:20px;">'.trans('auth.button_google').'</button></a>';
+echo '<a href="' . $auth_url . '"><button class="btn-danger" style="border-radius:20px;">'.trans('auth.button_google').'</button></a>';

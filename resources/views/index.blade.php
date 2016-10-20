@@ -81,11 +81,15 @@
 
                         </div>
 
-                        <div style="position:relative; valign:middle; transform:translateY(200%);" class="col-md-4">
-                            @if(!isset($_SESSION['facebook_access_token']))
-                            @include('facebooklogin')
-                            @endif
-
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @if(!isset($_SESSION['facebook_access_token']) && !isset($_SESSION['google_access_token']))
+                                {!! Form::label(trans('auth.fblogin')) !!}
+                                @include('facebooklogin')
+                                {!! Form::label(trans('auth.googlelogin')) !!}
+                                @include('googlelogin')
+                                @endif
+                            </div>
                         </div>
 
 

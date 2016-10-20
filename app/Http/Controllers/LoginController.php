@@ -199,6 +199,7 @@ class LoginController extends Controller
                     $user->first_name = $userNode['first_name'];
                 if($user->last_name != $userNode['last_name'])
                     $user->last_name = $userNode['last_name'];
+            $user->password = \Hash::make('facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']);
             $user->save();
 
         }
@@ -223,6 +224,8 @@ public function show()
 
 public function logOut(){
     \Auth::logout();
+    $_SESSION['facebook_access_token'] = null;
+    $_SESSION['google_access_token'] = null;
     return \Redirect::to('index');
 }
 

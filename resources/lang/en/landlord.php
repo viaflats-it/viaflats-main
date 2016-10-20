@@ -46,6 +46,7 @@ return [
 
     'landlord' => 'Landlord',
     'profile' => 'Profile',
+    'availabilities' => 'Availabilities',
     'add_property' => 'Add a Property',
     'my_properties' => 'My Properties',
     'my_booking' => 'My Booking',
