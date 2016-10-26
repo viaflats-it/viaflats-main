@@ -6,6 +6,18 @@
   display: flex;
 }
 
+@mixin Dosis() {
+  font-family: $Dosis;
+  font-size: 16px;
+  @content;
+}
+
+@mixin Lato() {
+  font-family: $Lato;
+  font-size: 16px;
+  @content;
+}
+
 @mixin flex-direction($value) {
   -moz-flex-direction: $value;
   -ms-flex-direction: $value;
@@ -15,15 +27,21 @@
 
 @mixin placeholder {
   ::-webkit-input-placeholder {
-    @content
+    @content;
   }
   :-moz-placeholder {
-    @content
+    @content;
   }
   ::-moz-placeholder {
-    @content
+    @content;
   }
   :-ms-input-placeholder {
-    @content
+    @content;
+  }
+}
+
+@mixin hover() {
+  &:hover{
+    @content;
   }
 }

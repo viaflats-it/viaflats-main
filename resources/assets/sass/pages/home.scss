@@ -1,11 +1,224 @@
 .home-container{
   @include flexbox;
   @include flex-direction(column);
-  .nav-container{
-    padding: 0;
-    margin: 0;
+  .header-container{
+    margin: auto;
+    width: 100%;
+    @include flexbox;
+    @include flex-direction(column);
+    .logo-container{
+      margin: auto;
+      @include flexbox;
+      padding: 5px;
+      .logo-viaflats{
+        width: 150px;
+        height: 100px;
+        margin: auto;
+      }
+    }
+    .nav-container{
+      @include flexbox;
+      margin: auto;
+      .nav-info{
+        @include flexbox;
+        list-style: none;
+        padding: 10px;
+        margin: auto;
+        li{
+          overflow: hidden;
+          @include flexbox;
+          cursor: pointer;
+          min-width: 50px;
+          height: 35px;
+          padding: 0px 10px;
+          margin: 30px;
+          h3{
+            margin: auto;
+            @include Dosis{
+              color: $schWhite;
+            }
+          }
+          &:nth-child(1n){
+            @include hover{
+              background: rgba($baseThemePurple, 0.6);
+            }
+          }
+        }
+      }
+    }
+    .left-container{
+      position: absolute;
+      top: 0;
+      right: 100%;
+      transform: translate(100%, 0);
+      @include flexbox;
+      .burger-container{
+        list-style: none;
+        @include flexbox;
+        padding: 10px;
+        margin: auto;
+        li{
+          @include flexbox;
+          @include flex-direction(column);
+          margin: auto;
+          .line-1, .line-2, .line-3{
+          background-color: $schWhite;
+          width: 30px;
+          margin: 4px 0;
+          padding: 1px;
+          transition: 0.4s;
+          }
+          &:hover .line-1{
+            width: 28px;
+          }
+          &:hover .line-2{
+            width: 17px;
+          }
+          &:hover .line-3{
+            width: 34px;
+          }
+        }
+      }
+    }
+    .right-container{
+      position: absolute;
+      top: 0;
+      left: 100%;
+      transform: translate(-100%, 0);
+      @include flexbox;
+      .socials-container{
+        @include flexbox;
+        list-style: none;
+        margin: auto;
+        padding: 10px;
+        li{
+          @include flexbox;
+          .networks{
+            width: 15px;
+            height: 15px;
+            margin: auto 5px;
+            cursor: pointer;
+          }
+        }
+      }
+      .login-container{
+        @include flexbox;
+        list-style: none;
+        padding: 10px;
+        margin: auto;
+        li{
+          cursor: pointer;
+          margin: auto 15px;
+          padding: 5px 30px;
+          transition: 0.4s;
+        }
+        .login{
+          background: rgba($baseThemePurple, 0.6);
+
+          @include Dosis{
+            color: $schWhite;
+            font-weight: bold;
+          }
+          @include hover {
+            background: rgba($schGreen, 0.6);
+          }
+        }
+        .signup{
+          background: rgba($baseThemePurple, 0.6);
+          @include Dosis{
+            color: $schWhite;
+            font-weight: bold;
+          }
+          @include hover {
+            background: rgba($schRed, 0.6);
+          }
+        }
+      }
+    }
   }
   .search-container{
-
+    background: rgba($schWhite, 0.4);
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    @include flexbox;
+    .location, .check-in, .check-out{
+      outline: 0;
+      background-color: $schWhite;
+      border: none;
+      width: 250px;
+      margin: auto 2px;
+      padding: 10px 10px;
+      @include Dosis{
+        color: $baseThemePurple;
+      }
+    }
+    @include placeholder{
+      color: $baseThemePurple;
+    }
+    .search{
+      outline: 0;
+      background-color: $baseThemePurple;
+      border: none;
+      margin: auto 2px;
+      padding: 10px 20px;
+      @include Lato{
+        color: $schWhite;
+      }
+    }
+  }
+  .background-container{
+    z-index: -2;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    .video{
+      width: 100%;
+    }
+  }
+  .background-color{
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    background: rgba($schBlack, 0.3);
+  }
+  .label-container-home{
+    z-index: -1;
+    position: absolute;
+    top: 45%;
+    right: 0;
+    bottom: 0;
+    left: 10%;
+    transform: translate(-5%, -45%);
+    overflow: hidden;
+    h1{
+      @include Dosis{
+        font-size: 32px;
+        color: $schWhite
+      }
+    }
+    h1:last-child{
+      font-weight: bold;
+    }
+  }
+  .buildings-container{
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    .svg{
+      transform: translate(-30%, -12.5%);
+    }
   }
 }

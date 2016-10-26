@@ -8,4 +8,7 @@ p, input, select, button{
 
 html{
   background-color: $bakcgroundWhite;
+  body{
+    margin: 0;
+  }
 }

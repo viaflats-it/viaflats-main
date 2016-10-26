@@ -5,11 +5,12 @@ $Lato: 'Lato', sans-serif; // text
 
 //schema
 //https://coolors.co/087e8b-ff5a5f-9962bb-3c3c3c-f5f5f5
+$schBrown: #C2847A;
 $schBlack: #2D3047;
 $schGreen: #419D78;
 $schApple: #B0DB43;
 $schYellow: #E0A458;
-$schSand: #FFDBB5;
+$schSand: #F8F6B0;
 $schPink: #DB2763;
 $schTurquoise: #12EAEA;
 $schDiamond: #BCE7FD;
@@ -22,7 +23,14 @@ $schWhite: #F5F5F5;
 $black: #101010;
 $white: #FBFBFB;
 $bakcgroundWhite: #FFFFFF;
-$baseThemePurple: #9962BB;
+$baseThemePurple: #9982bb;
+$Darkthem: #6457A6;
+
+//socials network
+/*$facebook: #;
+$twitter: #1da1f2;
+$instagram: #;
+$linkedin: #;*/
 
 // Breakpoints
 $desktop-large: 1400px;

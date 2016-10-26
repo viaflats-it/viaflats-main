@@ -10,6 +10,10 @@
   font-weight: normal;
   font-style: normal; }
 
+/*$facebook: #;
+$twitter: #1da1f2;
+$instagram: #;
+$linkedin: #;*/
 h1, h2, h3, h4, h5 {
   font-family: "Dosis", sans-serif;
   font-weight: 200; }
@@ -19,6 +23,8 @@ p, input, select, button {
 
 html {
   background-color: #FFFFFF; }
+  html body {
+    margin: 0; }
 
 .home-container {
   display: -webkit-box;
@@ -27,9 +33,218 @@ html {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column; }
-  .home-container .nav-container {
-    padding: 0;
-    margin: 0; }
+  .home-container .header-container {
+    margin: auto;
+    width: 100%;
+    display: -webkit-box;
+    display: flex;
+    -moz-flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column; }
+    .home-container .header-container .logo-container {
+      margin: auto;
+      display: -webkit-box;
+      display: flex;
+      padding: 5px; }
+      .home-container .header-container .logo-container .logo-viaflats {
+        width: 150px;
+        height: 100px;
+        margin: auto; }
+    .home-container .header-container .nav-container {
+      display: -webkit-box;
+      display: flex;
+      margin: auto; }
+      .home-container .header-container .nav-container .nav-info {
+        display: -webkit-box;
+        display: flex;
+        list-style: none;
+        padding: 10px;
+        margin: auto; }
+        .home-container .header-container .nav-container .nav-info li {
+          overflow: hidden;
+          display: -webkit-box;
+          display: flex;
+          cursor: pointer;
+          min-width: 50px;
+          height: 35px;
+          padding: 0px 10px;
+          margin: 30px; }
+          .home-container .header-container .nav-container .nav-info li h3 {
+            margin: auto;
+            font-family: "Dosis", sans-serif;
+            font-size: 16px;
+            color: #F5F5F5; }
+          .home-container .header-container .nav-container .nav-info li:nth-child(1n):hover {
+            background: rgba(153, 130, 187, 0.6); }
+    .home-container .header-container .left-container {
+      position: absolute;
+      top: 0;
+      right: 100%;
+      -webkit-transform: translate(100%, 0);
+      transform: translate(100%, 0);
+      display: -webkit-box;
+      display: flex; }
+      .home-container .header-container .left-container .burger-container {
+        list-style: none;
+        display: -webkit-box;
+        display: flex;
+        padding: 10px;
+        margin: auto; }
+        .home-container .header-container .left-container .burger-container li {
+          display: -webkit-box;
+          display: flex;
+          -moz-flex-direction: column;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          flex-direction: column;
+          margin: auto; }
+          .home-container .header-container .left-container .burger-container li .line-1, .home-container .header-container .left-container .burger-container li .line-2, .home-container .header-container .left-container .burger-container li .line-3 {
+            background-color: #F5F5F5;
+            width: 30px;
+            margin: 4px 0;
+            padding: 1px;
+            -webkit-transition: 0.4s;
+            transition: 0.4s; }
+          .home-container .header-container .left-container .burger-container li:hover .line-1 {
+            width: 28px; }
+          .home-container .header-container .left-container .burger-container li:hover .line-2 {
+            width: 17px; }
+          .home-container .header-container .left-container .burger-container li:hover .line-3 {
+            width: 34px; }
+    .home-container .header-container .right-container {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      -webkit-transform: translate(-100%, 0);
+      transform: translate(-100%, 0);
+      display: -webkit-box;
+      display: flex; }
+      .home-container .header-container .right-container .socials-container {
+        display: -webkit-box;
+        display: flex;
+        list-style: none;
+        margin: auto;
+        padding: 10px; }
+        .home-container .header-container .right-container .socials-container li {
+          display: -webkit-box;
+          display: flex; }
+          .home-container .header-container .right-container .socials-container li .networks {
+            width: 15px;
+            height: 15px;
+            margin: auto 5px;
+            cursor: pointer; }
+      .home-container .header-container .right-container .login-container {
+        display: -webkit-box;
+        display: flex;
+        list-style: none;
+        padding: 10px;
+        margin: auto; }
+        .home-container .header-container .right-container .login-container li {
+          cursor: pointer;
+          margin: auto 15px;
+          padding: 5px 30px;
+          -webkit-transition: 0.4s;
+          transition: 0.4s; }
+        .home-container .header-container .right-container .login-container .login {
+          background: rgba(153, 130, 187, 0.6);
+          font-family: "Dosis", sans-serif;
+          font-size: 16px;
+          color: #F5F5F5;
+          font-weight: bold; }
+          .home-container .header-container .right-container .login-container .login:hover {
+            background: rgba(65, 157, 120, 0.6); }
+        .home-container .header-container .right-container .login-container .signup {
+          background: rgba(153, 130, 187, 0.6);
+          font-family: "Dosis", sans-serif;
+          font-size: 16px;
+          color: #F5F5F5;
+          font-weight: bold; }
+          .home-container .header-container .right-container .login-container .signup:hover {
+            background: rgba(255, 90, 95, 0.6); }
+  .home-container .search-container {
+    background: rgba(245, 245, 245, 0.4);
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    display: -webkit-box;
+    display: flex; }
+    .home-container .search-container .location, .home-container .search-container .check-in, .home-container .search-container .check-out {
+      outline: 0;
+      background-color: #F5F5F5;
+      border: none;
+      width: 250px;
+      margin: auto 2px;
+      padding: 10px 10px;
+      font-family: "Dosis", sans-serif;
+      font-size: 16px;
+      color: #9982bb; }
+    .home-container .search-container ::-webkit-input-placeholder {
+      color: #9982bb; }
+    .home-container .search-container :-moz-placeholder {
+      color: #9982bb; }
+    .home-container .search-container ::-moz-placeholder {
+      color: #9982bb; }
+    .home-container .search-container :-ms-input-placeholder {
+      color: #9982bb; }
+    .home-container .search-container .search {
+      outline: 0;
+      background-color: #9982bb;
+      border: none;
+      margin: auto 2px;
+      padding: 10px 20px;
+      font-family: "Lato", sans-serif;
+      font-size: 16px;
+      color: #F5F5F5; }
+  .home-container .background-container {
+    z-index: -2;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden; }
+    .home-container .background-container .video {
+      width: 100%; }
+  .home-container .background-color {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    background: rgba(45, 48, 71, 0.3); }
+  .home-container .label-container-home {
+    z-index: -1;
+    position: absolute;
+    top: 45%;
+    right: 0;
+    bottom: 0;
+    left: 10%;
+    -webkit-transform: translate(-5%, -45%);
+    transform: translate(-5%, -45%);
+    overflow: hidden; }
+    .home-container .label-container-home h1 {
+      font-family: "Dosis", sans-serif;
+      font-size: 16px;
+      font-size: 32px;
+      color: #F5F5F5; }
+    .home-container .label-container-home h1:last-child {
+      font-weight: bold; }
+  .home-container .buildings-container {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden; }
+    .home-container .buildings-container .svg {
+      -webkit-transform: translate(-30%, -12.5%);
+      transform: translate(-30%, -12.5%); }
 
 /* Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
