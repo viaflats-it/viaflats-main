@@ -235,16 +235,18 @@ html {
       color: #F5F5F5; }
     .home-container .label-container-home h1:last-child {
       font-weight: bold; }
-  .home-container .buildings-container {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden; }
-    .home-container .buildings-container .svg {
-      -webkit-transform: translate(-30%, -12.5%);
-      transform: translate(-30%, -12.5%); }
+
+.buildings-container {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden; }
+  .buildings-container .background-svg {
+    height: 100%;
+    width: 100%; }
 
 /* Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";

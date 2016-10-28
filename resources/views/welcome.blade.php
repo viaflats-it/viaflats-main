@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="home-container">
-      <div class="header-container">
+      <!--<div class="header-container">
         <div class="logo-container">
           <img class="logo-viaflats" src="images/logos/logo-viaflats.png" alt="logo" />
         </div>
@@ -41,25 +41,27 @@
             <li class="signup">Signup</li>
           </ul>
         </div>
-      </div>
-      <div class="search-container">
+      </div>-->
+      <!--<div class="search-container">
         <input type="text" name="location" class="location" placeholder="Where do you want to go ?">
         <input type="text" name="check-in" class="check-in" placeholder="Check in">
         <input type="text" name="check-out" class="check-out" placeholder="Check out">
         <input type="submit" name="search" class="search" value="Search">
-      </div>
-      <div class="background-container">
+      </div>-->
+      <!--<div class="background-container">
         <video preload="preload" class="video" autoplay="autoplay" loop="loop"><source src="images/videos/background.mp4" type="video/mp4"></video>
       </div>
-      <div class="background-color"></div>
-      <div class="label-container-home">
+      <div class="background-color"></div>-->
+      <!--<div class="label-container-home">
         <h1>FIND.</h1>
         <h1>BOOK.</h1>
         <h1>ENJOY.</h1>
-      </div>
+      </div>-->
       <div class="buildings-container">
-        <img class="svg" src="images/svgs/building1.svg" alt="Kiwi standing on oval">
+        <background></background>
       </div>
     </div>
+    <script src="../js/app.js"></script>
+    <!--<script src="../js/components/loaderBackground.js"></script>-->
   </body>
 </html>

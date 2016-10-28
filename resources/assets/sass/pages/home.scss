@@ -210,15 +210,4 @@
       font-weight: bold;
     }
   }
-  .buildings-container{
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    .svg{
-      transform: translate(-30%, -12.5%);
-    }
-  }
 }
