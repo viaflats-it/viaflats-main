@@ -83,6 +83,9 @@ return [
     'unique'               => 'The :attribute has already been taken.',
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
+    'weekday' => 'Weekday is invalid',
+    'time_start' => 'Time Start is invalid or missing',
+    'time_end' => 'Time End is invalid or missing',
 
     /*
     |--------------------------------------------------------------------------

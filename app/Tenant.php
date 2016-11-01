@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tenant extends Model
 {
-    protected $table= 'tenant';
+    protected $table = 'tenant';
 
     protected $primaryKey = 'idTenant';
 
     protected $fillable = [
-        'idTenant', 'student', 'account_state', 'about', 'spoken_languages', 'nationality', 'idPerson'
+        'idTenant', 'student', 'account_state', 'about', 'spoken_languages', 'nationality', 'idPerson', 'expected_city', 'budget_min',
+        'budget_max', 'expected_in', 'expected_out', 'expected_type', 'gender', 'birth_place', 'birth_date',
     ];
 
     /**
@@ -23,10 +24,23 @@ class Tenant extends Model
         'password',
     ];
 
-    protected $dates = ['creation_date'];
+    public function address()
+    {
+        return $this->belongsTo('App\Address', 'idAddress');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne('App\Parents', 'idTenant');
+    }
 
     public function person()
     {
-        return $this->hasOne('App\User', 'idPerson');
+        return $this->belongsTo('App\User', 'idPerson');
     }
+
+    protected $dates = ['creation_date'];
+
+    public $timestamps = false;
+
 }

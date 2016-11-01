@@ -25,6 +25,9 @@ class Landlord extends Model
 
     protected $dates = ['creation_date'];
 
+    public $timestamps = false;
+
+
     public function person()
     {
         return $this->hasOne('App\User', 'idPerson');

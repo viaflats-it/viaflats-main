@@ -11,6 +11,7 @@ class MessageController extends Controller
     public function delete()
     {
 
+
     }
 
     public function sendPublic()

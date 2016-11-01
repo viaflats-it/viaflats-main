@@ -24,4 +24,12 @@ class PageController extends Controller
     public function landlord(){
         return view('landlord/profil_landlord');
     }
+
+    public function tenant(){
+        return view('tenant/profile_tenant');
+    }
+
+    public function account(){
+        return view('tenant/account');
+    }
 }

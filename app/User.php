@@ -19,7 +19,7 @@ class User extends Authenticatable
 
     protected $primaryKey = 'idPerson';
     protected $fillable = [
-        'login','password', 'email', 'first-name','last_name','phone_indicator', 'phone'
+        'login','password', 'email', 'first_name','last_name','phone_indicator', 'phone', 'confirmation_code', 'type_person'
     ];
 
     /**
@@ -30,6 +30,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function tenant()
+    {
+        return $this->hasOne('App\Tenant', 'idPerson');
+    }
 
     public $timestamps = false;
 }
