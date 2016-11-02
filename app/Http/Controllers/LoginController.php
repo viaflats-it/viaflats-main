@@ -72,7 +72,7 @@ class LoginController extends Controller
     public function signUpGoogle()
     {
         $client = new Google_Client();
-        $client->setAuthConfig('C:\wamp\www\Viaflats\config\credentials.json');
+        $client->setAuthConfig('..\config\credentials.json');
         $client->setScopes(['profile', 'email']);
         $client->setAccessType('offline');
         $client->setApplicationName('Viaflats');
@@ -100,6 +100,7 @@ class LoginController extends Controller
                 'login' => $id,
                 'email'=> $email,
                 'password' => \Hash::make('google_'.$email.$fname.$lname),
+                'profile_picture' => $picture,
                 'first_name' => $fname,
                 'last_name' => $lname,
                 ]);
@@ -123,6 +124,8 @@ class LoginController extends Controller
                 $user->first_name = $fname;
             if($user->last_name != $lname)
                 $user->last_name = $lname;
+            if($user->profile_picture != $picture)
+                $user->profile_picture = $picture;
             $user->password = \Hash::make('google_'.$email.$fname.$lname);
             $user->save();
 
@@ -178,6 +181,7 @@ class LoginController extends Controller
                 'login' => $userNode['id'],
                 'email'=> $userNode['email'],
                 'password' => \Hash::make('facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']),
+                'profile_picture' => 'http://graph.facebook.com/'.$userNode['id'].'/picture',
                 'first_name' => $userNode['first_name'],
                 'last_name' => $userNode['last_name'],
                 ]);
@@ -199,6 +203,8 @@ class LoginController extends Controller
                     $user->first_name = $userNode['first_name'];
                 if($user->last_name != $userNode['last_name'])
                     $user->last_name = $userNode['last_name'];
+                if($user->profile_picture != 'http://graph.facebook.com/'.$userNode['id'].'/picture')
+                    $user->profile_picture = 'http://graph.facebook.com/'.$userNode['id'].'/picture';
             $user->password = \Hash::make('facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']);
             $user->save();
 

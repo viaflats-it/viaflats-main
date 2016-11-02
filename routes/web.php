@@ -63,9 +63,12 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::get('add_property', 'LandlordController@showAddProperty');
     Route::get('my_properties', 'LandlordController@showProperties');
     Route::get('my_booking', 'LandlordController@showBooking');
-    Route::get('update_availabilities', 'LandlordController@showUpdateAvailabilities');
     Route::get('invoices', 'LandlordController@showInvoices');
     Route::get('messages', 'LandlordController@showMessages');
+
+    Route::get('update_availabilities', 'LandlordController@showUpdateAvailabilities');
+    Route::post('update_availabilities', 'LandlordController@updateAvailabilities');
+    Route::post('update_absences', 'LandlordController@updateAbsences');
 
     Route::get('complete_profile' , 'LandlordController@completeProfile');
     Route::post('complete_profile' , 'LandlordController@doCompleteProfile');

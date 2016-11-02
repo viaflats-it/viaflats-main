@@ -6,7 +6,27 @@ body {
 
 /* Toggle Styles */
 
+.selectable { user-select: none; }
 
+.viaflats-text-day {
+    color:#9982bb;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.hour{
+    margin-right: 0px;
+    float:right;
+    cursor:pointer;
+    text-align: center;
+    width:35px;
+    border-style: outset;
+}
+
+.hour:hover, .hour::selection{
+    text-decoration: none;
+    border-style: inset;
+}
 
 .adminAddLandlord
 {
@@ -25,7 +45,7 @@ body {
     padding: 5px 10px 5px 10px;
 
 
-   // background-color: #ecf0f1;
+    // background-color: #ecf0f1;
 
     border: 1px solid lightgray;
 }

@@ -12,77 +12,83 @@
     {{ Html::style('css/app.css') }}
     {{ Html::style('css/custom.css') }}
     {{ Html::style('css/boostrap.min.css') }}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- jQuery -->
+  <script src="{{URL::asset('js/app.js')}}"></script>
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 
 </head>
 <body>
-<div id="wrapper">
+    <div id="wrapper">
 
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a href="landlord">
-                    @lang('landlord.landlord')
-                </a>
-            </li>
-            <li>
-                <a href="profile">@lang('landlord.profile')</a>
-            </li>
-            <li>
-                <a href="add_property">@lang('landlord.add_property')</a>
-            </li>
-            <li>
-                <a href="my_properties">@lang('landlord.my_properties')</a>
-            </li>
-            <li>
-                <a href="my_booking">@lang('landlord.my_booking')</a>
-            </li>
-            <li>
-                <a href="update_availabilities">@lang('landlord.update_availabilities')</a>
-            </li>
-            <li>
-                <a href="invoices">@lang('landlord.invoices')</a>
-            </li>
-            <li>
-                <a href="messages">@lang('landlord.messages')</a>
-            </li>
-            @if(Auth::user()->admin == 1)
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="landlord">
+                        @lang('landlord.landlord')
+                    </a>
+                </li>
+                <li>
+                    <a href="profile">@lang('landlord.profile')</a>
+                </li>
+                <li>
+                    <a href="add_property">@lang('landlord.add_property')</a>
+                </li>
+                <li>
+                    <a href="my_properties">@lang('landlord.my_properties')</a>
+                </li>
+                <li>
+                    <a href="my_booking">@lang('landlord.my_booking')</a>
+                </li>
+                <li>
+                    <a href="update_availabilities">@lang('landlord.update_availabilities')</a>
+                </li>
+                <li>
+                    <a href="invoices">@lang('landlord.invoices')</a>
+                </li>
+                <li>
+                    <a href="messages">@lang('landlord.messages')</a>
+                </li>
+                @if(Auth::user()->admin == 1)
                 <li>
                     <span class="adminAddlandlord"><a href="addLandlord">@lang('landlord.adminAddlandlord')</a></span>
                 </li>
                 @endif
-        </ul>
-    </div>
-    <!-- /#sidebar-wrapper -->
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <nav class="navbar navbar-default">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <a class="navbar-brand" href="index">Viaflats</a>
-                        </div>
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="#">Home</a></li>
-                            @if(Auth::check())
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+                            <div class="navbar-header">
+                                <a class="navbar-brand" href="index">Viaflats</a>
+                            </div>
+                            <ul class="nav navbar-nav">
+                                <li class="active"><a href="#">Home</a></li>
+                                @if(Auth::check())
                                 <li><a>{{Auth::user()->login}}</a>
 
                                 </li>
                                 <li><a href="logout">
-                                        <button class="btn btn-danger">Logout</button>
-                                    </a>
-                                </li>
+                                    <button class="btn btn-danger">Logout</button>
+                                </a>
+                            </li>
                             @else
-                                <li><a id="login">Login</a></li>
-                                <li><a id="signup">Signup</a></li>
+                            <li><a id="login">Login</a></li>
+                            <li><a id="signup">Signup</a></li>
                             @endif
                         </ul>
                     </div>
@@ -104,8 +110,7 @@
 <!-- /#wrapper -->
 
 
-<!-- jQuery -->
-<script src="{{URL::asset('js/app.js')}}"></script>
+
 
 
 <!-- Menu Toggle Script -->
