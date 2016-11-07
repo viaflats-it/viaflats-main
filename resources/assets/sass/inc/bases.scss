@@ -1,0 +1,22 @@
+h1, h2, h3, h4, h5{
+  font-family: $Dosis;
+  font-weight: 200;
+}
+p, input, select, button{
+  font-family: $Lato;
+}
+
+html{
+  background-color: $backgroundWhite;
+  body{
+    margin: 0;
+  }
+}
+
+.flex-container{
+  @include flexbox;
+}
+.column-flex-container{
+  @include flexbox;
+  @include flex-direction(column);
+}

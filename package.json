@@ -1,18 +1,40 @@
 {
-  "private": true,
-  "scripts": {
-    "prod": "gulp --production",
+  "name": "viaflats-main",
+  "version": "1.0.0",
+  "description": "New Viaflats' Website",
+  "main": "gulpfile.js",
+  "directories": {
     "dev": "gulp watch"
   },
+  "scripts": {
+    "start": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viaflats-it/viaflats-main.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viaflats-it/viaflats-main/issues"
+  },
+  "homepage": "https://github.com/viaflats-it/viaflats-main#readme",
   "devDependencies": {
     "bootstrap-sass": "^3.3.7",
+    "buble": "^0.14.2",
+    "css-loader": "^0.25.0",
     "gulp": "^3.9.1",
-    "jquery": "^3.1.0",
-    "laravel-elixir": "^6.0.0-9",
+    "intl-tel-input": "^9.2.4",
+    "jquery": "^3.1.1",
+    "laravel-elixir": "^6.0.0-11",
+    "laravel-elixir-browsersync": "^0.1.5",
+    "laravel-elixir-browsersync-official": "^1.0.0",
     "laravel-elixir-vue-2": "^0.2.0",
     "laravel-elixir-webpack-official": "^1.0.2",
     "lodash": "^4.16.2",
+    "rimraf": "^2.5.4",
     "vue": "^2.0.1",
-    "vue-resource": "^1.0.3"
+    "vue-resource": "^1.0.3",
+    "webpack": "^1.13.3"
   }
 }

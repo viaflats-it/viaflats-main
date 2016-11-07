@@ -1,0 +1,47 @@
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin Dosis() {
+  font-family: $Dosis;
+  font-size: 16px;
+  @content;
+}
+
+@mixin Lato() {
+  font-family: $Lato;
+  font-size: 16px;
+  @content;
+}
+
+@mixin flex-direction($value) {
+  -moz-flex-direction: $value;
+  -ms-flex-direction: $value;
+  -webkit-flex-direction: $value;
+  flex-direction: $value;
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder {
+    @content;
+  }
+  :-moz-placeholder {
+    @content;
+  }
+  ::-moz-placeholder {
+    @content;
+  }
+  :-ms-input-placeholder {
+    @content;
+  }
+}
+
+@mixin hover() {
+  &:hover{
+    @content;
+  }
+}
