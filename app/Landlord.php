@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Landlord extends Model
 {
-    protected $table= 'landlord';
+    protected $table = 'landlord';
 
     protected $primaryKey = 'idLandlord';
 
@@ -32,4 +32,10 @@ class Landlord extends Model
     {
         return $this->hasOne('App\User', 'idPerson');
     }
+
+    public function payment_way()
+    {
+        return $this->belongsToMany('App\Payment_way','Payment_way_landlord','idLandlord','idPayment');
+    }
+
 }

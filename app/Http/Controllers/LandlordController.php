@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Landlord;
 use App\User;
+use App\Payment_way;
 use Illuminate\support;
 use Image;
 
@@ -48,8 +49,17 @@ class LandlordController extends Controller
 
     public function showProfile()
     {
+
+        $payment = array();
+        foreach (Payment_way::all() as $p) {
+            $payment[$p->idPayment] = $p->label;
+        }
         $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
-        return view('landlord/profile_landlord', compact('landlord'));
+        $land_payment = array();
+        foreach ($landlord->payment_way()->get() as $p) {
+            array_push($land_payment, $p->idPayment);
+        }
+        return view('landlord/profile_landlord', compact('landlord', 'payment', 'land_payment'));
 
     }
 
@@ -158,15 +168,18 @@ class LandlordController extends Controller
             'contact_preference' => $formFields['contact_preference'],
             'corporate' => $formFields['corporate'],
         );
-
         $landlord->about = $userData['about'];
         $landlord->contact_preference = $userData['contact_preference'];
         $landlord->corporate = $userData['corporate'];
         $landlord->company_website = $userData['company_web'];
         $landlord->save();
-
-//        }
+        if (isset($formFields['payment_way'])) {
+            $landlord->payment_way()->sync($formFields['payment_way']);
+        } else {
+            $landlord->payment_way()->detach();
+        }
     }
+
 
     public function verifyAccount($code)
     {

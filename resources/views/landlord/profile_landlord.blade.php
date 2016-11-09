@@ -48,7 +48,7 @@
                                 {{--value="{{Auth::user()->phone ? Auth::user()->phone: ''}}"/>--}}
                                 {{--</div>--}}
                                 <input type="tel" class="form-control" id="phone"
-                                       value="{{Auth::user()->phone ? Auth::user()->phone: ''}}" />
+                                       value="{{Auth::user()->phone ? Auth::user()->phone: ''}}"/>
                                 <div id="phone_error"></div>
                                 <div id="phone_indicator_error"></div>
 
@@ -183,10 +183,14 @@
                         {!! Form::label('company_web' ,trans('landlord.company_web')) !!}
                         {!! Form::text('company_web', $landlord->company_website , ['class' => 'form-control']) !!}
                     </div>
-
+                </div>
+                <div class="col-md-3 col-md-push-1" id="payment">
+                    @foreach($payment as $p)
+                        {!! Form::label('payment_way[]',$p) !!}
+                        {!! Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '' )!!}
+                    @endforeach
                 </div>
             </div>
-
             {!! Form::submit(trans('landlord.update'), ['class' => 'btn btn-viaflats']) !!}
             {!! Form::close() !!}
         </div>
@@ -196,6 +200,8 @@
         $("#phone").intlTelInput();
     </script>
     <script>
+
+
         /*UPDATE PROFILES */
         function saveProfile() {
 
@@ -208,7 +214,7 @@
                 url: url,
                 data: {
                     'data': $form.serialize(),
-                    "phone" : phone,
+                    "phone": phone,
                     "_token": "{{ csrf_token() }}"
                 }
             });

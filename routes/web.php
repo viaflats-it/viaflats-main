@@ -20,7 +20,7 @@ Route::get('confirmation/mail/{confirmationCode}','MailController@confirm');
 Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
 Route::get('logoutfb', 'LoginController@logOutFb');
 Route::get('logoutgoogle', 'LoginController@logOutGoogle');
-
+Route::get('SendConfirmationMail','MailController@SendConfirmationMail');
 
 
 /* ----------------------
@@ -56,8 +56,13 @@ Route::group(['middleware' => 'auth'], function() {
     //Update Profile
     Route::post('updatePlace','TenantController@updateBookingSearch');
     Route::post('updateAbout','TenantController@updateAboutYou');
-    Route::post('updatePictureTenant','TenantController@updatePicture');
     Route::post('updateTrustCenter','TenantController@updateTrustCenter');
+
+    //First Step after mail confirm
+    Route::post('uploadFiles', 'TenantController@uploadFiles');
+    Route::get('deletePicture','TenantController@deletePicture');
+    Route::get('FirstStepTenant','TenantController@FirstStepTenant');
+    Route::get('FirstStepProperties','SearchController@FirstStepProperties');
 
     //Upload File Center
     Route::post('updateIdentity','TenantController@updateIdentity');

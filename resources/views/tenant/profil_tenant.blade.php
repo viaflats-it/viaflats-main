@@ -43,6 +43,21 @@
                         {!! Form::label('expected_type','What type of room do you want ? ') !!}
                         {!! Form::select('expected_type',trans('tenant.type_room'),['value' => $tenant->expected_type]) !!}
                     </div>
+                    <!----- Couple ------>
+                    <div class="form-group row " id="couple_has_error">
+                        <div class="col-md-12">
+                            {!! Form::label('couple',trans('tenant.couple')) !!}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {!! Form::label('couple',trans('tenant.no')) !!}
+                            {!! Form::radio('couple','No',true) !!}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {!! Form::label('couple',trans('tenant.yes')) !!}
+                            {!! Form::radio('couple','Yes') !!}
+                        </div>
+                        <div id="couple_error"></div>
+                    </div>
                     <!----- Expected Date --->
                     <div class="form-group">
                         <div id="expected_in_has_error">
@@ -77,6 +92,7 @@
             <h3>@lang('tenant.about_you')</h3>
             <div id="aboutYou">
                 {!! Form::open(['url'=>'updateAbout','id'=>'updateAbout']) !!}
+                {!! Form::hidden('First_step',false) !!}
                 <div id="successMessageAbout"></div>
                 <div class="col-md-6">
                     <!------------ Gender ----------->
@@ -230,21 +246,15 @@
         <!----------- Picture ----------->
         <div class="col-md-12">
             <div class="form-group">
-                {!! Form::open(['url'=>'updatePictureTenant','id'=>'updatePictureTenant','files'=>true]) !!}
-                {!! Form::label('picture',trans('tenant.picture')) !!}
-                <div id="picture_has_error">
-                    @if($tenant->profile_picture != NULL)
-                        <img class="profilPic" src="profilepics/{{$tenant->profile_picture}}">
-                    @else
-                        <img class="profilPic" src="profilepics/logov1.png">
-                    @endif
-                    {!! Form::file('picture') !!}
-                </div>
-                <div id="picture_error"></div>
-                {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                {!! Form::close() !!}
+                @if($tenant->profile_picture != NULL)
+                    <img class="profilPic" src="profilepics/{{$tenant->profile_picture}}">
+                @else
+                    <img class="profilPic" src="profilepics/logov1.png">
+                @endif
+                <button class="btn btn-viaflats" id="ProfilPictureButton">Upload My Picture</button>
             </div>
         </div>
+
 
         <!--------- Trust Center -------->
         <div class="col-md-12">
@@ -526,9 +536,9 @@
                 {!! Form::label('picture',trans('tenant.identity')) !!}
                 <div id="picture_has_error">
                     @if($tenant->identity != NULL)
-                        {!! Form::label('You already upload a file ') !!}
+                        {!! Form::label(trans('tenant.file_load')) !!}
                     @else
-                        {!! Form::label('You didn\'t upload any file ') !!}
+                        {!! Form::label(trans('tenant.file_not_load')) !!}
                     @endif
                     {!! Form::file('picture') !!}
                 </div>
@@ -542,10 +552,11 @@
                     {!! Form::open(['url'=>'updateStudyAgreement','files'=>true]) !!}
                     {!! Form::label('picture',trans('tenant.study_agreement')) !!}
                     <div id="picture_has_error">
+                        {!! Form::label(trans('tenant.study_agreement_explanation')) !!}
                         @if($tenant->study_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -560,9 +571,9 @@
                     {!! Form::label('picture',trans('tenant.work_agreement')) !!}
                     <div id="picture_has_error">
                         @if($tenant->work_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -576,9 +587,9 @@
                     {!! Form::label('picture',trans('tenant.pay_slip')) !!}
                     <div id="picture_has_error">
                         @if($tenant->pay_slip != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -593,9 +604,9 @@
                     {!! Form::label('picture',trans('tenant.study_agreement')) !!}
                     <div id="picture_has_error">
                         @if($tenant->study_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -609,9 +620,9 @@
                     {!! Form::label('picture',trans('tenant.work_agreement')) !!}
                     <div id="picture_has_error">
                         @if($tenant->work_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -625,9 +636,9 @@
                     {!! Form::label('picture',trans('tenant.pay_slip')) !!}
                     <div id="picture_has_error">
                         @if($tenant->pay_slip != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -639,8 +650,59 @@
         </div>
     </div>
 
+    <!------- Modal Profil Picture ------->
+    <div id="ProfilPicture" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@lang('tenant.picture')</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6" style="text-align: center;margin-left:25%">
+                            {!! Form::open(['url'=>'uploadFiles','class'=>'dropzone','id'=>'MyDropzone','files'=>true]) !!}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="modal-footer">
+                    {!! Form::close() !!}
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+
+        $('#ProfilPictureButton').click(function(){
+            $('#ProfilPicture').modal();
+        });
+
+        Dropzone.options.MyDropzone = {
+            dictDefaultMessage: 'Drop your picture here !<br>Or<br> Click on it to select one !',
+            paramName: "file",
+            maxFiles: 1,
+            addRemoveLinks: true,
+            thumbnailWidth: "300",
+            thumbnailHeight: "300",
+            accept: function (file, done) {
+                done()
+            },
+            init: function () {
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                });
+                this.on("removedfile", function () {
+                    this.removeAllFiles();
+                    $.ajax({
+                        url: 'deletePicture',
+                    });
+                });
+            },
+        };
 
         $('#student').change(function () {
             var content = '<div id="respons_student">' +
