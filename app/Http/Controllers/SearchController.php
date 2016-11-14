@@ -109,4 +109,5 @@ class SearchController extends Controller
             'Available' => $available_list,
         ));
     }
+
 }

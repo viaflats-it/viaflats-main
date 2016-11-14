@@ -10,7 +10,7 @@ class Payment_way extends Model
 
     protected $primaryKey = 'idPayment';
 
-    public function payment_way()
+    public function landlord()
     {
         return $this->belongsToMany('App\Landlord','Payment_way_landlord','idPayment','idLandlord');
     }

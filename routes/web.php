@@ -30,10 +30,8 @@ Route::group(['middleware' => 'guest'], function() {
     Route::post('login', 'LoginController@signIn');
     Route::post('signup', 'LoginController@signUp');
 
-
     Route::get('fbsignup', 'LoginController@signUpFacebook');
     Route::get('logingoogle', 'LoginController@signUpGoogle');
-
 
 });
 
@@ -57,6 +55,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updatePlace','TenantController@updateBookingSearch');
     Route::post('updateAbout','TenantController@updateAboutYou');
     Route::post('updateTrustCenter','TenantController@updateTrustCenter');
+    Route::post('DeleteTagTenant','TenantController@DeleteTagTenant');
 
     //First Step after mail confirm
     Route::post('uploadFiles', 'TenantController@uploadFiles');
@@ -69,6 +68,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('updateWorkAgreement','TenantController@updateWorkAgreement');
     Route::post('updateStudyAgreement','TenantController@updateStudyAgreement');
     Route::post('updatePaySlip','TenantController@updatePaySlip');
+
+    //Reservation
+    Route::get('my_reservation','ReservationController@showMyReservation');
+    Route::get('showAllReservation','ReservationController@showAll');
 });
 
 

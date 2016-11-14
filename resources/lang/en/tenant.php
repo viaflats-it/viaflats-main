@@ -112,4 +112,14 @@ return [
     'disable' => 'Disable',
     'delete_account' => 'Delete Your account',
     'delete' => 'Delete',
+
+    /*----------------------------
+                                    Reservation
+                                                ----------------------------*/
+
+    'pending' => 'Pending',
+    'waiting' => 'Waiting',
+    'confirmed' => 'Confirmed',
+    'rejected' => 'Rejected',
+
 ];

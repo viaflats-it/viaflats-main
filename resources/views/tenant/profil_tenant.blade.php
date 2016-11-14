@@ -8,7 +8,7 @@
             <h3>@lang('tenant.about_next_place')</h3>
             <div id="aboutPlace">
                 {!! Form::open(['url'=>'updatePlace','id'=>'updatePlace'])!!}
-                {!! Form::token() !!}
+                {!! Form::hidden('First_step',false) !!}
                 <div id="successMessagePlace"></div>
                 <div class="col-md-6">
                     <!-------- City --------->
@@ -17,7 +17,7 @@
                             {!! Form::label('expected_city',trans('tenant.expected_city')) !!}
                         </div>
                         <div class="col-md-6">
-                            {!! Form::select('expected_city',$array,['value'=>$tenant->expected_city]) !!}
+                            {!! Form::select('expected_city',$list_city,['value'=>$tenant->expected_city]) !!}
                         </div>
                         <div id="expected_city_error"></div>
                     </div>
@@ -50,11 +50,11 @@
                         </div>
                         <div class="form-group col-md-6">
                             {!! Form::label('couple',trans('tenant.no')) !!}
-                            {!! Form::radio('couple','No',true) !!}
+                            {!! Form::radio('couple',0,true) !!}
                         </div>
                         <div class="form-group col-md-6">
                             {!! Form::label('couple',trans('tenant.yes')) !!}
-                            {!! Form::radio('couple','Yes') !!}
+                            {!! Form::radio('couple',1) !!}
                         </div>
                         <div id="couple_error"></div>
                     </div>
@@ -234,6 +234,20 @@
                         <div class="col-md-6">
                             {!! Form::select('contact_pref',trans('tenant.contact_pref'),['value' => $tenant->contact_preference ]) !!}
                         </div>
+                    </div>
+                    <!------- Tag For Matching --------->
+                    <div class="form-group row">
+                        {!! Form::label('tag') !!}
+                        {!! Form::text('tag',null,['id'=>'Tag_Input']) !!}
+                        <a class="btn btn-viaflats" id="TagButton">Validate</a>
+                    </div>
+                    <div id="Tag" class="row">
+                        @foreach($list_tag as $t)
+                            <div class="col-md-4">
+                                <span>{{$t->label}}</span>
+                                <a class="TagDelete" id=tag{{$t->idTag}}>X</a>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -519,6 +533,7 @@
                                 </div>
                             </div>
                         @endif
+
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -676,9 +691,22 @@
 
     <script>
 
-        $('#ProfilPictureButton').click(function(){
+        $('#ProfilPictureButton').click(function () {
             $('#ProfilPicture').modal();
         });
+
+
+        $(function () {
+            var list = [
+                <?php foreach ($all_Tag as $tag) { ?>
+                        '{{$tag->label}}',
+                <?php } ?>];
+            $('#Tag_Input').autocomplete({
+                source: list,
+                minLength: 1,
+            })
+        });
+
 
         Dropzone.options.MyDropzone = {
             dictDefaultMessage: 'Drop your picture here !<br>Or<br> Click on it to select one !',
@@ -791,6 +819,15 @@
                         }
                     });
                     $('#successMessageAbout').html(successContent);
+                    $('#Tag').html('');
+                    var content = data.list_tag;
+                    $(content).each(function (index, value) {
+                        $("#Tag").append('<div class="col-md-4">' +
+                                '<span>' + value.label + '</span>' +
+                                '<a class="TagDelete" id=tag' + value.idTag + '>X</a>' +
+                                '</div>'
+                        );
+                    });
                 }
             });
         }
@@ -922,8 +959,35 @@
             savePlace("");
         });
 
+
+        $("#Tag").on('click', ".TagDelete[id^='tag']", function (event) {
+            event.preventDefault();
+            var id = $(this).attr('id').replace('tag', '');
+            var url = 'DeleteTagTenant';
+            var posting = $.ajax({
+                type: "POST",
+                datType: "json",
+                url: url,
+                data: {
+                    'data': id,
+                    "_token": "{{ csrf_token() }}",
+                }
+            });
+            posting.done(function (data) {
+                $("#Tag").html("");
+                $(data.list_tag).each(function (index, value) {
+                    $("#Tag").append('<div class="col-md-4">' +
+                            '<span>' + value.label + '</span>' +
+                            '<a class="TagDelete" id=tag' + value.idTag + '>X</a>' +
+                            '</div>'
+                    );
+                });
+            });
+        });
+
+
         //Autosave
-        $('#aboutYou').on('change', function () {
+        $("#TagButton").on('click', function () {
             saveAbout("");
         });
 
@@ -931,7 +995,6 @@
         $('#trustCenter').on('change', function () {
             saveTrustCenter("");
         });
-
 
     </script>
 

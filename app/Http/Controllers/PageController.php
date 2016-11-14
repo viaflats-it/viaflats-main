@@ -38,4 +38,5 @@ class PageController extends Controller
     public function account(){
         return view('tenant/account');
     }
+
 }

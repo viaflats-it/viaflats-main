@@ -8,6 +8,7 @@ use App\Tenant;
 use App\Http\Requests;
 use App\User;
 use Image;
+use App\Tag;
 use App\Mail\ConfirmationMailTenant;
 use App\Address;
 use App\Parents;
@@ -15,26 +16,25 @@ use Illuminate\Support\Facades\Redirect;
 
 class TenantController extends Controller
 {
+    //Show Profile Page
     public function showProfile()
     {
         $city = City::all();
-        $array = array();
+        $list_city = array();
         $tenant = Tenant::where("idPerson", "=", \Auth::user()->idPerson)->first();
         $parent = Parents::where("idTenant", "=", $tenant->idTenant)->first();
         $address_T = Address::where("idAddress", "=", $tenant->idAddress)->first();
         $address_P = Address::where("idAddress", "=", $parent->idAddress)->first();
         $user = User::find(\Auth::user()->idPerson);
         foreach ($city as $town) {
-            $id = $town->idCity;
-            $name = $town->libelle;
-            $array[$id] = $name;
+            $list_city[$town->idCity] = $town->libelle;
         }
-
-        return view('tenant/profil_tenant', compact('array', 'tenant', 'user', 'parent', 'address_T', 'address_P'));
-
+        $all_Tag = Tag::all();
+        $list_tag = $tenant->tag()->get();
+        return view('tenant/profil_tenant', compact('list_city', 'tenant', 'user', 'parent', 'address_T', 'address_P', 'list_tag', 'all_Tag'));
     }
 
-    //Delete all info about a tenant + Ne pas oublier de mettre anonyme les booking
+    //Delete all info about a tenant + Ne pas oublier de mettre anonyme les bookings
     public function delete()
     {
         $user = User::where('idPerson', '=', \Auth::user()->idPerson)->first();
@@ -148,8 +148,8 @@ class TenantController extends Controller
             $tenant->couple = $tenantData['couple'];
             $tenant->save();
 
-            if($tenantData['First_step']){
-                $user -> status = 1;
+            if ($tenantData['First_step']) {
+                $user->status = 1;
                 $user->save();
             }
         }
@@ -207,6 +207,35 @@ class TenantController extends Controller
                 $user['first_name'] = $tenantData['first_name'];
                 $user['last_name'] = $tenantData['last_name'];
                 $user->save();
+
+                //Tag
+                if ($tenantData['tag'] != Null) {
+                    $All_tag = Tag::all();
+                    $exists = false;
+                    $Tenant_tag = array();
+                    foreach ($All_tag as $tag) {
+                        if ($tag->label == $tenantData['tag']) {
+                            $old_tag = $tag;
+                            $exists = true;
+                        }
+                    }
+                    foreach ($tenant->tag()->get() as $t) {
+                        array_push($Tenant_tag, $t->idTag);
+                    }
+                    if ($exists == false) {
+                        $new_tag = Tag::create([
+                            'label' => $tenantData['tag'],
+                        ]);
+                        array_push($Tenant_tag, ($new_tag->idTag));
+                        $tenant->tag()->sync($Tenant_tag);
+                    } else {
+                        array_push($Tenant_tag, $old_tag->idTag);
+                        $tenant->tag()->sync($Tenant_tag);
+                    }
+                    return \Response::json(array(
+                        'list_tag' => $tenant->tag()->get(),
+                    ));
+                }
             }
         }
     }
@@ -436,9 +465,29 @@ class TenantController extends Controller
     }
 
     //Confirm first connection after confirmation mail
-    public function FirstStepTenant(){
+    public function FirstStepTenant()
+    {
         $user = User::find(\Auth::user()->idPerson);
         $user->status = 1;
         $user->save();
     }
+
+    //Delete Tag
+    public function DeleteTagTenant()
+    {
+        $tenant = $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
+        $tag = $tenant->tag()->get();
+        $Data = \Input::get('data');
+        $newTag = array();
+        foreach ($tag as $t){
+            if($t->idTag != $Data){
+                array_push($newTag,$t->idTag);
+            }
+        }
+        $tenant->tag()->sync($newTag);
+        return \Response::json(array(
+            'list_tag' => $tenant->tag()->get(),
+        ));
+    }
+
 }
