@@ -16,6 +16,11 @@ $flagsImagePath: "../images/flags/" !default; in ../../../node_modules/intl-tel-
 
 @import 'inc/intl-tel-input/src/css/intlTelInput';
 
+/* Dropzone */
+
+@import 'inc/dropzone/basic.scss';
+@import 'inc/dropzone/dropzone.scss';
+
 // Views
 @import 'pages/landlord';
 

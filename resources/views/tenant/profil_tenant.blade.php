@@ -8,7 +8,7 @@
             <h3>@lang('tenant.about_next_place')</h3>
             <div id="aboutPlace">
                 {!! Form::open(['url'=>'updatePlace','id'=>'updatePlace'])!!}
-                {!! Form::token() !!}
+                {!! Form::hidden('First_step',false) !!}
                 <div id="successMessagePlace"></div>
                 <div class="col-md-6">
                     <!-------- City --------->
@@ -17,7 +17,7 @@
                             {!! Form::label('expected_city',trans('tenant.expected_city')) !!}
                         </div>
                         <div class="col-md-6">
-                            {!! Form::select('expected_city',$array,['value'=>$tenant->expected_city]) !!}
+                            {!! Form::select('expected_city',$list_city,['value'=>$tenant->expected_city]) !!}
                         </div>
                         <div id="expected_city_error"></div>
                     </div>
@@ -42,6 +42,21 @@
                     <div class="form-group">
                         {!! Form::label('expected_type','What type of room do you want ? ') !!}
                         {!! Form::select('expected_type',trans('tenant.type_room'),['value' => $tenant->expected_type]) !!}
+                    </div>
+                    <!----- Couple ------>
+                    <div class="form-group row " id="couple_has_error">
+                        <div class="col-md-12">
+                            {!! Form::label('couple',trans('tenant.couple')) !!}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {!! Form::label('couple',trans('tenant.no')) !!}
+                            {!! Form::radio('couple',0,true) !!}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {!! Form::label('couple',trans('tenant.yes')) !!}
+                            {!! Form::radio('couple',1) !!}
+                        </div>
+                        <div id="couple_error"></div>
                     </div>
                     <!----- Expected Date --->
                     <div class="form-group">
@@ -77,6 +92,7 @@
             <h3>@lang('tenant.about_you')</h3>
             <div id="aboutYou">
                 {!! Form::open(['url'=>'updateAbout','id'=>'updateAbout']) !!}
+                {!! Form::hidden('First_step',false) !!}
                 <div id="successMessageAbout"></div>
                 <div class="col-md-6">
                     <!------------ Gender ----------->
@@ -219,6 +235,20 @@
                             {!! Form::select('contact_pref',trans('tenant.contact_pref'),['value' => $tenant->contact_preference ]) !!}
                         </div>
                     </div>
+                    <!------- Tag For Matching --------->
+                    <div class="form-group row">
+                        {!! Form::label('tag') !!}
+                        {!! Form::text('tag',null,['id'=>'Tag_Input']) !!}
+                        <a class="btn btn-viaflats" id="TagButton">Validate</a>
+                    </div>
+                    <div id="Tag" class="row">
+                        @foreach($list_tag as $t)
+                            <div class="col-md-4">
+                                <span>{{$t->label}}</span>
+                                <a class="TagDelete" id=tag{{$t->idTag}}>X</a>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
                 <div class="col-md-12">
                     {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"])!!}
@@ -230,21 +260,15 @@
         <!----------- Picture ----------->
         <div class="col-md-12">
             <div class="form-group">
-                {!! Form::open(['url'=>'updatePictureTenant','id'=>'updatePictureTenant','files'=>true]) !!}
-                {!! Form::label('picture',trans('tenant.picture')) !!}
-                <div id="picture_has_error">
-                    @if($tenant->profile_picture != NULL)
-                        <img class="profilPic" src="profilepics/{{$tenant->profile_picture}}">
-                    @else
-                        <img class="profilPic" src="profilepics/logov1.png">
-                    @endif
-                    {!! Form::file('picture') !!}
-                </div>
-                <div id="picture_error"></div>
-                {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                {!! Form::close() !!}
+                @if($tenant->profile_picture != NULL)
+                    <img class="profilPic" src="profilepics/{{$tenant->profile_picture}}">
+                @else
+                    <img class="profilPic" src="profilepics/logov1.png">
+                @endif
+                <button class="btn btn-viaflats" id="ProfilPictureButton">Upload My Picture</button>
             </div>
         </div>
+
 
         <!--------- Trust Center -------->
         <div class="col-md-12">
@@ -509,6 +533,7 @@
                                 </div>
                             </div>
                         @endif
+
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -526,9 +551,9 @@
                 {!! Form::label('picture',trans('tenant.identity')) !!}
                 <div id="picture_has_error">
                     @if($tenant->identity != NULL)
-                        {!! Form::label('You already upload a file ') !!}
+                        {!! Form::label(trans('tenant.file_load')) !!}
                     @else
-                        {!! Form::label('You didn\'t upload any file ') !!}
+                        {!! Form::label(trans('tenant.file_not_load')) !!}
                     @endif
                     {!! Form::file('picture') !!}
                 </div>
@@ -542,10 +567,11 @@
                     {!! Form::open(['url'=>'updateStudyAgreement','files'=>true]) !!}
                     {!! Form::label('picture',trans('tenant.study_agreement')) !!}
                     <div id="picture_has_error">
+                        {!! Form::label(trans('tenant.study_agreement_explanation')) !!}
                         @if($tenant->study_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -560,9 +586,9 @@
                     {!! Form::label('picture',trans('tenant.work_agreement')) !!}
                     <div id="picture_has_error">
                         @if($tenant->work_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -576,9 +602,9 @@
                     {!! Form::label('picture',trans('tenant.pay_slip')) !!}
                     <div id="picture_has_error">
                         @if($tenant->pay_slip != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -593,9 +619,9 @@
                     {!! Form::label('picture',trans('tenant.study_agreement')) !!}
                     <div id="picture_has_error">
                         @if($tenant->study_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -609,9 +635,9 @@
                     {!! Form::label('picture',trans('tenant.work_agreement')) !!}
                     <div id="picture_has_error">
                         @if($tenant->work_agreement != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -625,9 +651,9 @@
                     {!! Form::label('picture',trans('tenant.pay_slip')) !!}
                     <div id="picture_has_error">
                         @if($tenant->pay_slip != NULL)
-                            {!! Form::label('You already upload a file ') !!}
+                            {!! Form::label(trans('tenant.file_load')) !!}
                         @else
-                            {!! Form::label('You didn\'t upload any file ') !!}
+                            {!! Form::label(trans('tenant.file_not_load')) !!}
                         @endif
                         {!! Form::file('picture') !!}
                     </div>
@@ -639,8 +665,72 @@
         </div>
     </div>
 
+    <!------- Modal Profil Picture ------->
+    <div id="ProfilPicture" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@lang('tenant.picture')</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6" style="text-align: center;margin-left:25%">
+                            {!! Form::open(['url'=>'uploadFiles','class'=>'dropzone','id'=>'MyDropzone','files'=>true]) !!}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="modal-footer">
+                    {!! Form::close() !!}
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
+
+        $('#ProfilPictureButton').click(function () {
+            $('#ProfilPicture').modal();
+        });
+
+
+        $(function () {
+            var list = [
+                <?php foreach ($all_Tag as $tag) { ?>
+                        '{{$tag->label}}',
+                <?php } ?>];
+            $('#Tag_Input').autocomplete({
+                source: list,
+                minLength: 1,
+            })
+        });
+
+
+        Dropzone.options.MyDropzone = {
+            dictDefaultMessage: 'Drop your picture here !<br>Or<br> Click on it to select one !',
+            paramName: "file",
+            maxFiles: 1,
+            addRemoveLinks: true,
+            thumbnailWidth: "300",
+            thumbnailHeight: "300",
+            accept: function (file, done) {
+                done()
+            },
+            init: function () {
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                });
+                this.on("removedfile", function () {
+                    this.removeAllFiles();
+                    $.ajax({
+                        url: 'deletePicture',
+                    });
+                });
+            },
+        };
 
         $('#student').change(function () {
             var content = '<div id="respons_student">' +
@@ -729,6 +819,15 @@
                         }
                     });
                     $('#successMessageAbout').html(successContent);
+                    $('#Tag').html('');
+                    var content = data.list_tag;
+                    $(content).each(function (index, value) {
+                        $("#Tag").append('<div class="col-md-4">' +
+                                '<span>' + value.label + '</span>' +
+                                '<a class="TagDelete" id=tag' + value.idTag + '>X</a>' +
+                                '</div>'
+                        );
+                    });
                 }
             });
         }
@@ -860,8 +959,35 @@
             savePlace("");
         });
 
+
+        $("#Tag").on('click', ".TagDelete[id^='tag']", function (event) {
+            event.preventDefault();
+            var id = $(this).attr('id').replace('tag', '');
+            var url = 'DeleteTagTenant';
+            var posting = $.ajax({
+                type: "POST",
+                datType: "json",
+                url: url,
+                data: {
+                    'data': id,
+                    "_token": "{{ csrf_token() }}",
+                }
+            });
+            posting.done(function (data) {
+                $("#Tag").html("");
+                $(data.list_tag).each(function (index, value) {
+                    $("#Tag").append('<div class="col-md-4">' +
+                            '<span>' + value.label + '</span>' +
+                            '<a class="TagDelete" id=tag' + value.idTag + '>X</a>' +
+                            '</div>'
+                    );
+                });
+            });
+        });
+
+
         //Autosave
-        $('#aboutYou').on('change', function () {
+        $("#TagButton").on('click', function () {
             saveAbout("");
         });
 
@@ -869,7 +995,6 @@
         $('#trustCenter').on('change', function () {
             saveTrustCenter("");
         });
-
 
     </script>
 

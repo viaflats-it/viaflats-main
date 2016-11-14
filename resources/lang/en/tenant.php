@@ -18,6 +18,10 @@ return [
                                                 ----------------------------*/
     'save' => 'Save',
     'save_file' => 'Send File',
+    'next' => 'Next',
+    'pass_step' => 'Pass this step',
+    'end' => 'Finish',
+
 
 
     /*----------------------------
@@ -38,7 +42,9 @@ return [
                                                 ----------------------------*/
 
     'about_next_place' => 'About your next place',
+    'city_list' => ["1"=>"Maastricht","2"=>"Brussels","3"=>"Liège","4"=>"Lille"],
     'type_room' => ['0'=>'No preference','1'=>'Entire place','2'=>'Private Room','3'=>'Shared Room'],
+    'couple' => 'Are you searching as a couple ? ',
     'expected_city' => 'In which city do you want to search ? ',
     'budget_range' => 'Budget range : ',
     'expected_in' => 'Expected In ',
@@ -57,7 +63,7 @@ return [
     'last_name' => 'Last Name',
     'nationality' => 'Nationality',
     'describe' => 'Describe you',
-    'picture' => 'Profile Picture',
+    'picture' => 'Profil Picture',
     'student' => 'I\'m a student',
     'worker' => 'I\'m a worker',
     'studies' => 'What are you studying ?',
@@ -90,7 +96,9 @@ return [
     'work_agreement' => 'Copy of your work agreement',
     'study_agreement' => 'Copy of your study agreement',
     'pay_slip' => 'Copy of your pay slip',
-
+    'file_load' => 'You already upload a file ',
+    'file_not_load' => 'You didn\'t upload any file ',
+    'study_agreement_explanation' => 'A mail from you school is enough',
 
     /*----------------------------
                                      Account
@@ -104,4 +112,14 @@ return [
     'disable' => 'Disable',
     'delete_account' => 'Delete Your account',
     'delete' => 'Delete',
+
+    /*----------------------------
+                                    Reservation
+                                                ----------------------------*/
+
+    'pending' => 'Pending',
+    'waiting' => 'Waiting',
+    'confirmed' => 'Confirmed',
+    'rejected' => 'Rejected',
+
 ];

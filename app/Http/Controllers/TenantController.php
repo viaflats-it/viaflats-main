@@ -8,6 +8,7 @@ use App\Tenant;
 use App\Http\Requests;
 use App\User;
 use Image;
+use App\Tag;
 use App\Mail\ConfirmationMailTenant;
 use App\Address;
 use App\Parents;
@@ -15,35 +16,34 @@ use Illuminate\Support\Facades\Redirect;
 
 class TenantController extends Controller
 {
+    //Show Profile Page
     public function showProfile()
     {
         $city = City::all();
-        $array = array();
+        $list_city = array();
         $tenant = Tenant::where("idPerson", "=", \Auth::user()->idPerson)->first();
         $parent = Parents::where("idTenant", "=", $tenant->idTenant)->first();
         $address_T = Address::where("idAddress", "=", $tenant->idAddress)->first();
         $address_P = Address::where("idAddress", "=", $parent->idAddress)->first();
         $user = User::find(\Auth::user()->idPerson);
         foreach ($city as $town) {
-            $id = $town->idCity;
-            $name = $town->libelle;
-            $array[$id] = $name;
+            $list_city[$town->idCity] = $town->libelle;
         }
-
-        return view('tenant/profil_tenant', compact('array', 'tenant', 'user', 'parent', 'address_T', 'address_P'));
-
+        $all_Tag = Tag::all();
+        $list_tag = $tenant->tag()->get();
+        return view('tenant/profil_tenant', compact('list_city', 'tenant', 'user', 'parent', 'address_T', 'address_P', 'list_tag', 'all_Tag'));
     }
 
-    //Delete all info about a tenant + Ne pas oublier de mettre anonyme les booking
+    //Delete all info about a tenant + Ne pas oublier de mettre anonyme les bookings
     public function delete()
     {
         $user = User::where('idPerson', '=', \Auth::user()->idPerson)->first();
         $tenant = Tenant::where("idPerson", "=", \Auth::user()->idPerson)->first();
         $parent = Parents::where("idTenant", "=", $tenant->idTenant)->first();
-        if($tenant->idAddress == $parent->idAddress){
+        if ($tenant->idAddress == $parent->idAddress) {
             $address = Address::where("idAddress", "=", $parent->idAddress)->first();
             $address->delete();
-        }else{
+        } else {
             $address_P = Address::where("idAddress", "=", $parent->idAddress)->first();
             $address_T = Address::where("idAddress", "=", $tenant->idAddress)->first();
             $address_T->delete();
@@ -102,14 +102,13 @@ class TenantController extends Controller
     public function updateBookingSearch()
     {
         $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
-
+        $user = User::find(\Auth::user()->idPerson);
         $Data = \Input::get('data');
         parse_str($Data, $tenantData);
 
         $rules = array(
-            'expected_in' => 'date|after:today',
-            'expected_out' => 'date|after:expected_in'
-
+            'expected_in' => 'required|date|after:today',
+            'expected_out' => 'required|date|after:expected_in'
         );
 
         $validator = \Validator::make($tenantData, $rules);
@@ -146,22 +145,44 @@ class TenantController extends Controller
                 $tenant->expected_out = $tenantData['expected_out'];
             }
             $tenant->expected_type = $tenantData['expected_type'];
+            $tenant->couple = $tenantData['couple'];
             $tenant->save();
+
+            if ($tenantData['First_step']) {
+                $user->status = 1;
+                $user->save();
+            }
         }
     }
 
     public function updateAboutYou()
     {
         $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
-        $user = User::where('idPerson', '=', \Auth::user()->idPerson)->first();
 
         $Data = \Input::get('data');
         parse_str($Data, $tenantData);
 
-        $rules = array(
-            'first_name' => 'required|alpha',
-            'last_name' => 'required|alpha',
-        );
+        if ($tenantData['First_step']) {
+            $rules = array(
+                'nationality' => 'required',
+                'school_company' => 'required',
+                'gender' => 'required',
+                'work_studies' => 'required',
+                'spoken_languages' => 'required',
+                'about' => 'required',
+            );
+        } else {
+            $rules = array(
+                'first_name' => 'required|alpha',
+                'last_name' => 'required|alpha',
+                'nationality' => 'required',
+                'school_company' => 'required',
+                'gender' => 'required',
+                'work_studies' => 'required',
+                'spoken_languages' => 'required',
+                'about' => 'required',
+            );
+        }
 
         $validator = \Validator::make($tenantData, $rules);
 
@@ -171,7 +192,6 @@ class TenantController extends Controller
                 'errors' => $validator->getMessageBag()->toArray()
             ));
         } else {
-
             $tenant['about'] = $tenantData['about'];
             $tenant['spoken_languages'] = $tenantData['spoken_languages'];
             $tenant['nationality'] = $tenantData['nationality'];
@@ -182,27 +202,42 @@ class TenantController extends Controller
             $tenant['gender'] = $tenantData['gender'];
             $tenant->save();
 
-            $user['first_name'] = $tenantData['first_name'];
-            $user['last_name'] = $tenantData['last_name'];
-            $user->save();
-            $this->updatePicture();
+            if (!$tenantData['First_step']) {
+                $user = User::where('idPerson', '=', \Auth::user()->idPerson)->first();
+                $user['first_name'] = $tenantData['first_name'];
+                $user['last_name'] = $tenantData['last_name'];
+                $user->save();
+
+                //Tag
+                if ($tenantData['tag'] != Null) {
+                    $All_tag = Tag::all();
+                    $exists = false;
+                    $Tenant_tag = array();
+                    foreach ($All_tag as $tag) {
+                        if ($tag->label == $tenantData['tag']) {
+                            $old_tag = $tag;
+                            $exists = true;
+                        }
+                    }
+                    foreach ($tenant->tag()->get() as $t) {
+                        array_push($Tenant_tag, $t->idTag);
+                    }
+                    if ($exists == false) {
+                        $new_tag = Tag::create([
+                            'label' => $tenantData['tag'],
+                        ]);
+                        array_push($Tenant_tag, ($new_tag->idTag));
+                        $tenant->tag()->sync($Tenant_tag);
+                    } else {
+                        array_push($Tenant_tag, $old_tag->idTag);
+                        $tenant->tag()->sync($Tenant_tag);
+                    }
+                    return \Response::json(array(
+                        'list_tag' => $tenant->tag()->get(),
+                    ));
+                }
+            }
         }
-    }
-
-    public function updatePicture()
-    {
-        $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
-        if (\Input::file('picture')) {
-
-            $image = \Input::file('picture');
-            $filename = \Auth::user()->idPerson . '.' . $image->getClientOriginalExtension();
-            $path = public_path("profilepics/" . $filename);
-            Image::make($image->getRealPath())->save($path);
-            $tenant->profile_picture = $filename;
-            $tenant->save();
-        }
-        return \Redirect::to('tenant');
-
     }
 
     public function updateTrustCenter()
@@ -386,6 +421,73 @@ class TenantController extends Controller
             $tenant->save();
         }
         return \Redirect::to('tenant');
+    }
+
+    //Upload Profil Picture Dropzone
+    public function uploadFiles()
+    {
+
+        $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
+
+        $input = \Input::all();
+
+        $rules = array(
+            'file' => 'image|max:3000',
+        );
+
+        $validation = \Validator::make($input, $rules);
+
+        if ($validation->fails()) {
+            return \Response::make($validation->errors->first(), 400);
+        }
+        $image = \Input::file('file');
+        $destinationPath = 'profilepics'; // upload path
+        $fileName = \Auth::user()->idPerson . '.' . $image->getClientOriginalExtension();
+        $upload_success = $image->move($destinationPath, $fileName); // uploading file to given path
+        $tenant->profile_picture = $fileName;
+        $tenant->save();
+
+        if ($upload_success) {
+            return \Response::json('success', 200);
+        } else {
+            return \Response::json('error', 400);
+        }
+
+    }
+
+    //Delete picture on dropzone (Profil Picture)
+    public function deletePicture()
+    {
+        $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
+        $tenant->profile_picture = NULL;
+        $tenant->save();
+
+    }
+
+    //Confirm first connection after confirmation mail
+    public function FirstStepTenant()
+    {
+        $user = User::find(\Auth::user()->idPerson);
+        $user->status = 1;
+        $user->save();
+    }
+
+    //Delete Tag
+    public function DeleteTagTenant()
+    {
+        $tenant = $tenant = Tenant::where('idPerson', '=', \Auth::user()->idPerson)->first();
+        $tag = $tenant->tag()->get();
+        $Data = \Input::get('data');
+        $newTag = array();
+        foreach ($tag as $t){
+            if($t->idTag != $Data){
+                array_push($newTag,$t->idTag);
+            }
+        }
+        $tenant->tag()->sync($newTag);
+        return \Response::json(array(
+            'list_tag' => $tenant->tag()->get(),
+        ));
     }
 
 }

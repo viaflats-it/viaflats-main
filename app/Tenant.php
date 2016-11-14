@@ -39,6 +39,21 @@ class Tenant extends Model
         return $this->belongsTo('App\User', 'idPerson');
     }
 
+    public function expected_city()
+    {
+        return $this->belongsTo('App\City', 'expected_city');
+    }
+
+    public function tag()
+    {
+        return $this->belongsToMany('App\Tag', 'Tenant_tag', 'idTenant', 'idTag');
+    }
+
+    public function booking()
+    {
+        return $this->hasMany('App\Booking','idTenant');
+    }
+
     protected $dates = ['creation_date'];
 
     public $timestamps = false;

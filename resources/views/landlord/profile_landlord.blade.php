@@ -121,6 +121,15 @@
         </div>
         {!! Form::label(trans('landlord.corporate')) !!}
       </div>
+      <div class="form-group inline" id="payment">
+          @foreach($payment as $p)
+          {!! Form::label('payment_way[]',$p) !!}
+          <div class="radio-container">
+          {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
+            <span class="radio-style"></span>
+          </div>
+          @endforeach
+      </div>
       <div class="form-group">
         {!! Form::label('company_web' ,trans('landlord.company_web')) !!}
         {!! Form::text('company_web', $landlord->company_website , ['class' => 'form-control']) !!}
@@ -142,39 +151,39 @@
       }
     });
 
-    function saveProfile() {
+        /*UPDATE PROFILES */
+        function saveProfile() {
 
-        var $form = $("#updateProfile"),
-                url = "profile",
-                phone = $('#phone').intlTelInput('getNumber');
+            var $form = $("#updateProfile"),
+                    url = "profile",
+                    phone = $('#phone').intlTelInput('getNumber');
 
-        var posting = $.ajax({
-            method: "POST",
-            url: url,
-            data: {
-                'data': $form.serialize(),
-                "phone" : phone,
-                "_token": "{{ csrf_token() }}"
-            }
-        });
-        posting.done(function (data) {
-            if (data.fail) {
-                $.each(data.errors, function (index, value) {
-                    var errorMsg = '#' + index + '_error';
-                    var errorDiv = '#' + index + '_has_error';
-                    $(errorMsg).addClass('required');
-                    $(errorMsg).empty().append(value);
-                    $(errorDiv).addClass('has-error');
-                });
-                $('#successMessageProfile').empty();
-            } else {
-                var successContent = '<div class="alert alert-success"><span>Update Completed Successfully</span></div>';
-                $('#successMessageProfile').html(successContent);
-            }
+            var posting = $.ajax({
+                method: "POST",
+                url: url,
+                data: {
+                    'data': $form.serialize(),
+                    "phone": phone,
+                    "_token": "{{ csrf_token() }}"
+                }
+            });
+            posting.done(function (data) {
+                if (data.fail) {
+                    $.each(data.errors, function (index, value) {
+                        var errorMsg = '#' + index + '_error';
+                        var errorDiv = '#' + index + '_has_error';
+                        $(errorMsg).addClass('required');
+                        $(errorMsg).empty().append(value);
+                        $(errorDiv).addClass('has-error');
+                    });
+                    $('#successMessageProfile').empty();
+                } else {
+                    var successContent = '<div class="alert alert-success"><span>Update Completed Successfully</span></div>';
+                    $('#successMessageProfile').html(successContent);
+                }
 
-        });
-    }
-
+            });
+        }
 
     /*UPDATE PASSWORD */
 
@@ -278,7 +287,6 @@
             }
         })
     });
-
 
     $(document).on('blur', '#about', function () {
         saveInformation();

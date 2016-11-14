@@ -10,10 +10,10 @@
     <!-- Fonts -->
 
 {{ Html::style('css/app.css') }}
-{{ Html::style('css/custom.css') }}
 {{ Html::style('css/boostrap.min.css') }}
 
-    <script src="{{URL::asset('js/app.js')}}"></script>
+<script src="{{URL::asset('js/app.js')}}"></script>
+
 </head>
 <body>
 
