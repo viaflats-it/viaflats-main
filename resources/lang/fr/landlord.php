@@ -50,9 +50,10 @@ return [
     'add_property' => 'Ajouter une propriété',
     'my_properties' => 'Mes propriétés',
     'my_booking' => 'Mes booking',
-    'update_availabilities' => 'Mettre à jour mes disponibilités',
+    'update_availabilities' => 'Mes disponibilités',
     'invoices' => 'Mes factures',
     'messages' => 'Messages',
+    'minimize_label' => 'Réduire',
     'adminAddlandlord' => 'Ajouter un propriétaire',
     'menu-toggle' => 'Menu',
 

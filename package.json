@@ -22,6 +22,7 @@
   "devDependencies": {
     "bootstrap-sass": "^3.3.7",
     "buble": "^0.14.2",
+    "compass-mixins": "^0.12.10",
     "css-loader": "^0.25.0",
     "gulp": "^3.9.1",
     "intl-tel-input": "^9.2.4",

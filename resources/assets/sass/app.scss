@@ -4,12 +4,25 @@
 @import 'inc/vars';
 @import 'inc/mixins';
 @import 'inc/bases';
+@import 'inc/font-awesome/font-awesome';
+@import 'inc/forms';
+
+/*
+intl-tel-input modify
+
+$flagsImagePath: "../images/flags/" !default; in ../../../node_modules/intl-tel-input/src/css/intlTelInput.scss:
+
+*/
+
+@import 'inc/intl-tel-input/src/css/intlTelInput';
 
 // Views
+@import 'pages/landlord';
 
 
 // Components
 
 
-// Bootstrap
+/* Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+*/

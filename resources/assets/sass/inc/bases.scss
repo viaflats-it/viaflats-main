@@ -1,22 +1,15 @@
 h1, h2, h3, h4, h5{
-  font-family: $Dosis;
+  @include Dosis;
   font-weight: 200;
 }
 p, input, select, button{
-  font-family: $Lato;
+  @include Lato;
 }
 
 html{
   background-color: $backgroundWhite;
+  @include font-size(16px);
   body{
     margin: 0;
   }
-}
-
-.flex-container{
-  @include flexbox;
-}
-.column-flex-container{
-  @include flexbox;
-  @include flex-direction(column);
 }
