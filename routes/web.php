@@ -17,6 +17,8 @@
                                         ---------------------- */
 Route::get('index', 'PageController@index');
 Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
+Route::get('test', 'SearchController@test');
+Route::post('search', 'SearchController@search');
 
 
 

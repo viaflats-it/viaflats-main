@@ -77,6 +77,8 @@ return [
     'btnhide' => 'Hide all',
     'fillall' => 'Fill all',
     'clearall' => 'Clear all',
+    'cancelall' => 'Cancel all',
+    'cancel' => 'Cancel',
 
 
 

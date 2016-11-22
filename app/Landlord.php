@@ -11,7 +11,7 @@ class Landlord extends Model
     protected $primaryKey = 'idLandlord';
 
     protected $fillable = [
-        'idLandlord', 'corporate', 'account_state', 'about', 'verified', 'idPerson'
+        'idLandlord', 'corporate', 'account_state', 'about', 'verified', 'idPerson', 'response_time'
     ];
 
     /**
