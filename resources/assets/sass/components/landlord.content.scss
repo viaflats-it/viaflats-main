@@ -1,0 +1,233 @@
+$cubic-bezier: cubic-bezier(.5,.03,.52,.93);
+
+.content{
+  margin: 0 0 25px 0;
+  width: 100%;
+  background-color: $schWhite;
+  overflow: auto;
+  @include flexbox;
+  .content-container{
+    width: 100%;
+    .section {
+      position: relative;
+      margin: 25px 25px 0px 25px;
+      background-color: $backgroundWhite;
+      @media screen and (max-width: $mobile) {
+        margin: 0;
+        background-color: $schWhite;
+      }
+      .title{
+        text-align: left;
+        @include font-size(25px);
+        @media screen and (max-width: $mobile) {
+          @include font-size(20px);
+        }
+        margin: 0;
+        padding: 2px 8px;
+        background-color: $baseThemePurple;
+        color: $schWhite;
+      }
+      .container{
+        @include flexbox;
+        @include flex-direction(row);
+        @media screen and (max-width: $desktop) {
+          @include flex-direction(column);
+        }
+        .form{
+          width: 100%;
+          @include flexbox;
+          .form-container{
+            margin: 10px auto;
+            @include flexbox;
+            @include flex-direction(column);
+            .sucess-message{
+              color: $schGreen;
+            }
+            .error-message{
+              color: $schRed ;
+            }
+            .form-group{
+              width: 440px;
+              @media screen and (max-width: $mobile) {
+                width: 200px;
+              }
+              margin: auto;
+              @include flexbox;
+              @include flex-direction(column);
+              & > label{
+                @include label($cubic-bezier);
+                @media screen and (max-width: $mobile) {
+                  @include font-size(10px);
+                }
+              }
+              & > input{
+                @include input($cubic-bezier);
+                @media screen and (max-width: $mobile) {
+                  @include font-size(10px);
+                }
+              }
+              & > textarea{
+                @include textarea($cubic-bezier);
+                @media screen and (max-width: $mobile) {
+                  @include font-size(10px);
+                  height: 40px;
+                }
+              }
+              & > .radio-container{
+                position: relative;
+                margin: auto 10px;
+                @media screen and (max-width: $mobile) {
+                  margin: auto;
+                  width: 100%;
+                }
+                @include flexbox;
+                .radio{
+                  cursor: pointer;
+                  width: 20px;
+                  height: 20px;
+                  @media screen and (max-width: $mobile) {
+                    width: 10px;
+                    height: 10px;
+                    top: 4px;
+                    position: absolute;
+                  }
+                  margin: auto 10px;
+                  @include opacity(0);
+                  z-index: 1;
+                  &:checked + .radio-style {
+                    &:after{
+                      @include opacity(1);
+                    }
+                  }
+                  @media screen and (max-width: $mobile) {
+                    @include font-size(10px);
+                  }
+                }
+                .radio-style{
+                  width: 20px;
+                  height: 20px;
+                  @media screen and (max-width: $mobile) {
+                    width: 10px;
+                    height: 10px;
+                    top: 3px;
+                    right: 5px;
+                  }
+                  position: absolute;
+                  top: -1px;
+                  left: 9px;
+                  z-index: 0;
+                  border: 1px solid $borderInput;
+                  background-color: $backgroundWhite;
+                  @include transition( 0.2s $cubic-bezier);
+                  @include box-shadow(0px, 1px, 1px, rgba(0,0,0,0.05));
+                  &:focus, &:active{
+                    border: 1px solid $baseThemePurple;
+                  }
+                  &:hover{
+                    border: 1px solid $baseThemePurple;
+                    @include box-shadow(0px, 0px, 3px, $baseThemePurple);
+                  }
+                  &:after {
+                    content: '';
+                    width: 9px;
+                    height: 5px;
+                    position: absolute;
+                    @media screen and (max-width: $mobile) {
+                      width: 5px;
+                      height: 3px;
+                      top: 2px;
+                      left: 1px;
+                    }
+                    top: 4px;
+                    left: 4px;
+                    border: 3px solid $baseThemePurple;
+                    border-top: none;
+                    border-right: none;
+                    background: transparent;
+                    @include opacity(0);
+                    @include transform(rotate(-45deg));
+                  }
+                }
+              }
+              .form-phone{
+                @include phone($cubic-bezier);
+                @media screen and (max-width: $mobile) {
+                  @include font-size(10px);
+                }
+              }
+              .flag-container{
+                .selected-flag{
+                  @media screen and (max-width: $mobile) {
+                    &:focus, &:active{
+                      border: none;
+                    }
+                    &:hover{
+                      border: none;
+                      background-color: $schWhite;
+                    }
+                  }
+                  &:focus, &:active{
+                    border: 1px solid $baseThemePurple;
+                  }
+                  &:hover{
+                    border: 1px solid $baseThemePurple;
+                    background-color: $schWhite;
+                  }
+                }
+              }
+              .profilPic{
+                overflow: hidden;
+                margin: 0px auto 5px auto;
+                width: 118px;
+                height: 118px;
+                @media screen and (max-width: $mobile) {
+                  width: 70px;
+                  height: 70px;
+                }
+                border-radius: 50%;
+                background-color: $baseThemePurple;
+                border: 2px solid $schWhite;
+              }
+            }
+            & > .btn{
+              margin: 10px auto;
+              width: 150px;
+              @include button($cubic-bezier, $schWhite, $baseThemePurple, $Darkthem);
+              @media screen and (max-width: $mobile) {
+                @include font-size(10px);
+              }
+            }
+            /*& > .btn-submit{
+              @include button($cubic-bezier, $schWhite, $schGreen, $schDarkGreen);
+            }*/
+            .inline{
+              margin: 5px auto;
+              @include flex-direction(row);
+              @media screen and (max-width: $mobile) {
+                @include flex-direction(column);
+              }
+              & > label{
+                @include label($cubic-bezier){
+                  margin: auto;
+                };
+                @media screen and (max-width: $mobile) {
+                  @include font-size(10px);
+                  margin: auto 25px;
+                }
+              }
+            }
+            & > label{
+              @include label($cubic-bezier){
+                margin: 5px auto;
+              };
+              @media screen and (max-width: $mobile) {
+                @include font-size(10px);
+                margin: auto;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
