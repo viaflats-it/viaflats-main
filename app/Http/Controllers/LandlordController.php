@@ -152,7 +152,7 @@ class LandlordController extends Controller
             $image = \Input::file('image');
             $filename = \Auth::user()->idPerson . '.' . $image->getClientOriginalExtension();
 
-            $path = public_path('profilepics/' . $filename);
+            $path = public_path('images/profiles/' . $filename);
 
             Image::make($image->getRealPath())->save($path);
             $user->profile_picture = $filename;

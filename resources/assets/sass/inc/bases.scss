@@ -1,0 +1,15 @@
+h1, h2, h3, h4, h5{
+  @include Dosis;
+  font-weight: 200;
+}
+p, input, select, button{
+  @include Lato;
+}
+
+html{
+  background-color: $backgroundWhite;
+  @include font-size(16px);
+  body{
+    margin: 0;
+  }
+}

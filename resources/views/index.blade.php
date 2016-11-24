@@ -451,13 +451,10 @@
         </div>
     </div>
 
-
     <script>
+
         $("#phone").intlTelInput();
-    </script>
-    <script>
-
-
+        
         $('#updatePlace').on('change', function () {
             if (checkFieldPlace()) {
                 $('.submitForm').attr('disabled', false);
@@ -518,6 +515,7 @@
             });
         });
 
+
         Dropzone.options.MyDropzone = {
             dictDefaultMessage: 'Drop your picture here !<br>Or<br> Click on it to select one !',
             paramName: "file",
@@ -547,6 +545,7 @@
                 });
             },
         };
+
 
         //Date Picker
         $(function () {

@@ -53,6 +53,7 @@ return [
     'invoices' => 'My Invoices',
     'messages' => 'Messages',
     'adminAddlandlord' => 'Add a Landlord',
+    'minimize_label' => 'Minimize',
     'menu-toggle' => 'Toggle Menu',
 
 

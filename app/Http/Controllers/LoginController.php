@@ -46,7 +46,7 @@ class LoginController extends Controller
 
         //Send mail confirmation And create Tenant or Landlord
         if ($user->type_person == 0) {
-            \Mail::to(\Input::get('email'))->send(new ConfirmationMailTenant($user));
+            //\Mail::to(\Input::get('email'))->send(new ConfirmationMailTenant($user));
             $address = New Address;
             $addressParents = New Address;
             $tenant = New Tenant;
@@ -57,14 +57,14 @@ class LoginController extends Controller
             $addressParents->parent()->save($tenant->parent()->save($parent));
 
         } elseif ($user->type_person == 1) {
-            \Mail::to(\Input::get('email'))->send(new ConfirmationMailLandlord($user));
+            //\Mail::to(\Input::get('email'))->send(new ConfirmationMailLandlord($user));
             Landlord::create([
                 'idPerson' => $user->idPerson,
             ]);
         }
 
         //Log in
-        if (\Auth::attempt(array('login' => \Input::get('login'), 'password' => \Input::get('password')))) {
+        /*if (\Auth::attempt(array('login' => \Input::get('login'), 'password' => \Input::get('password')))) {
             $id = \Auth::user()->idPerson;
             if (!empty(Tenant::where('idPerson', '=', $id)->first())) {
                 return \Redirect::to('tenant');
@@ -74,8 +74,10 @@ class LoginController extends Controller
                 $user = Photographer::where('idPerson', '=', $id)->first();
                 return \Redirect::to('photographer');
             }
-        }
-        return \Redirect::to('index');
+        }*/
+
+        return \Redirect::to('tenant');
+        //return \Redirect::to('index');
     }
 
     public function signIn()
