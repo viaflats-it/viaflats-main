@@ -67,4 +67,5 @@ return [
 - « Check out » means the leaving date of the Tenant in the Accommodation
 - « Taxes » means all applicable taxes (VAT, sales taxes) when a Tenant books an accommodation on Viaflats'
 
+
 ];

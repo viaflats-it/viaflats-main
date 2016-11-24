@@ -11,7 +11,7 @@ class Estate extends Model
     protected $primaryKey = 'idEstate';
 
     protected $fillable = [
-        'idElement', 'type_element', 'shared',
+        'idEstate', 'idElement', 'type_element', 'guest_nb', 'rent', 'short_rent', 'short_period', 'booking_flexibility', 'estatecol', 'checking_preference', 'checkout_preference', 'final_checking', 'status', 'viaflats_percentage', 'last_update', 'views_nb', 'positive_rate', 'negative_rate', 'booking_date', 'creation_date'
     ];
 
     public function estateMorph()
@@ -24,4 +24,8 @@ class Estate extends Model
         return $this->hasMany('App\Booking', 'idEstate');
     }
 
+    public function estate_fee()
+    {
+        return $this->hasOne('App\Estate_fee', 'idEstate');
+    }
 }

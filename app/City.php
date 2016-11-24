@@ -10,6 +10,10 @@ class City extends Model
     protected $primaryKey = 'idCity';
     public $timestamps = false;
 
+    protected $fillable = [
+        'idCity', 'libelle'
+    ];
+
     public function city()
     {
         return $this->find(all);

@@ -116,5 +116,32 @@ return [
     'parent_phone' => 'Parent phone',
     'parent_mail' => 'Parent mail',
 
+    'menu-toggle' => 'Toggle Menu',
+    'absence' => 'Absences :',
+    'absence_begin' => 'First day :',
+    'absence_end' => 'Ending date :',
+    'wrong_dates' => 'Selected dates are not correct',
+    'monday' => 'Monday',
+    'tuesday' => 'Tuesday',
+    'wednesday' => 'Wednesday',
+    'thursday' => 'Thursday',
+    'friday' => 'Friday',
+    'saturday' => 'Saturday',
+    'sunday' => 'Sunday',
+    'monday_availability' => 'Monday: ',
+    'tuesday_availability' => 'Tuesday: ',
+    'wednesday_availability' => 'Wednesday: ',
+    'thursday_availability' => 'Thursday: ',
+    'friday_availability' => 'Friday: ',
+    'saturday_availability' => 'Saturday: ',
+    'sunday_availability' => 'Sunday: ',
+    'btnshow' => 'Show all',
+    'btnhide' => 'Hide all',
+    'fillall' => 'Fill all',
+    'clearall' => 'Clear all',
+    'cancelall' => 'Cancel all',
+    'cancel' => 'Cancel',
+
+
 
 ];

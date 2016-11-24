@@ -18,7 +18,7 @@ return [
     'home' => 'Accueil',
     'close' => 'Fermer',
 
-    /* ------------------------------Sign Up/In Form-------------------------------- */
+    'fb_disconnect' => 'se déconnecter',
 
     'login' => 'Connexion',
     'signin' => 'Se connecter',
