@@ -11,18 +11,26 @@
   @return $remSize * 1rem;
 }
 
+@mixin x-appearance ($value) {
+	-webkit-appearance: $value;
+	   -moz-appearance: $value;
+	        appearance: $value;
+}
+
 @mixin font-size($size) {
   font-size: $size;
   font-size: calculateRem($size);
 }
 
 @mixin Dosis() {
+  color: $black;
   font-family: $Dosis;
   @include font-size(16px);
   @content;
 }
 
 @mixin Lato() {
+  color: $black;
   font-family: $Lato;
   @include font-size(16px);
   @content;
@@ -108,6 +116,15 @@
   }
 }
 
+@mixin noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
 @mixin rounded($radius: 0.5em) {
 -webkit-border-radius: $radius;
 -moz-border-radius: $radius;

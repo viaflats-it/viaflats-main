@@ -32,6 +32,7 @@ return [
     'none' => 'No preference',
     'availabilities' => 'Availabilities',
     'corporate' => 'Corporate',
+    'paymentType' => 'Payment',
     'private' => 'Private',
     'company_web' => 'Company web site',
     'update' => 'Update',

@@ -50,18 +50,53 @@ $cubic-bezier: cubic-bezier(.5,.03,.52,.93);
               width: 440px;
               @media screen and (max-width: $mobile) {
                 width: 200px;
+                margin: 5px auto;
               }
-              margin: auto;
+              margin: 10px auto;
               @include flexbox;
               @include flex-direction(column);
-              & > label{
+              & > label, .text{
                 @include label($cubic-bezier);
                 @media screen and (max-width: $mobile) {
                   @include font-size(10px);
                 }
               }
+              .ui-slider-handle{
+                //JQEURY OVERRIDE
+                @media screen and (max-width: $mobile) {
+                  width: 16px;
+                  height: 16px;
+                  top: calc(50% - 8px;);
+                }
+              }
+              .ui-slider-horizontal {
+                //JQEURY OVERRIDE
+                width: 90%;
+                margin: auto;
+                @media screen and (max-width: $mobile) {
+                  height: 8px;
+                }
+              }
+              .center{
+                text-align: center;
+              }
               & > input{
                 @include input($cubic-bezier);
+                @media screen and (max-width: $mobile) {
+                  @include font-size(10px);
+                }
+              }
+              & > select {
+                option{
+                  &:hover{
+                    background-color: $baseThemePurple;
+                    @include x-appearance(none);
+                  }
+                }
+
+              }
+              & > .dropwdown{
+                @include select($cubic-bezier);
                 @media screen and (max-width: $mobile) {
                   @include font-size(10px);
                 }

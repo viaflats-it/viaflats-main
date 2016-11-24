@@ -32,6 +32,7 @@ return [
     'none' => 'Pas de préférence ',
     'availabilities' => 'Disponibilités',
     'corporate' => 'Entreprise',
+    'paymentType' => 'Paiement',
     'private' => 'Privé',
     'company_web' => 'Site web de votre entreprise ',
     'update' => 'Mettre à jour',

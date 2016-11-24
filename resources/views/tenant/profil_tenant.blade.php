@@ -2,699 +2,466 @@
 
 @section('contenu')
 
-    <div class="row profile">
-        <!----------About your next place Section ------------->
-        <div class="col-md-12">
-            <h3>@lang('tenant.about_next_place')</h3>
-            <div id="aboutPlace">
-                {!! Form::open(['url'=>'updatePlace','id'=>'updatePlace'])!!}
-                {!! Form::hidden('First_step',false) !!}
-                <div id="successMessagePlace"></div>
-                <div class="col-md-6">
-                    <!-------- City --------->
-                    <div class="form-group row" id="expected_city_has_error">
-                        <div class="col-md-6">
-                            {!! Form::label('expected_city',trans('tenant.expected_city')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::select('expected_city',$list_city,['value'=>$tenant->expected_city]) !!}
-                        </div>
-                        <div id="expected_city_error"></div>
-                    </div>
-                    <!--------Budget -------->
-                    <div class="form-group row" id="budget">
-                        <div class="col-md-6">
-                            {!! Form::label('amount',trans('tenant.budget_range')) !!}
-                        </div>
-                        <div id="amount">
-                            {{$tenant->budget_min}} € - {{$tenant->budget_max}} €
-                        </div>
-                        <div>
-                            {!! Form::hidden('budget_min',$tenant->budget_min,['id'=>'budget_min','type'=>'hidden']) !!}
-                            {!! Form::hidden('budget_max',$tenant->budget_max,['id'=>'budget_max','type'=>'hidden']) !!}
-                        </div>
-                        <br>
-                        <div id="slider_range"></div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <!----- Expected Room --->
-                    <div class="form-group">
-                        {!! Form::label('expected_type','What type of room do you want ? ') !!}
-                        {!! Form::select('expected_type',trans('tenant.type_room'),['value' => $tenant->expected_type]) !!}
-                    </div>
-                    <!----- Couple ------>
-                    <div class="form-group row " id="couple_has_error">
-                        <div class="col-md-12">
-                            {!! Form::label('couple',trans('tenant.couple')) !!}
-                        </div>
-                        <div class="form-group col-md-6">
-                            {!! Form::label('couple',trans('tenant.no')) !!}
-                            {!! Form::radio('couple',0,true) !!}
-                        </div>
-                        <div class="form-group col-md-6">
-                            {!! Form::label('couple',trans('tenant.yes')) !!}
-                            {!! Form::radio('couple',1) !!}
-                        </div>
-                        <div id="couple_error"></div>
-                    </div>
-                    <!----- Expected Date --->
-                    <div class="form-group">
-                        <div id="expected_in_has_error">
-                            <div class="col-md-6">
-                                {!! Form::label('expected_in',trans('tenant.expected_in')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('expected_in',$tenant->expected_in,array('class'=>'datepicker')) !!}
-                            </div>
-                            <div id="expected_in_error"></div>
-                        </div>
-                        <div id="expected_out_has_error">
-                            <div class="col-md-6">
-                                {!! Form::label('expected_out',trans('tenant.expected_out')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('expected_out',$tenant->expected_out,['class'=>'datepicker']) !!}
-                            </div>
-                            <div id="expected_out_error"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
-            </div>
+<section class="section section-about-place" id="aboutPlace">
+  <h3 class="title">@lang('tenant.about_next_place')</h3>
+  <div class="container">
+    {!! Form::open(['url'=>'updatePlace','id'=>'updatePlace', 'class' => 'form'])!!}
+    {!! Form::hidden('First_step',false) !!}
+    <div class="form-container">
+      <span class="sucess-message" id="successMessagePlace"></span>
+
+      <div class="form-group" id="expected_city_has_error">
+        {!! Form::label('expected_city',trans('tenant.expected_city')) !!}
+        <div class="dropwdown">
+          <input type="text" name="expected_city">
+          <div class="input-hover" id="city_label">
+            @foreach($list_city as $key=>$city)
+              @if ($key == 1)
+              {{ $city }}
+              @endif
+            @endforeach
+          </div>
+          <i class="fa fa-caret-down" aria-hidden="true"></i>
+          <ul class="dropwdown-ul">
+            @foreach($list_city as $key=>$city)
+              <li class="dropwdown-li city-li" value="{{$key}}">
+                {{ $city }}
+              </li>
+              @endforeach
+          </ul>
         </div>
 
-        <!--------------- About you Section --------------->
-        <div class="col-md-12">
-            <h3>@lang('tenant.about_you')</h3>
-            <div id="aboutYou">
-                {!! Form::open(['url'=>'updateAbout','id'=>'updateAbout']) !!}
-                {!! Form::hidden('First_step',false) !!}
-                <div id="successMessageAbout"></div>
-                <div class="col-md-6">
-                    <!------------ Gender ----------->
-                    <div class="form-group">
-                        @if($tenant->gender == 'Girl')
-                            <div class="form-group col-md-6">
-                                {!! Form::label('gender',trans('tenant.girl')) !!}
-                                {!! Form::radio('gender','Girl',true) !!}
-                            </div>
-                            <div class="form-group col-md-6">
-                                {!! Form::label('gender',trans('tenant.boy')) !!}
-                                {!! Form::radio('gender','Boy') !!}
-                            </div>
-                        @else
-                            <div class="form-group col-md-6">
-                                {!! Form::label('gender',trans('tenant.girl')) !!}
-                                {!! Form::radio('gender','Girl') !!}
-                            </div>
-                            <div class="form-group col-md-6">
-                                {!! Form::label('gender',trans('tenant.boy')) !!}
-                                {!! Form::radio('gender','Boy',true) !!}
-                            </div>
-                        @endif
-                    </div>
-                    <!---------- Name ------------>
-                    <div class="form-group" id="first_name_has_error">
-                        {!! Form::label('first_name', trans('tenant.first_name')) !!}
-                        {!! Form::text('first_name',$user->first_name) !!}
-                        <div id="first_name_error"></div>
-                    </div>
-                    <div class="form-group" id="last_name_has_error">
-                        {!! Form::label('last_name',trans('tenant.last_name')) !!}
-                        {!! Form::text('last_name',$user->last_name) !!}
-                        <div id="last_name_error"></div>
-                    </div>
-                    <!------------ Nationality ---------->
-                    <div class="form-group">
-                        {!! Form::label('nationality',trans('tenant.nationality')) !!}
-                        {!! Form::text('nationality',$tenant->nationality) !!}
-                    </div>
-                    <!------------ About --------->
-                    <div class="form-group">
-                        {!! Form::label('about',trans('tenant.describe')) !!}
-                        {!! Form::textarea('about',$tenant->about) !!}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <!------------- Student / Worker ------------->
-                    <div class="form-group">
-                        @if($tenant->student == 1)
-                            <div class="row" id="student">
-                                <div class="col-md-6">
-                                    {!! Form::label('student',trans('tenant.student')) !!}
-                                </div>
-                                <div class="col-md-6">
-                                    {!! Form::radio('student','1',true) !!}
-                                </div>
-                            </div>
-                            <div class="row" id='worker'>
-                                <div class="col-md-6">
-                                    {!! Form::label('student',trans('tenant.worker')) !!}
-                                </div>
-                                <div class="col-md-6">
-                                    {!! Form::radio('student','0') !!}
-                                </div>
-                            </div>
-                            <br>
-                            <div id="respons_student" class="form-group">
-                                <div>
-                                    <div class="col-md-6">
-                                        {!! Form::label("work_studies",trans('tenant.studies')) !!}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::text("work_studies",$tenant->work_studies) !!}
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">
-                                        {!! Form::label("school_company",trans('tenant.school')) !!}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::text("school_company",$tenant->school_company) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <div class="row" id="student">
-                                <div class="col-md-6">
-                                    {!! Form::label('student',trans('tenant.student')) !!}
-                                </div>
-                                <div class="col-md-6">
-                                    {!! Form::radio('student','1') !!}
-                                </div>
-                            </div>
-                            <div class="row" id='worker'>
-                                <div class="col-md-6">
-                                    {!! Form::label('student',trans('tenant.worker')) !!}
-                                </div>
-                                <div class="col-md-6">
-                                    {!! Form::radio('student','0',true) !!}
-                                </div>
-                            </div>
-                            <br>
-                            <div id="respons_student" class="form-group">
-                                <div>
-                                    <div class="col-md-6">
-                                        {!! Form::label("work_studies",trans('tenant.work')) !!}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::text("work_studies",$tenant->work_studies) !!}
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="col-md-6">
-                                        {!! Form::label("school_company",trans('tenant.company')) !!}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::text("school_company",$tenant->school_company) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                    <!------------- Languages -------->
-                    <div class="form-group row ">
-                        <div class="col-md-6">
-                            {!! Form::label('spoken_languages',trans('tenant.languages')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('spoken_languages',$tenant->spoken_languages) !!}
-                        </div>
+        <span class="error-message" id="expected_city_error"></span>
+      </div>
 
-                    </div>
-                    <!------- Contact Preference --------->
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            {!! Form::label('contact_pref',trans('tenant.contact')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::select('contact_pref',trans('tenant.contact_pref'),['value' => $tenant->contact_preference ]) !!}
-                        </div>
-                    </div>
-                    <!------- Tag For Matching --------->
-                    <div class="form-group row">
-                        {!! Form::label('tag') !!}
-                        {!! Form::text('tag',null,['id'=>'Tag_Input']) !!}
-                        <a class="btn btn-viaflats" id="TagButton">Validate</a>
-                    </div>
-                    <div id="Tag" class="row">
-                        @foreach($list_tag as $t)
-                            <div class="col-md-4">
-                                <span>{{$t->label}}</span>
-                                <a class="TagDelete" id=tag{{$t->idTag}}>X</a>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"])!!}
-                    {!! Form::close() !!}
-                </div>
-            </div>
-        </div>
+      <div class="form-group" id="budget">
+        {!! Form::label('amount',trans('tenant.budget_range')) !!}
+        <span class="text center" id="amount">
+            {{$tenant->budget_min}} € - {{$tenant->budget_max}} €
+        </span>
+        {!! Form::hidden('budget_min',$tenant->budget_min,['id'=>'budget_min','type'=>'hidden']) !!}
+        {!! Form::hidden('budget_max',$tenant->budget_max,['id'=>'budget_max','type'=>'hidden']) !!}
+        <div id="slider_range"></div>
+      </div>
 
-        <!----------- Picture ----------->
-        <div class="col-md-12">
-            <div class="form-group">
-                @if($tenant->profile_picture != NULL)
-                    <img class="profilPic" src="profilepics/{{$tenant->profile_picture}}">
-                @else
-                    <img class="profilPic" src="profilepics/logov1.png">
+      <div class="form-group">
+          {!! Form::label('expected_type','What type of room do you want ? ') !!}
+          <div class="dropwdown">
+            <input type="text" name="expected_city">
+            <div class="input-hover" id="type_label">
+              @foreach(trans('tenant.type_room') as $key=>$type_room)
+                @if ($key == 0)
+                {{ $type_room }}
                 @endif
-                <button class="btn btn-viaflats" id="ProfilPictureButton">Upload My Picture</button>
+              @endforeach
             </div>
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+            <ul class="dropwdown-ul">
+              @foreach(trans('tenant.type_room') as $key=>$type_room)
+                <li class="dropwdown-li type-li" value="{{$key}}">
+                  {{ $type_room }}
+                </li>
+                @endforeach
+            </ul>
+          </div>
+      </div>
+      {!! Form::label('couple', trans('tenant.couple')) !!}
+      <div class="form-group inline" id="couple_has_error">
+        <div class="radio-container">
+         {!! Form::radio('couple', 0, true, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
         </div>
-
-
-        <!--------- Trust Center -------->
-        <div class="col-md-12">
-            <h3>@lang('tenant.trust_center')</h3>
-            <div id="trustCenter">
-                <div id="successMessageTrustCenter"></div>
-                <div class="col-md-6">
-                    <h4>More Info About You</h4>
-                {!! Form::open(['url'=>'updateTrustCenter','id'=>'updateTrustCenter'])  !!}
-                <!--------- Email ---------->
-                    <div class="form-group row" id="email_has_error">
-                        <div class="col-md-4">
-                            {!! Form::label('email',trans('tenant.email')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::email('email',$user->email) !!}
-                        </div>
-                        <div id="email_error"></div>
-                    </div>
-                    <!-------- Phone ----------->
-                    <div class="form-group row" id="phone_has_error">
-                        <div class="col-md-4">
-                            {!! Form::label('phone',trans('tenant.phone')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('phone',$user->phone) !!}
-                        </div>
-                        <div id="phone_error"></div>
-                    </div>
-                    <!-------- Birth ----------->
-                    <div class="form-group row">
-                        <div class="col-md-4">
-                            {!! Form::label('birth_date',trans('tenant.birth_date')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('birth_date',$tenant->birth_date,['class'=>'datepicker']) !!}
-                        </div>
-                    </div>
-                    <div class="form-group row ">
-                        <div class="col-md-4">
-                            {!! Form::label('birth_place',trans('tenant.birth_place') )!!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('birth_place',$tenant->birth_place) !!}
-                        </div>
-                    </div>
-                    <!-------- Address ---------->
-                    <div class="form-group">
-                        <div style="text-align: center;">
-                            {!! Form::label('Your Address') !!}
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">
-                                {!! Form::label('street_number',trans('tenant.street_number')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('street_number',$address_T->street_number) !!}
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">
-                                {!! Form::label('street_name',trans('tenant.street')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('street_name',$address_T->street) !!}
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">
-                                {!! Form::label('complement',trans('tenant.complement')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('complement',$address_T->complement) !!}
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">
-                                {!! Form::label('zip',trans('tenant.zip')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('zip',$address_T->zip) !!}
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">
-                                {!! Form::label('city',trans('tenant.city')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('city',$address_T->city) !!}
-                            </div>
-                        </div>
-                        <div class=" form-group row">
-                            <div class="col-md-4">
-                                {!! Form::label('country',trans('tenant.country')) !!}
-                            </div>
-                            <div class="col-md-6">
-                                {!! Form::text('country',$address_T->country) !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <h4>About your parents</h4>
-                    <!-------- Name ---------->
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            {!! Form::label(trans('tenant.first_name')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('p_first_name',$parent->first_name) !!}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            {!! Form::label(trans('tenant.last_name')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('p_last_name',$parent->last_name) !!}
-                        </div>
-                    </div>
-                    <!------- Phone --------->
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            {!! Form::label(trans('tenant.phone')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('p_phone',$parent->phone) !!}
-                        </div>
-                    </div>
-                    <!--------- Email -------->
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            {!! Form::label(trans('tenant.email')) !!}
-                        </div>
-                        <div class="col-md-6">
-                            {!! Form::text('p_email',$parent->email) !!}
-                        </div>
-                    </div>
-                    <!-------- Address Parent -------->
-                    <div class="form-group row">
-                        {!! Form::label('parent_address',trans('tenant.address')) !!}
-                        @if(($parent->idAddress == NULL) || ($parent->idAddress == $tenant->idAddress))
-                            <div>
-                                <div class="col-md-6 " id='Yes'>
-                                    {!! Form::label(trans('tenant.yes')) !!}
-                                    {!! Form::radio('parent_address',0,true)!!}
-                                </div>
-                                <div class="col-md-6" id="No">
-                                    {!! Form::label(trans('tenant.no')) !!}
-                                    {!! Form::radio('parent_address',1) !!}
-                                </div>
-                                <div id="ParentAddressShow" style="display: none">
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_street_number',trans('tenant.street_number')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_street_number') !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_street_name',trans('tenant.street')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_street_name') !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_complement',trans('tenant.complement')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_complement') !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_zip',trans('tenant.zip')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_zip') !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_city',trans('tenant.city')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_city') !!}
-                                        </div>
-                                    </div>
-                                    <div class=" form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_country',trans('tenant.country')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_country') !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <div>
-                                <div class="col-md-6" id="Yes">
-                                    {!! Form::label(trans('tenant.yes')) !!}
-                                    {!! Form::radio('parent_address',0)!!}
-                                </div>
-                                <div class="col-md-6" id="No">
-                                    {!! Form::label(trans('tenant.no')) !!}
-                                    {!! Form::radio('parent_address',1,true) !!}
-                                </div>
-                                <div id="ParentAddressShow">
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_street_number',trans('tenant.street_number')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_street_number',$address_P->street_number) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_street_name',trans('tenant.street')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_street_name',$address_P->street) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_complement',trans('tenant.complement')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_complement',$address_P->complement) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_zip',trans('tenant.zip')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_zip',$address_P->zip) !!}
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_city',trans('tenant.city')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_city',$address_P->city) !!}
-                                        </div>
-                                    </div>
-                                    <div class=" form-group row">
-                                        <div class="col-md-4">
-                                            {!! Form::label('p_country',trans('tenant.country')) !!}
-                                        </div>
-                                        <div class="col-md-6">
-                                            {!! Form::text('p_country',$address_P->country) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
-            </div>
+        {!! Form::label('couple', trans('tenant.no')) !!}
+        <div class="radio-container">
+         {!! Form::radio('couple', 0, true, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
         </div>
+        {!! Form::label('couple',trans('tenant.yes')) !!}
+        <span class="error-message" id="couple_error"></span>
+      </div>
 
-        <div class="col-md-12" id="updateFileCenter">
-            <h3></h3>
-            <!----------- ID/Passport ----------->
-            <div class="form-group col-md-4">
-                {!! Form::open(['url'=>'updateIdentity','files'=>true]) !!}
-                {!! Form::label('picture',trans('tenant.identity')) !!}
-                <div id="picture_has_error">
-                    @if($tenant->identity != NULL)
-                        {!! Form::label(trans('tenant.file_load')) !!}
-                    @else
-                        {!! Form::label(trans('tenant.file_not_load')) !!}
-                    @endif
-                    {!! Form::file('picture') !!}
-                </div>
-                <div id="picture_error"></div>
-                {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                {!! Form::close() !!}
-            </div>
-        @if($tenant->student == 1)
-            <!---------- Study Agreement ---------->
-                <div class="form-group col-md-4" id="Study_agreement">
-                    {!! Form::open(['url'=>'updateStudyAgreement','files'=>true]) !!}
-                    {!! Form::label('picture',trans('tenant.study_agreement')) !!}
-                    <div id="picture_has_error">
-                        {!! Form::label(trans('tenant.study_agreement_explanation')) !!}
-                        @if($tenant->study_agreement != NULL)
-                            {!! Form::label(trans('tenant.file_load')) !!}
-                        @else
-                            {!! Form::label(trans('tenant.file_not_load')) !!}
-                        @endif
-                        {!! Form::file('picture') !!}
-                    </div>
-                    <div id="picture_error"></div>
-                    {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
+      <div class="form-group" id="expected_in_has_error">
+        {!! Form::label('expected_in',trans('tenant.expected_in')) !!}
+        {!! Form::text('expected_in',$tenant->expected_in,array('class'=>'datepicker')) !!}
+        <span class="error-message" id="expected_in_error"></span>
+      </div>
 
-                <!---------- Work Agreement ---------->
-                <div class="form-group col-md-4" id='Work_agreement' style="display:none;">
-                    {!! Form::open(['url'=>'updateWorkAgreement','files'=>true]) !!}
-                    {!! Form::label('picture',trans('tenant.work_agreement')) !!}
-                    <div id="picture_has_error">
-                        @if($tenant->work_agreement != NULL)
-                            {!! Form::label(trans('tenant.file_load')) !!}
-                        @else
-                            {!! Form::label(trans('tenant.file_not_load')) !!}
-                        @endif
-                        {!! Form::file('picture') !!}
-                    </div>
-                    <div id="picture_error"></div>
-                    {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
-                <!---------- Pay slip ---------->
-                <div class="form-group col-md-4" id="Pay_Slip" style="display:none;">
-                    {!! Form::open(['url'=>'updatePaySlip','files'=>true]) !!}
-                    {!! Form::label('picture',trans('tenant.pay_slip')) !!}
-                    <div id="picture_has_error">
-                        @if($tenant->pay_slip != NULL)
-                            {!! Form::label(trans('tenant.file_load')) !!}
-                        @else
-                            {!! Form::label(trans('tenant.file_not_load')) !!}
-                        @endif
-                        {!! Form::file('picture') !!}
-                    </div>
-                    <div id="picture_error"></div>
-                    {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
+      <div class="form-group" id="expected_out_has_error">
+        {!! Form::label('expected_out',trans('tenant.expected_out')) !!}
+        {!! Form::text('expected_out',$tenant->expected_out,['class'=>'datepicker']) !!}
+        <span class="error-message" id="expected_out_error"></span>
+      </div>
+      {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"]) !!}
+    </div>
+    {!! Form::close() !!}
+  </div>
+</section>
+
+<section class="section section-about-you" id="aboutYou">
+  <h3 class="title">@lang('tenant.about_you')</h3>
+  <div class="container">
+    {!! Form::open(['url'=>'updateAbout','id'=>'updateAbout', 'class' => 'form']) !!}
+    {!! Form::hidden('First_step',false) !!}
+    <div class="form-container">
+      <span id="successMessageAbout"></span>
+      <div class="form-group inline">
+        @if($tenant->gender == 'Girl')
+        {!! Form::label('gender', trans('tenant.girl')) !!}
+        <div class="radio-container">
+         {!! Form::radio('gender', 'Girl', true, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
+        {!! Form::label('gender', trans('tenant.boy')) !!}
+        <div class="radio-container">
+         {!! Form::radio('gender', 'Boy', false, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
         @else
-            <!---------- Study Agreement ---------->
-                <div class="form-group col-md-4" id="Study_agreement" style="display:none;">
-                    {!! Form::open(['url'=>'updateStudyAgreement','files'=>true]) !!}
-                    {!! Form::label('picture',trans('tenant.study_agreement')) !!}
-                    <div id="picture_has_error">
-                        @if($tenant->study_agreement != NULL)
-                            {!! Form::label(trans('tenant.file_load')) !!}
-                        @else
-                            {!! Form::label(trans('tenant.file_not_load')) !!}
-                        @endif
-                        {!! Form::file('picture') !!}
-                    </div>
-                    <div id="picture_error"></div>
-                    {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
-                <!---------- Work Agreement ---------->
-                <div class="form-group col-md-4" id='Work_agreement'>
-                    {!! Form::open(['url'=>'updateWorkAgreement','files'=>true]) !!}
-                    {!! Form::label('picture',trans('tenant.work_agreement')) !!}
-                    <div id="picture_has_error">
-                        @if($tenant->work_agreement != NULL)
-                            {!! Form::label(trans('tenant.file_load')) !!}
-                        @else
-                            {!! Form::label(trans('tenant.file_not_load')) !!}
-                        @endif
-                        {!! Form::file('picture') !!}
-                    </div>
-                    <div id="picture_error"></div>
-                    {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
-                <!---------- Pay slip ---------->
-                <div class="form-group col-md-4" id="Pay_Slip">
-                    {!! Form::open(['url'=>'updatePaySlip','files'=>true]) !!}
-                    {!! Form::label('picture',trans('tenant.pay_slip')) !!}
-                    <div id="picture_has_error">
-                        @if($tenant->pay_slip != NULL)
-                            {!! Form::label(trans('tenant.file_load')) !!}
-                        @else
-                            {!! Form::label(trans('tenant.file_not_load')) !!}
-                        @endif
-                        {!! Form::file('picture') !!}
-                    </div>
-                    <div id="picture_error"></div>
-                    {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
-                    {!! Form::close() !!}
-                </div>
-            @endif
+        {!! Form::label('gender', trans('tenant.girl')) !!}
+        <div class="radio-container">
+         {!! Form::radio('gender', 'Girl', false, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
         </div>
+        {!! Form::label('gender', trans('tenant.boy')) !!}
+        <div class="radio-container">
+         {!! Form::radio('gender', 'Boy', true, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
+        @endif
+      </div>
+
+      <div class="form-group" id="first_name_has_error">
+        {!! Form::label('first_name', trans('tenant.first_name')) !!}
+        {!! Form::text('first_name',$user->first_name) !!}
+        <span id="first_name_error"></span>
+      </div>
+
+      <div class="form-group" id="last_name_has_error">
+        {!! Form::label('last_name',trans('tenant.last_name')) !!}
+        {!! Form::text('last_name',$user->last_name) !!}
+        <span id="last_name_error"></span>
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('nationality',trans('tenant.nationality')) !!}
+        {!! Form::text('nationality',$tenant->nationality) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('about',trans('tenant.describe')) !!}
+        {!! Form::textarea('about',$tenant->about) !!}
+      </div>
+
+      @if($tenant->student == 1)
+      <div class="form-group inline" id="student">
+        {!! Form::label('student', trans('tenant.student')) !!}
+        <div class="radio-container">
+         {!! Form::radio('student', '1', true, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
+      </div>
+
+      <div class="form-group inline" id="worker">
+        {!! Form::label('student',trans('tenant.worker')) !!}
+        <div class="radio-container">
+         {!! Form::radio('student', '0', false, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
+      </div>
+      @else
+      <div class="form-group inline" id="student">
+        {!! Form::label('student', trans('tenant.student')) !!}
+        <div class="radio-container">
+         {!! Form::radio('student', '1', false, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
+      </div>
+
+      <div class="form-group inline" id="student">
+        {!! Form::label('student',trans('tenant.worker')) !!}
+        <div class="radio-container">
+         {!! Form::radio('student', '0', true, ['class' => 'radio']) !!}
+          <span class="radio-style"></span>
+        </div>
+      </div>
+      @endif
+
+      <div class="form-group" id="respons_student">
+        {!! Form::label("work_studies", trans('tenant.studies')) !!}
+        {!! Form::text("work_studies", $tenant->work_studies) !!}
+        {!! Form::label("school_company", trans('tenant.school')) !!}
+        {!! Form::text("school_company", $tenant->school_company) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('spoken_languages', trans('tenant.languages')) !!}
+        {!! Form::text('spoken_languages', $tenant->spoken_languages) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('contact_pref',trans('tenant.contact')) !!}
+        {!! Form::select('contact_pref',trans('tenant.contact_pref'),['value' => $tenant->contact_preference ]) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('tag') !!}
+        {!! Form::text('tag',null,['id'=>'Tag_Input']) !!}
+      </div>
+      <a class="btn btn-viaflats" id="TagButton">Validate</a>
+
+      <div class="from-group" id="Tag" >
+          @foreach($list_tag as $t)
+              <div class="col-md-4">
+                  <span>{{$t->label}}</span>
+                  <a class="TagDelete" id=tag{{$t->idTag}}>X</a>
+              </div>
+          @endforeach
+      </div>
+      {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"])!!}
+    </div>
+    {!! Form::close() !!}
+
+    <div class="form">
+      <div class="form-container">
+        <div class="form-group">
+          @if($tenant->profile_picture != NULL)
+            <img class="profilPic" src="images/profiles/{{$tenant->profile_picture}}">
+          @else
+            <img class="profilPic" src="images/profiles/profilePic.svg">
+          @endif
+        </div>
+          <input type="submit" class="btn btn-viaflats" id="ProfilPictureButton" value="Upload My Picture"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-trust-center" id="trustCenter">
+  <h3 class="title">@lang('tenant.trust_center')</h3>
+  <div class="container">
+    {!! Form::open(['url'=>'updateTrustCenter','id'=>'updateTrustCenter', 'class' => 'form'])  !!}
+    <h4 class="subtitle">More Info About You</h4>
+    <div class="form-container">
+      <span id="successMessageTrustCenter"></span>
+
+      <div class="form-group" id="email_has_error">
+        {!! Form::label('email',trans('tenant.email')) !!}
+        {!! Form::email('email',$user->email) !!}
+        <span class="error-message" id="email_error"></span>
+      </div>
+
+      <div class="form-group" id="phone_has_error">
+        {!! Form::label('phone', trans('tenant.phone')) !!}
+        {!! Form::text('phone', $user->phone) !!}
+        <span class="error-message" id="phone_error"></span>
+      </div>
+
+      <div class="form-group" id="phone_has_error">
+        {!! Form::label('Your Address') !!}
+        {!! Form::label('street_number', trans('tenant.street_number')) !!}
+        {!! Form::text('street_number',$address_T->street_number) !!}
+        {!! Form::label('street_name',trans('tenant.street')) !!}
+        {!! Form::text('street_name',$address_T->street) !!}
+        {!! Form::label('complement',trans('tenant.complement')) !!}
+        {!! Form::text('complement',$address_T->complement) !!}
+        {!! Form::label('zip',trans('tenant.zip')) !!}
+        {!! Form::text('zip',$address_T->zip) !!}
+        {!! Form::label('city',trans('tenant.city')) !!}
+        {!! Form::text('city',$address_T->city) !!}
+        {!! Form::label('country',trans('tenant.country')) !!}
+        {!! Form::text('country',$address_T->country) !!}
+      </div>
+
+      <h4 class="subtitle">About your parents</h4>
+
+      <div class="form-group">
+        {!! Form::label(trans('tenant.first_name')) !!}
+        {!! Form::text('p_first_name',$parent->first_name) !!}
+        {!! Form::label(trans('tenant.last_name')) !!}
+        {!! Form::text('p_last_name',$parent->last_name) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label(trans('tenant.phone')) !!}
+        {!! Form::text('p_phone',$parent->phone) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label(trans('tenant.email')) !!}
+        {!! Form::text('p_email',$parent->email) !!}
+      </div>
+
+      {!! Form::label('parent_address',trans('tenant.address')) !!}
+      @if(($parent->idAddress == NULL) || ($parent->idAddress == $tenant->idAddress))
+      <div class="form-group">
+        {!! Form::label(trans('tenant.yes')) !!}
+        <div class="radio-container" id="Yes">
+        {!! Form::radio('parent_address', 0, true, ['class' => 'radio'])!!}
+          <span class="radio-style"></span>
+        </div>
+
+        {!! Form::label(trans('tenant.no')) !!}
+        <div class="radio-container" id="No">
+        {!! Form::radio('parent_address', 1, false, ['class' => 'radio'])!!}
+          <span class="radio-style"></span>
+        </div>
+      </div>
+
+      <div class="form-group" id="ParentAddressShow" style="display: none">
+        {!! Form::label('p_street_number',trans('tenant.street_number')) !!}
+        {!! Form::text('p_street_number') !!}
+        {!! Form::label('p_street_name',trans('tenant.street')) !!}
+        {!! Form::text('p_street_name') !!}
+        {!! Form::label('p_complement',trans('tenant.complement')) !!}
+        {!! Form::text('p_complement') !!}
+        {!! Form::label('p_zip',trans('tenant.zip')) !!}
+        {!! Form::text('p_zip') !!}
+        {!! Form::label('p_city',trans('tenant.city')) !!}
+        {!! Form::text('p_city') !!}
+        {!! Form::label('p_country',trans('tenant.country')) !!}
+        {!! Form::text('p_country') !!}
+      </div>
+      @else
+      <div class="form-group">
+        {!! Form::label(trans('tenant.yes')) !!}
+        <div class="radio-container" id="Yes">
+        {!! Form::radio('parent_address', 0, false, ['class' => 'radio'])!!}
+          <span class="radio-style"></span>
+        </div>
+
+        {!! Form::label(trans('tenant.no')) !!}
+        <div class="radio-container" id="No">
+        {!! Form::radio('parent_address', 1, true, ['class' => 'radio'])!!}
+          <span class="radio-style"></span>
+        </div>
+      </div>
+
+      <div class="form-group" id="ParentAddressShow">
+        {!! Form::label('p_street_number',trans('tenant.street_number')) !!}
+        {!! Form::text('p_street_number') !!}
+        {!! Form::label('p_street_name',trans('tenant.street')) !!}
+        {!! Form::text('p_street_name') !!}
+        {!! Form::label('p_complement',trans('tenant.complement')) !!}
+        {!! Form::text('p_complement') !!}
+        {!! Form::label('p_zip',trans('tenant.zip')) !!}
+        {!! Form::text('p_zip') !!}
+        {!! Form::label('p_city',trans('tenant.city')) !!}
+        {!! Form::text('p_city') !!}
+        {!! Form::label('p_country',trans('tenant.country')) !!}
+        {!! Form::text('p_country') !!}
+      </div>
+      @endif
+      {!! Form::submit(trans('tenant.save'),['class'=>"btn  btn-viaflats"]) !!}
+    </div>
+    {!! Form::close() !!}
+    </div>
+</section>
+
+<section class="section section-file-center" id="updateFileCenter">
+  <div class="container">
+    {!! Form::open(['url' => 'updateIdentity','files' => true, 'class' => 'form']) !!}
+    <div class="form-container">
+        {!! Form::label('picture',trans('tenant.identity')) !!}
+      <div class="form-group" id="picture_has_error">
+        @if($tenant->identity != NULL)
+          {!! Form::label(trans('tenant.file_load')) !!}
+        @else
+          {!! Form::label(trans('tenant.file_not_load')) !!}
+        @endif
+        {!! Form::file('picture') !!}
+        <span id="picture_error"></span>
+      </div>
+      {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
+    </div>
+    {!! Form::close() !!}
+
+    @if($tenant->student == 1)
+
+      {!! Form::open(['url' => 'updateStudyAgreement','files' => true, 'class' => 'form', 'id' => 'Study_agreement']) !!}
+      <div class="form-container">
+        {!! Form::label('picture',trans('tenant.study_agreement')) !!}
+        <div class="form-group" id="picture_has_error">
+          {!! Form::label(trans('tenant.study_agreement_explanation')) !!}
+          @if($tenant->study_agreement != NULL)
+              {!! Form::label(trans('tenant.file_load')) !!}
+          @else
+              {!! Form::label(trans('tenant.file_not_load')) !!}
+          @endif
+          {!! Form::file('picture') !!}
+          <span id="picture_error"></span>
+        </div>
+        {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
+      </div>
+      {!! Form::close() !!}
+
+      {!! Form::open(['url' => 'updateWorkAgreement','files' => true, 'class' => 'form', 'id' => 'Work_agreement']) !!}
+      <div class="form-container">
+        {!! Form::label('picture',trans('tenant.work_agreement')) !!}
+        <div class="form-group" id="picture_has_error">
+          @if($tenant->work_agreement != NULL)
+              {!! Form::label(trans('tenant.file_load')) !!}
+          @else
+              {!! Form::label(trans('tenant.file_not_load')) !!}
+          @endif
+          {!! Form::file('picture') !!}
+          <span id="picture_error"></span>
+        </div>
+        {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
+      </div>
+      {!! Form::close() !!}
     </div>
 
-    <!------- Modal Profil Picture ------->
-    <div id="ProfilPicture" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">@lang('tenant.picture')</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6" style="text-align: center;margin-left:25%">
-                            {!! Form::open(['url'=>'uploadFiles','class'=>'dropzone','id'=>'MyDropzone','files'=>true]) !!}
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="modal-footer">
-                    {!! Form::close() !!}
-                    <button class="btn" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
+    @else
+
+    {!! Form::open(['url' => 'updateWorkAgreement','files' => true, 'class' => 'form', 'id' => 'Work_agreement']) !!}
+    <div class="form-container">
+      {!! Form::label('picture',trans('tenant.work_agreement')) !!}
+      <div class="form-group" id="picture_has_error">
+        @if($tenant->work_agreement != NULL)
+            {!! Form::label(trans('tenant.file_load')) !!}
+        @else
+            {!! Form::label(trans('tenant.file_not_load')) !!}
+        @endif
+        {!! Form::file('picture') !!}
+        <span id="picture_error"></span>
+      </div>
+      {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
     </div>
+    {!! Form::close() !!}
 
+    {!! Form::open(['url' => 'updatePaySlip','files' => true, 'class' => 'form', 'id' => 'Pay_Slip']) !!}
+    <div class="form-container">
+      {!! Form::label('picture',trans('tenant.pay_slip')) !!}
+      <div class="form-group" id="picture_has_error">
+        @if($tenant->pay_slip != NULL)
+            {!! Form::label(trans('tenant.file_load')) !!}
+        @else
+            {!! Form::label(trans('tenant.file_not_load')) !!}
+        @endif
+        {!! Form::file('picture') !!}
+        <span id="picture_error"></span>
+      </div>
+      {!! Form::submit(trans('tenant.save_file'),['class'=>"btn  btn-viaflats"]) !!}
+    </div>
+    {!! Form::close() !!}
 
-    <script>
+    @endif
+  </div>
+</section>
+
+<script>
+        // DROPDOWN CITY
+        $('.city-li').click(function(){
+          $('#city_label').text($(this).text());
+        });
+        // DROPDOWN TYPE
+        $('.type-li').click(function(){
+          $('#type_label').text($(this).text());
+        });
 
         $('#ProfilPictureButton').click(function () {
             $('#ProfilPicture').modal();
         });
-
 
         $(function () {
             var list = [
@@ -801,6 +568,10 @@
                     "_token": "{{ csrf_token() }}"
                 }
             });
+
+
+
+
             posting.done(function (data) {
                 if (data.fail) {
                     $.each(data.errors, function (index, value) {

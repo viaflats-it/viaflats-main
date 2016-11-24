@@ -1,5 +1,6 @@
 
-// Fonts & Vars also base template & mixins
+/* Fonts & Vars also base template & mixins */
+
 @import 'inc/fonts';
 @import 'inc/vars';
 @import 'inc/mixins';
@@ -18,14 +19,19 @@ $flagsImagePath: "../images/flags/" !default; in ../../../node_modules/intl-tel-
 
 /* Dropzone */
 
-@import 'inc/dropzone/basic.scss';
-@import 'inc/dropzone/dropzone.scss';
+@import 'inc/dropzone/basic';
+@import 'inc/dropzone/dropzone';
 
-// Views
-@import 'pages/landlord';
+/* Jquery-ui */
+
+@import "inc/jquery-ui/assets/sass/jquery-ui";
+
+/* Views */
+
+@import 'pages/back';
 
 
-// Components
+/* Components */
 
 
 /* Bootstrap
