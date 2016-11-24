@@ -31,8 +31,9 @@
                                                                                   id="#{{$p->idPerson}}">{{$p->login}}</a>
                                             </div>
                                             <div> @lang('landlord.period') {{$b->checkin}} @lang('landlord.to') {{$b->checkout}}</div>
-                                            <div> @lang('landlord.days') </div>
-                                            <div> @lang('landlord.profit') </div>
+                                            <div> @lang('landlord.days') {{(strtotime($b->checkout)-strtotime($b->checkin))/(60*60*24)}}</div>
+                                            <div> @lang('landlord.profit') {{strtotime($b->creation_date)}} </div>
+
                                             <div> @lang('landlord.guest') {{$b->guest}}</div>
                                             @if($b->status == 'pending')
                                                 <p>
@@ -227,8 +228,6 @@
     </div>
 
     <script>
-
-
         function showPending() {
             var posting = $.ajax({
                 url: 'showPendingBooking',

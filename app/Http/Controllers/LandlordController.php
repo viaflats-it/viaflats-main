@@ -22,7 +22,7 @@ class LandlordController extends Controller
         return view('landlord/my_properties');
     }
 
-    function compare($a, $b) {
+    public function compare($a, $b) {
         return strcmp($b->creation_date,$a->creation_date);
     }
 
@@ -35,7 +35,6 @@ class LandlordController extends Controller
         $booking = array();
         $tenant = array();
         $person = array();
-        $numberDays = array();
         foreach ($property as $p) {
             if($p->rooms()->first() !=''){
                 $var = $p->rooms()->first()->estates()->first();
@@ -49,19 +48,14 @@ class LandlordController extends Controller
             foreach ($book as $b){
                 array_push($tenant,$b->tenant()->first());
                 array_push($person,$b->tenant()->first()->person()->first());
-                $checkin = $b->checkin;
-                $checkout = $b->checkout;
-                $daysTimestamp =  $checkout - $checkin;
-                $days = $daysTimestamp/(60*60*24);
                 array_push($booking,$b);
-                array_push($numberDays,$days);
             }
         }
         usort($booking, array($this,'compare'));
         $tenant = array_unique($tenant);
         $estate = array_unique($estate);
         $person = array_unique($person);
-        return view('landlord/my_booking', compact('estate','booking','tenant','person','numberDays'));
+        return view('landlord/my_booking', compact('estate','booking','tenant','person'));
     }
 
     public function showUpdateAvailabilities()

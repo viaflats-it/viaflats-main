@@ -75,13 +75,15 @@ class SearchController extends Controller
         }
 
         $rooms = Room::all();
-        $estates = Estate::where("type_element", 1);
+        $estates = Estate::where("type_element", "App\Room");
         $index=0;
 
         foreach($rooms as $room)
         {
+
             $landlord=$room->property->landlord;
             $restrictions = $room->property->property_restrictions;
+            echo $room->property->area->city->idCity;
             if($room->property->area->city->idCity==$IDcity && $estate=$estates->where("idElement", $room->idRoom)->first())
             {
                 $medias_room = $room->media_room;
