@@ -19,6 +19,12 @@ class Property extends Model
         return $this->morphMany('App\Estate', 'estateMorph', 'type_element', 'idElement');
     }
 
+    public function rooms()
+    {
+        return $this->hasMany('App\Room','idProperty');
+    }
+
+
     public function address()
     {
         return $this->belongsTo('App\Address', 'idAddress');

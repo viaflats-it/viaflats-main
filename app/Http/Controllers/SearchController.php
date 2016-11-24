@@ -53,6 +53,7 @@ class SearchController extends Controller
             }
             if ($available == true) {
                 $type = $e->estateMorph()->first();
+
                 //Available From
                 foreach ($booked_before as $booked) {
                     foreach ($booked_before as $b) {
@@ -61,13 +62,13 @@ class SearchController extends Controller
                         }
                     }
                 }
+
                 array_push($available_list, date('d - m - Y', $available_date));
                 if ($tenant->expected_type == 1) { //Entire Place
                     if ($e->type_element == 'App\Property') {
                         $address = $type->address()->first();
                         if ($address->city == $tenant->expected_city()->first()->libelle) {
                             if ($tenant->budget_min <= $e->rent && $tenant->budget_max >= $e->rent) {
-                                //Verif dispo à partir de ..
                                 array_push($sugg, $e);
                                 array_push($area, $type->area()->first());
                             }

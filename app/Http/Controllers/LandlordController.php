@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Landlord;
 use App\User;
+use App\Booking;
 use App\Payment_way;
 use Illuminate\support;
 use Image;
@@ -23,11 +24,48 @@ class LandlordController extends Controller
 
     }
 
+    function compare($a, $b) {
+        return strcmp($b->creation_date,$a->creation_date);
+    }
+
     public function showBooking()
     {
-        return view('landlord/my_booking');
 
+        $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
+        $property = $landlord->property()->get();
+        $estate = array();
+        $booking = array();
+        $tenant = array();
+        $person = array();
+        $numberDays = array();
+        foreach ($property as $p) {
+            if($p->rooms()->first() !=''){
+                $var = $p->rooms()->first()->estates()->first();
+                array_push($estate,$var);
+
+            }else{
+                $var = $p->estates()->first();
+                array_push($estate,$var);
+            }
+            $book = $var->booking()->get();
+            foreach ($book as $b){
+                array_push($tenant,$b->tenant()->first());
+                array_push($person,$b->tenant()->first()->person()->first());
+                $checkin = $b->checkin;
+                $checkout = $b->checkout;
+                $daysTimestamp =  $checkout - $checkin;
+                $days = $daysTimestamp/(60*60*24);
+                array_push($booking,$b);
+                array_push($numberDays,$days);
+            }
+        }
+        usort($booking, array($this,'compare'));
+        $tenant = array_unique($tenant);
+        $estate = array_unique($estate);
+        $person = array_unique($person);
+        return view('landlord/my_booking', compact('estate','booking','tenant','person','numberDays'));
     }
+
 
     public function showUpdateAvailabilities()
     {

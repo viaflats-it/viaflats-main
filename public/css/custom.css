@@ -5,6 +5,10 @@ body {
     overflow-x: hidden;
 }
 
+.details{
+    display: none;
+}
+
 /* Toggle Styles */
 
 #radio_home ,

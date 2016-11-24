@@ -13,50 +13,104 @@ class ReservationController extends Controller
 {
     public function showMyReservation()
     {
-        return view('tenant/my_reservation');
-    }
-
-    public function showAll()
-    {
-        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status','=','pending')->get();
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->get()->sortByDesc('creation_date');
         $estate = array();
         foreach ($booking as $b) {
             array_push($estate, $b->estate()->first());
         }
+        return view('tenant/my_reservation',compact('booking','estate'));
+    }
+
+    public function showPendingReservation()
+    {
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', '=', 'pending')->get()->sortByDesc('creation_date');
+        $estate = array();
+        foreach ($booking as $b) {
+            array_push($estate, $b->estate()->first());
+        }
+
         return [
-            $booking,
-            $estate,
+            'booking' => $booking,
+            'estate' => $estate,
         ];
     }
 
-    public function showPending()
+    public function showWaitingReservation()
     {
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', '=', 'waiting')->get()->sortByDesc('creation_date');
+        $estate = array();
+        foreach ($booking as $b) {
+            array_push($estate, $b->estate()->first());
+        }
 
+        return [
+            'booking' => $booking,
+            'estate' => $estate,
+        ];
     }
 
-    public function showWaiting()
+    public function showConfirmedReservation()
     {
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', '=', 'confirmed')->get()->sortByDesc('creation_date');
+        $estate = array();
+        foreach ($booking as $b) {
+            array_push($estate, $b->estate()->first());
+        }
 
+        return [
+            'booking' => $booking,
+            'estate' => $estate,
+        ];
     }
 
-    public function showConfirmed()
+    public function showRejectedReservation()
     {
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', '=', 'rejected')->get()->sortByDesc('creation_date');
+        $estate = array();
+        foreach ($booking as $b) {
+            array_push($estate, $b->estate()->first());
+        }
 
+        return [
+            'booking' => $booking,
+            'estate' => $estate,
+        ];
     }
 
-    public function showRejected()
+    public function showExpiredReservation()
     {
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', '=', 'expired')->get()->sortByDesc('creation_date');
+        $estate = array();
+        foreach ($booking as $b) {
+            array_push($estate, $b->estate()->first());
+        }
 
+        return [
+            'booking' => $booking,
+            'estate' => $estate,
+        ];
     }
 
-    public function delete()
+    public function showInfoReservation()
     {
+        $id = \Input::get('ref');
+        $booking = Booking::find($id);
+        $estate = $booking->estate()->first();
+        return view('tenant/reservation-details',compact('booking','estate'));
+    }
 
+    public function deleteReservation()
+    {
+        $booking = Booking::find(\Input::get('ref'))->first();
+        $booking->status = 'cancelled';
+        $booking->save();
+        \Redirect::to('my_reservation');
     }
 
     public function update()
     {
 
     }
+
 
 }

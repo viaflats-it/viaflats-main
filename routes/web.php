@@ -72,6 +72,13 @@ Route::group(['middleware' => 'auth'], function() {
     //Reservation
     Route::get('my_reservation','ReservationController@showMyReservation');
     Route::get('showAllReservation','ReservationController@showAll');
+    Route::get('showPending','ReservationController@showPendingReservation');
+    Route::get('showWaiting','ReservationController@showWaitingReservation');
+    Route::get('showConfirmed','ReservationController@showConfirmedReservation');
+    Route::get('showRejected','ReservationController@showRejectedReservation');
+    Route::get('showExpired','ReservationController@showExpiredReservation');
+    Route::get('reservation-details','ReservationController@showInfoReservation');
+    Route::get('DeleteReservation','ReservationController@deleteReservation');
 });
 
 
@@ -97,6 +104,18 @@ Route::group(['middleware' => 'landlord'], function() {
 
     Route::get('complete_profile' , 'LandlordController@completeProfile');
     Route::post('complete_profile' , 'LandlordController@doCompleteProfile');
+
+    //Booking
+    Route::get('showMyBooking','BookingController@showMyBooking');
+    Route::get('showPendingBooking','BookingController@showPendingBooking');
+    Route::get('showWaitingBooking','BookingController@showWaitingBooking');
+    Route::get('showConfirmedBooking','BookingController@showConfirmedBooking');
+    Route::get('showRejectedBooking','BookingController@showRejectedBooking');
+    Route::get('showExpiredBooking','BookingController@showExpiredBooking');
+    Route::get('showInfoTenant','BookingController@showInfoTenant');
+    Route::get('confirmBooking','BookingController@confirmBooking');
+    Route::post('rejectBooking','BookingController@rejectBooking');
+    Route::get('viewDetails','BookingController@viewDetails');
 
 });
 

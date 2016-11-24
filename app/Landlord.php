@@ -35,7 +35,12 @@ class Landlord extends Model
 
     public function payment_way()
     {
-        return $this->belongsToMany('App\Payment_way','Payment_way_landlord','idLandlord','idPayment');
+        return $this->belongsToMany('App\Payment_way', 'Payment_way_landlord', 'idLandlord', 'idPayment');
+    }
+
+    public function property()
+    {
+        return $this->hasMany('App\Property','idLandlord');
     }
 
 }

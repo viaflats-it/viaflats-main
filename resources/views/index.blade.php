@@ -295,11 +295,11 @@
                     {!! Form::hidden('First_step',true) !!}
                     <!------------ Gender ----------->
                         <div class="form-group row " id="gender_has_error">
-                            <div class="form-group col-md-6">
+                            <div class="col-md-6">
                                 {!! Form::label('gender',trans('tenant.girl')) !!}
                                 {!! Form::radio('gender','Girl',true) !!}
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="col-md-6">
                                 {!! Form::label('gender',trans('tenant.boy')) !!}
                                 {!! Form::radio('gender','Boy') !!}
                             </div>
@@ -420,13 +420,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12" id="Property">
+                            <div class="col-md-12" id="property">
 
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-viaflats" data-dismiss="modal">Close</button>
+                        <button class="btn btn-viaflats" data-dismiss="modal">@lang('auth.close')</button>
                     </div>
                 </div>
             </div>
@@ -670,11 +670,11 @@
                     backdrop: 'static',
                     keyboard: false
                 });
-                var Property = $("#Property");
+                var Property = $("#property");
                 Property.html('');
                 for(var i=0;i<5;i++){
                     if(data.Property[i] != undefined){
-                        Property.append('<div style="text-align: center;"><img src="property/'+ data.Property[i].picture +
+                        property.append('<div style="text-align: center;"><img src="property/'+ data.Property[i].picture +
                                 '" width="100" height="..."/></div>' +
                                 data.Property[i].title +'<br> Rent:' + data.Property[i].rent +
                                 '<br> City '+ data.City +'<br> Area '+data.Area[i].label+'<br> Available from '+

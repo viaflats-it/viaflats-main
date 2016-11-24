@@ -21,12 +21,12 @@ class Parents extends Model
      */
     public function address()
     {
-        return $this->belongTo('App\Address', 'idAddress');
+        return $this->belongsTo('App\Address', 'idAddress');
     }
 
     public function tenant()
     {
-        return $this->belongTo('App\Tenant', 'idTenant');
+        return $this->belongsTo('App\Tenant', 'idTenant');
     }
 
     public $timestamps = false;
