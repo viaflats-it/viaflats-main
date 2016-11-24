@@ -21,6 +21,8 @@ Route::get('landlordCreateMail/{code}', 'LandlordController@verifyAccount');
 Route::get('logoutfb', 'LoginController@logOutFb');
 Route::get('logoutgoogle', 'LoginController@logOutGoogle');
 Route::get('SendConfirmationMail','MailController@SendConfirmationMail');
+Route::get('test', 'SearchController@test');
+Route::post('search', 'SearchController@search');
 
 
 /* ----------------------
@@ -99,6 +101,7 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::get('my_properties', 'LandlordController@showProperties');
     Route::get('my_booking', 'LandlordController@showBooking');
     Route::get('update_availabilities', 'LandlordController@showUpdateAvailabilities');
+    Route::post('update_availabilities', 'LandlordController@updateAvailabilities');
     Route::get('invoices', 'LandlordController@showInvoices');
     Route::get('messages', 'LandlordController@showMessages');
 

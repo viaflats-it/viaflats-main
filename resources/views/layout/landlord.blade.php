@@ -8,7 +8,7 @@
   <title>Landlord</title>
   <!-- css -->
   {{ Html::style('css/app.css') }}
-
+{{ Html::style('css/boostrap.min.css') }}
   <!-- js -->
   <script src="{{URL::asset('js/app.js')}}"></script>
 </head>

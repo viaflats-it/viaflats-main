@@ -38,8 +38,4 @@ class Room extends Model
         return $this->morphMany('App\Estate', 'estateMorph' , 'type_element' , 'idElement');
     }
 
-    public function property()
-    {
-        return $this->belongsTo('App\Property', 'idProperty');
-    }
 }

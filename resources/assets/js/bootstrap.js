@@ -1,4 +1,3 @@
-
 window._ = require('lodash');
 
 /**
@@ -26,9 +25,9 @@ require('vue-resource');
 window.gsap = require('gsap');
 
 window.intlTelInput = require('intl-tel-input');
- /**
-  GSAP
-  **/
+/**
+ GSAP
+ **/
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
@@ -36,12 +35,10 @@ window.intlTelInput = require('intl-tel-input');
  * included with Laravel will automatically verify the header's value.
  */
 
-
-Vue.http.interceptors.push((request, next) => {
+/**Vue.http.interceptors.push((request, next) => {
     request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
-
-    next();
-});
+next();
+});*/
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

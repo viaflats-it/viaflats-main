@@ -20,13 +20,6 @@ class LandlordController extends Controller
     public function showProperties()
     {
         return view('landlord/my_properties');
-        return view('landlord/add_property');
-    }
-
-    public function showProperties()
-    {
-        return view('landlord/my_properties');
-
     }
 
     function compare($a, $b) {
@@ -71,7 +64,6 @@ class LandlordController extends Controller
         return view('landlord/my_booking', compact('estate','booking','tenant','person','numberDays'));
     }
 
-
     public function showUpdateAvailabilities()
     {
         return view('landlord/update_availabilities');
@@ -103,12 +95,6 @@ class LandlordController extends Controller
             array_push($land_payment, $p->idPayment);
         }
         return view('landlord/profile_landlord', compact('landlord', 'payment', 'land_payment'));
-
-    }
-
-    public function showUpdateAvailabilities()
-    {
-        return view('landlord/update_availabilities');
 
     }
 
@@ -160,7 +146,6 @@ class LandlordController extends Controller
         }
         return \Redirect::to('profile');
     }
-    
 
     public function disable()
     {
@@ -277,7 +262,6 @@ class LandlordController extends Controller
             $landlord->payment_way()->detach();
         }
     }
-
 
     public function verifyAccount($code)
     {
