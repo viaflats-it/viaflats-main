@@ -8,6 +8,7 @@
   <title>Landlord</title>
   <!-- css -->
   {{ Html::style('css/app.css') }}
+
   <!-- js -->
   <script src="{{URL::asset('js/app.js')}}"></script>
 </head>

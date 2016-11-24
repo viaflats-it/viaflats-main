@@ -31,7 +31,7 @@
                                                                                   id="#{{$p->idPerson}}">{{$p->login}}</a>
                                             </div>
                                             <div> @lang('landlord.period') {{$b->checkin}} @lang('landlord.to') {{$b->checkout}}</div>
-                                            <div> @lang('landlord.days') {{var_dump($numberDays)}}</div>
+                                            <div> @lang('landlord.days') </div>
                                             <div> @lang('landlord.profit') </div>
                                             <div> @lang('landlord.guest') {{$b->guest}}</div>
                                             @if($b->status == 'pending')
