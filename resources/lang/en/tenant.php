@@ -18,6 +18,7 @@ return [
                                                 ----------------------------*/
     'save' => 'Save',
     'save_file' => 'Send File',
+    'send' => 'Send',
     'next' => 'Next',
     'pass_step' => 'Pass this step',
     'end' => 'Finish',
@@ -32,7 +33,7 @@ return [
     'my_reservation' => 'My Reservation',
     'invoices' => 'My Invoices',
     'messages' => 'Messages',
-    'account' => 'My account',
+    'settings' => 'Settings',
     'menu-toggle' => 'Toggle Menu',
 
 

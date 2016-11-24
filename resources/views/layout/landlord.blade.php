@@ -2,18 +2,17 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
-    <!-- css -->
-    {{ Html::style('css/app.css') }}
-    <!-- js -->
-    <script src="{{URL::asset('js/app.js')}}"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Landlord</title>
+  <!-- css -->
+  {{ Html::style('css/app.css') }}
+  <!-- js -->
+  <script src="{{URL::asset('js/app.js')}}"></script>
 </head>
 
 <body>
-
     <!-- wrapper-->
     <div class="wrapper">
         <!-- sidebar-->
@@ -79,7 +78,6 @@
       <!--/content -->
   </div>
   <!-- /wrapper-->
-
 <script type="text/javascript">
   let reverse = false;
   let menubool = true;
@@ -276,5 +274,4 @@
   });
 </script>
 </body>
-
 </html>

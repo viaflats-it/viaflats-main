@@ -9,6 +9,7 @@
       <div class="form-container">
         <span class="sucess-message" id="successMessageProfile"></span>
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
         <div class="form-group" id="first_name_has_error">
             <label for="first_name">@lang('landlord.first_name')</label>
             <input type="text" name="first_name" id="first_name"
@@ -52,7 +53,7 @@
   </div>
 </section>
 
-<section class="section" id="changePassword">
+<section class="section section-password" id="changePassword">
   <h1 class="title">@lang('landlord.changePassword')</h1>
   <div class="container">
     {!! Form::open(['id' => 'updatePassword', 'class' => 'form', 'url' => 'updatePassword']) !!}
@@ -77,7 +78,7 @@
   </div>
 </section>
 
-<section class="section" id="changeInformation">
+<section class="section section-information" id="changeInformation">
   <h1 class="title">@lang('landlord.moreInformation')</h1>
   <div class="container">
     {!! Form::open(['id' => 'updateInformation', 'class' => 'form', 'url' => 'updateInformation']) !!}
@@ -121,13 +122,28 @@
         </div>
         {!! Form::label(trans('landlord.corporate')) !!}
       </div>
+      {!! Form::label(trans('landlord.paymentType')) !!}
       <div class="form-group inline" id="payment">
-          @foreach($payment as $p)
-          {!! Form::label('payment_way[]',$p) !!}
-          <div class="radio-container">
-          {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
-            <span class="radio-style"></span>
-          </div>
+          @foreach($payment as $key=>$p)
+            @if ($key <= 3)
+              {!! Form::label('payment_way[]',$p) !!}
+              <div class="radio-container">
+              {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
+                <span class="radio-style"></span>
+              </div>
+            @endif
+          @endforeach
+      </div>
+      <!-- WE MAY FIND ANOTHER SOLUTION HERE -->
+      <div class="form-group inline" id="payment">
+          @foreach($payment as $key=>$p)
+            @if ($key > 3)
+              {!! Form::label('payment_way[]',$p) !!}
+              <div class="radio-container">
+              {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
+                <span class="radio-style"></span>
+              </div>
+            @endif
           @endforeach
       </div>
       <div class="form-group">
@@ -135,8 +151,8 @@
         {!! Form::text('company_web', $landlord->company_website , ['class' => 'form-control']) !!}
       </div>
       {!! Form::submit(trans('landlord.update'), ['class' => 'btn btn-viaflats']) !!}
-      {!! Form::close() !!}
     </div>
+    {!! Form::close() !!}
   </div>
 </section>
 
