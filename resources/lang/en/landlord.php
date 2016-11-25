@@ -40,6 +40,8 @@ return [
     'weekday' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     'read_accept' => 'I read and accept',
     'terms_condition' => 'Terms & Condition',
+    'yes' => 'Yes',
+    'no' => 'No',
 
             /*----------------------------
                                             MENU
@@ -56,6 +58,30 @@ return [
     'adminAddlandlord' => 'Add a Landlord',
     'minimize_label' => 'Minimize',
     'menu-toggle' => 'Toggle Menu',
+    'absence' => 'Absences :',
+    'absence_begin' => 'First day :',
+    'absence_end' => 'Ending date :',
+    'wrong_dates' => 'Selected dates are not correct',
+    'monday' => 'Monday',
+    'tuesday' => 'Tuesday',
+    'wednesday' => 'Wednesday',
+    'thursday' => 'Thursday',
+    'friday' => 'Friday',
+    'saturday' => 'Saturday',
+    'sunday' => 'Sunday',
+    'monday_availability' => 'Monday: ',
+    'tuesday_availability' => 'Tuesday: ',
+    'wednesday_availability' => 'Wednesday: ',
+    'thursday_availability' => 'Thursday: ',
+    'friday_availability' => 'Friday: ',
+    'saturday_availability' => 'Saturday: ',
+    'sunday_availability' => 'Sunday: ',
+    'btnshow' => 'Show all',
+    'btnhide' => 'Hide all',
+    'fillall' => 'Fill all',
+    'clearall' => 'Clear all',
+    'cancelall' => 'Cancel all',
+    'cancel' => 'Cancel',
 
 
                     /*----------------------------
@@ -116,32 +142,86 @@ return [
     'parent_phone' => 'Parent phone',
     'parent_mail' => 'Parent mail',
 
-    'menu-toggle' => 'Toggle Menu',
-    'absence' => 'Absences :',
-    'absence_begin' => 'First day :',
-    'absence_end' => 'Ending date :',
-    'wrong_dates' => 'Selected dates are not correct',
-    'monday' => 'Monday',
-    'tuesday' => 'Tuesday',
-    'wednesday' => 'Wednesday',
-    'thursday' => 'Thursday',
-    'friday' => 'Friday',
-    'saturday' => 'Saturday',
-    'sunday' => 'Sunday',
-    'monday_availability' => 'Monday: ',
-    'tuesday_availability' => 'Tuesday: ',
-    'wednesday_availability' => 'Wednesday: ',
-    'thursday_availability' => 'Thursday: ',
-    'friday_availability' => 'Friday: ',
-    'saturday_availability' => 'Saturday: ',
-    'sunday_availability' => 'Sunday: ',
-    'btnshow' => 'Show all',
-    'btnhide' => 'Hide all',
-    'fillall' => 'Fill all',
-    'clearall' => 'Clear all',
-    'cancelall' => 'Cancel all',
-    'cancel' => 'Cancel',
 
+
+                    /*----------------------------
+                                           ADD A PROPERTY
+                                                         ----------------------------*/
+
+    'details' => 'About the property',
+
+    'type' => 'Property\'s type',
+    'room_type'=> 'Room type, entire ou shared',
+    'home' => 'Home',
+    'shared' => 'Shared',
+    'apartment' => 'Apartment',
+    'studio' => 'Studio',
+    'Tsize' => 'Total Size',
+    'streetNumber' => 'Street Number',
+    'street' => 'Street',
+    'complement' => 'Complement',
+    'zip' => 'Zip',
+    'city' => 'City',
+    'area' => 'Area',
+    'country' => 'Country',
+    'address' => 'Address',
+    'wsarrond' => 'What\'s around',
+    'needhelp' => 'Need help ?',
+    'needHelpText' => 'We will be more than happy to assist you in fill this form. Please contact one of our Viaflats assistant.',
+
+
+    'entire' => 'Entire',
+
+
+                    /*----------------------------
+                                           DEF A PROPERTY
+                                                         ----------------------------*/
+
+    'definition' =>  'Define your property',
+    'living_room' => 'Living Room(s)',
+    'bathroom' => 'Bathroom(s)',
+    'bedroom' => 'Bedroom(s)',
+    'toilet' => 'Toilet(s)',
+    'laundry' => 'Laundry(s)',
+    'basement' => 'Basement',
+    'kitchen' => 'Kitchen',
+    'number' => 'Number',
+    'size' => 'Size',
+    'furnished' => 'Furnished',
+    'unfurnished' => 'Unfurnished',
+    'shortStayExplication' => 'you can define the a short stay period and increase the price for this period',
+
+                        /*----------------------------
+                                               AMENITIES
+                                                             ----------------------------*/
+
+    'simple_bed' => 'Simple bed',
+    'double_bed' => 'Double bed',
+    'mattress' => 'Mattress',
+    'desk' => 'Desk',
+    'sink' => 'Sink',
+    'heater' => 'Heater',
+    'cupboard' => 'Cupboard',
+    'towel' => 'Towel',
+    'sofa' => 'Sofa',
+    'bedside_lamp' => 'Bedside lamp',
+    'mirror' => 'Mirror',
+    'pillow' => 'Pillow',
+    'fridge' => 'Fridge',
+    'oven' => 'Oven',
+    'chair' => 'Chair',
+    'glass' => 'Glass',
+    'dishwasher' => 'Dishwasher',
+    'pot' => 'Pot',
+
+
+                            /*----------------------------
+                                                   FEES
+                                                                 ----------------------------*/
+
+    'city_fee' => 'City Fee',
+    'cleaning_fee' => 'Cleaning Fee',
+    'reservation_fee' => 'Reservation Fee',
 
 
 ];

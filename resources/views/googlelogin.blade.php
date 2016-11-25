@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 $client = new Google_Client();
 $client->setAuthConfig('../config/credentials.json');

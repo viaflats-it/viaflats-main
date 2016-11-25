@@ -2,7 +2,7 @@
 
 @extends('layout.landlord')
 
-@section('contenu')
+@section('content')
 
 
 <?php $landlord = \App\Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();

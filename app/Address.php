@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $table = 'Address';
+    protected $table = 'address';
 
     protected $primaryKey = 'idAddress';
-
     protected $fillable = [
-        'street_number', 'street', 'complement', 'zip', 'city', 'country',
+        'street_number', 'street', 'complement', 'zip', 'city', 'country'
     ];
 
     /**
@@ -20,15 +19,21 @@ class Address extends Model
      * @var array
      */
 
+
+    public $timestamps = false;
+
+
+    public function property()
+    {
+        return $this->hasOne('App\Property','idAddress', 'idAddress');
+    }
+
     public function tenant()
     {
         return $this->hasOne('App\Tenant', 'idAddress');
     }
-
     public function Parent()
     {
-        return $this->hasOne('App\Parents', 'idAddress');
+        return $this->hasOne('App\Parent', 'idAddress');
     }
-
-    public $timestamps = false;
 }

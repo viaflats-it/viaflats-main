@@ -24,6 +24,10 @@ class Tenant extends Model
         'password',
     ];
 
+    protected $dates = ['creation_date'];
+
+    public  $timestamps = false;
+
     public function address()
     {
         return $this->belongsTo('App\Address', 'idAddress');
@@ -34,10 +38,12 @@ class Tenant extends Model
         return $this->hasOne('App\Parents', 'idTenant');
     }
 
+
     public function person()
     {
         return $this->belongsTo('App\User', 'idPerson');
     }
+
 
     public function expected_city()
     {
@@ -53,9 +59,5 @@ class Tenant extends Model
     {
         return $this->hasMany('App\Booking','idTenant');
     }
-
-    protected $dates = ['creation_date'];
-
-    public $timestamps = false;
 
 }

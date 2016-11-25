@@ -65,7 +65,7 @@ return [
 - « Cancellation Policy » means the way a Member can cancel a Booking made on the Site
 - « Check in » means the entry date by the Tenant in the Accommodation
 - « Check out » means the leaving date of the Tenant in the Accommodation
-- « Taxes » means all applicable taxes (VAT, sales taxes) when a Tenant books an accommodation on Viaflats'
+- « Taxes » means all applicable taxes (VAT, sales taxes) when a Tenant books an accommodation on Viaflats',
 
 
 ];

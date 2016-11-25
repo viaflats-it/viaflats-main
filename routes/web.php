@@ -42,11 +42,16 @@ Route::group(['middleware' => 'guest'], function() {
                       connected as a Tenant :
                                         ---------------------- */
 Route::group(['middleware' => 'auth'], function() {
-
     Route::get('logout', 'LoginController@logOut');
     Route::get('tenant','TenantController@showProfile');
     Route::get('profile','TenantController@showProfile');
     Route::get('account','PageController@account');
+    Route::get('/home', 'HomeController@index');
+    Route::get('logoutfb', 'LoginController@logOutFb');
+    Route::get('fbsignup', 'LoginController@signUpFacebook');
+    Route::get('logingoogle', 'LoginController@signUpGoogle');
+    Route::get('logoutgoogle', 'LoginController@logOutGoogle');
+
 
     //Account
     Route::post('updatePasswordTenant','TenantController@changePassword');
@@ -97,7 +102,30 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::post('updatePassword', 'LandlordController@updatePassword');
     Route::post('updateInformation', 'LandlordController@updateInformation');
 
-    Route::get('add_property', 'LandlordController@showAddProperty');
+    /* ADD PROPERTY*/
+        /*GET*/
+    Route::get('add_property', 'LandlordController@showDetailsProperty');
+    Route::get('definition_property', 'LandlordController@showDefinitionProperty');
+    Route::get('definition_area', 'LandlordController@showDefinitionArea');
+    Route::get('definition_estate', 'LandlordController@showDefinitionEstate');
+    Route::get('definition_estate_shared', 'LandlordController@showDefinitionEstateShared');
+    Route::get('final_preview', 'LandlordController@showFinalPreview');
+    Route::get('update_estate_room' , 'LandlordController@showUpdateEstateRoom');
+
+        /*POST*/
+    Route::post('details_property', 'LandlordController@postDetailsProperty');
+    Route::post('definition_property', 'LandlordController@postDefinitionProperty');
+    Route::post('definition_area', 'LandlordController@postDefinitionArea');
+    Route::post('definition_estate', 'LandlordController@postDefinitionEstate');
+    Route::post('definition_estate_shared', 'LandlordController@postDefinitionEstateRoom');
+    Route::post('update_estate_room', 'LandlordController@updateEstateRoom');
+
+    /* AJAX */
+    Route::get('get_area', 'LandlordController@getArea');
+    Route::get('get_translation', 'LandlordController@getTranslation');
+    Route::get('get_room' , 'LandlordController@getRoom');
+    Route::get('get_delete', 'LandlordController@deleteEstate');
+
     Route::get('my_properties', 'LandlordController@showProperties');
     Route::get('my_booking', 'LandlordController@showBooking');
     Route::get('update_availabilities', 'LandlordController@showUpdateAvailabilities');

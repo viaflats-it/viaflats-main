@@ -26,4 +26,8 @@ class Area extends Model
     {
         return $this->hasOne('App\Property', 'idArea');
     }
+
+    public function properties(){
+        return $this->hasMany('App\Property','idArea');
+    }
 }
