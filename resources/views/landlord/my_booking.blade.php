@@ -37,7 +37,10 @@
                                             <div> @lang('landlord.guest') {{$b->guest}}</div>
                                             @if($b->status == 'pending')
                                                 <p>
-                                                    Il reste {{$b->creation_date}}
+                                                    Jour {{((strtotime($b->creation_date)+24*60*60)-time())/(60*60*24)%60}}
+                                                    Heure {{((strtotime($b->creation_date)+24*60*60)-time())/(60*60)%60}}
+                                                    Min {{((strtotime($b->creation_date)+24*60*60)-time())/(60)%60}}
+                                                    Seconde {{((strtotime($b->creation_date)+24*60*60)-time())%60}} <!--- Seconde --->
                                                 </p>
                                                 <div class="col-md-6">
                                                     <div class="confirmedButton">

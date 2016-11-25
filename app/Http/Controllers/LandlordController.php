@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Faker\Provider\cs_CZ\DateTime;
 use Illuminate\Http\Request;
 use App\Landlord;
 use App\User;
@@ -49,6 +50,7 @@ class LandlordController extends Controller
                 array_push($tenant,$b->tenant()->first());
                 array_push($person,$b->tenant()->first()->person()->first());
                 array_push($booking,$b);
+
             }
         }
         usort($booking, array($this,'compare'));

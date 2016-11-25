@@ -328,7 +328,7 @@ class BookingController extends Controller
                 $newBooking->idTenant = $booking->idTenant;
                 $newBooking->checkin = $rejectData['expected_in'];
                 $newBooking->checkout = $rejectData['expected_out'];
-                $newBooking->status = 'waiting';
+                $newBooking->status = 'pending';
                 $newBooking->idBookingPack = $booking->idBookingPack;
                 $newBooking->booking_fee = $booking->booking_fee;
                 $newBooking->idEstate = $booking->idEstate;
