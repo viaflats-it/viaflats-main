@@ -1,6 +1,6 @@
 @extends('layout.landlord')
 
-@section('contenu')
+@section('content')
 
     <div class="row profile" id="changeProfile">
         <div class="col-md-12">
@@ -89,9 +89,9 @@
             <div id="successMessagePassword"></div>
             <div class="row">
                 <div class="col-md-3">
+                    {!! Form::open(['id'=>'updatePassword', 'url' => 'updatePassword']) !!}
                     <div class="form-group" id="actual_password_has_error">
 
-                        {!! Form::open(['id'=>'updatePassword', 'url' => 'updatePassword']) !!}
                         {!! Form::label('actual_password', trans('landlord.actual_password')) !!}
                         {!! Form::password('actual_password', ['class' => 'form-control']) !!}
                         <div id="actual_password_error"></div>
@@ -110,6 +110,8 @@
                     </div>
                     {!! Form::submit(trans('landlord.update'), ['class'=>'btn btn-viaflats']) !!}
                     {!! Form::close() !!}
+
+
                 </div>
             </div>
 

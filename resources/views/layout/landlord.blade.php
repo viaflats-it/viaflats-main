@@ -12,20 +12,21 @@
     {{ Html::style('css/app.css') }}
     {{ Html::style('css/custom.css') }}
     {{ Html::style('css/boostrap.min.css') }}
+    {{ Html::style('../node_modules/material-design-icons-iconfont/dist/material-design-icons.css') }}
 
 <!-- jQuery -->
     <script src="{{URL::asset('js/app.js')}}"></script>
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
     <script src="../node_modules/intl-tel-input/build/js/intlTelInput.js"></script>
+    <script src="../node_modules/moment/min/moment.min.js"></script>
 
 
     <link rel="stylesheet" href="../node_modules/intl-tel-input/build/css/intlTelInput.css">
 
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 
 
@@ -102,7 +103,7 @@
                 <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">@lang('landlord.menu-toggle')</a>
 
                 <div class="content">
-                    @yield('contenu')
+                    @yield('content')
 
                 </div>
 

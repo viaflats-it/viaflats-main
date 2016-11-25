@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'fr',
+    'locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +179,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+
+//        IDE HELPER
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
+
 
 
     ],

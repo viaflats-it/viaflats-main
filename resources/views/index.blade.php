@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('contenu')
+@section('content')
 
 
     <div class="container">
@@ -201,7 +201,7 @@
             <div class="col-md-2 col-md-push-1">
                 <p>
                     @if(Auth::check())
-                    connexion :{{Auth::user()->account}}
+                    connexion :{{Auth::user()->type_person}}
                     {{Auth::user()}}
 
                         @endif

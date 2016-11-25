@@ -32,4 +32,9 @@ class User extends Authenticatable
     ];
 
     public $timestamps = false;
+
+    public function tenant()
+    {
+        return $this->hasOne('App\Tenant', 'idPerson');
+    }
 }

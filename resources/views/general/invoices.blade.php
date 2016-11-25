@@ -1,3 +1,3 @@
 @extends('layout.landlord')
 
-@section('contenu')
+@section('content')

@@ -23,10 +23,22 @@ class Tenant extends Model
         'password',
     ];
 
-    protected $dates = ['creation_date'];
+    public  $timestamps = false;
 
+//    protected $dates = ['creation_date'];
+
+
+    public function address()
+    {
+        return $this->belongsTo('App\Address', 'idAddress');
+    }
+    public function parent()
+    {
+        return $this->hasOne('App\Parent', 'idTenant');
+    }
     public function person()
     {
-        return $this->hasOne('App\User', 'idPerson');
+        return $this->belongsTo('App\Person', 'idPerson');
     }
+
 }

@@ -1,6 +1,6 @@
 @extends('layout.landlord')
 
-@section('contenu')
+@section('content')
 
 <div class="row profile" id="changeProfile">
 

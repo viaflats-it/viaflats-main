@@ -21,7 +21,7 @@ class authLandlord
         {
             return \Redirect::to('index')->withErrors('You can not access to this content');
         }
-        else if(!Landlord::where('idPerson' ,'=', \Auth::user()->idPerson)->first())
+        else if(!\Auth::user()->type_person == 1)
         {
             return \Redirect::to('index')->withErrors('You can not access to this content');
         }
