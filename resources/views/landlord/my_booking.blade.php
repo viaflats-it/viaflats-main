@@ -662,6 +662,8 @@
 
         $('#pending').on('click', function (event) {
             event.preventDefault();
+            $('#multibooking').html('');
+            $('#allbooking').html('');
             if ($(this).hasClass('isSelected')) {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
@@ -680,6 +682,8 @@
 
         $('#waiting').on('click', function (event) {
             event.preventDefault();
+            $('#multibooking').html('');
+            $('#allbooking').html('');
             if ($(this).hasClass('isSelected')) {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
@@ -698,6 +702,8 @@
 
         $('#confirmed').on('click', function (event) {
             event.preventDefault();
+            $('#multibooking').html('');
+            $('#allbooking').html('');
             if ($(this).hasClass('isSelected')) {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
@@ -716,6 +722,8 @@
 
         $('#rejected').on('click', function (event) {
             event.preventDefault();
+            $('#multibooking').html('');
+            $('#allbooking').html('');
             if ($(this).hasClass('isSelected')) {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
@@ -734,6 +742,8 @@
 
         $('#expired').on('click', function (event) {
             event.preventDefault();
+            $('#multibooking').html('');
+            $('#allbooking').html('');
             if ($(this).hasClass('isSelected')) {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")

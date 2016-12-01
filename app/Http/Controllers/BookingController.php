@@ -23,35 +23,43 @@ class BookingController extends Controller
         $person = array();
         $countdown = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-            } else {
-                $var = $p->estates()->first();
-            }
-            $book = $var->booking()->get();
-            foreach ($book as $b) {
-                if (isset($b) && $b->idBookingPack == Null) {
-                    array_push($tenant, $b->tenant()->first());
-                    array_push($person, $b->tenant()->first()->person()->first());
-                    array_push($estate, $var);
-                    if ($b->status == 'pending') {
-                        $count = BookingController::countdown($b->creation_date);
-                        if ($count['status'] == 'expired') {
-                            $b->status = 'expired';
-                            $b->save();
-                        } else {
-                            $countdown[$b->idBooking] = $count;
-                        }
-                    } elseif ($b->status == 'waiting') {
-                        $count = BookingController::countdown($b->confirm_date);
-                        if ($count['status'] == 'expired') {
-                            $b->status = 'expired';
-                            $b->save();
-                        } else {
-                            $countdown[$b->idBooking] = $count;
-                        }
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
                     }
-                    array_push($booking, $b);
+                }
+            } else {
+                $var[] = $p->estates()->first();
+            }
+            foreach ($var as $v) {
+                $book = $v->booking()->get();
+                foreach ($book as $b) {
+                    if (isset($b) && $b->idBookingPack == Null) {
+                        array_push($tenant, $b->tenant()->first());
+                        array_push($person, $b->tenant()->first()->person()->first());
+                        array_push($estate, $v);
+                        if ($b->status == 'pending') {
+                            $count = BookingController::countdown($b->creation_date);
+                            if ($count['status'] == 'expired') {
+                                $b->status = 'expired';
+                                $b->save();
+                            } else {
+                                $countdown[$b->idBooking] = $count;
+                            }
+                        } elseif ($b->status == 'waiting') {
+                            $count = BookingController::countdown($b->confirm_date);
+                            if ($count['status'] == 'expired') {
+                                $b->status = 'expired';
+                                $b->save();
+                            } else {
+                                $countdown[$b->idBooking] = $count;
+                            }
+                        }
+                        array_push($booking, $b);
+                    }
                 }
             }
         }
@@ -95,21 +103,27 @@ class BookingController extends Controller
         $person = array();
         $countdown = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'pending');
-
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
+                    }
+                }
             } else {
-                $var = $p->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'pending');
+                $var[] = $p->estates()->first();
             }
-            foreach ($book as $b) {
-                if (isset($b) && $b->idBookingPack == Null) {
-                    array_push($tenant, $b->tenant()->first());
-                    array_push($person, $b->tenant()->first()->person()->first());
-                    array_push($booking, $b);
-                    array_push($estate, $var);
-                    $countdown[$b->idBooking] = BookingController::countdown($b->creation_date);
+            foreach ($var as $v) {
+                $book = $v->booking()->get()->where('status', '=', 'pending');
+                foreach ($book as $b) {
+                    if (isset($b) && $b->idBookingPack == Null) {
+                        array_push($tenant, $b->tenant()->first());
+                        array_push($person, $b->tenant()->first()->person()->first());
+                        array_push($booking, $b);
+                        array_push($estate, $v);
+                        $countdown[$b->idBooking] = BookingController::countdown($b->creation_date);
+                    }
                 }
             }
         }
@@ -133,20 +147,27 @@ class BookingController extends Controller
         $person = array();
         $countdown = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'waiting');
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
+                    }
+                }
             } else {
-                $var = $p->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'waiting');
+                $var[] = $p->estates()->first();
             }
-            foreach ($book as $b) {
-                if (isset($b) && $b->idBookingPack == Null) {
-                    array_push($tenant, $b->tenant()->first());
-                    array_push($person, $b->tenant()->first()->person()->first());
-                    array_push($booking, $b);
-                    array_push($estate, $var);
-                    $countdown[$b->idBooking] = BookingController::countdown($b->confirm_date);
+            foreach ($var as $v) {
+                $book = $v->booking()->get()->where('status', '=', 'waiting');
+                foreach ($book as $b) {
+                    if (isset($b) && $b->idBookingPack == Null) {
+                        array_push($tenant, $b->tenant()->first());
+                        array_push($person, $b->tenant()->first()->person()->first());
+                        array_push($booking, $b);
+                        array_push($estate, $v);
+                        $countdown[$b->idBooking] = BookingController::countdown($b->confirm_date);
+                    }
                 }
             }
         }
@@ -169,19 +190,26 @@ class BookingController extends Controller
         $tenant = array();
         $person = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'confirmed');
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
+                    }
+                }
             } else {
-                $var = $p->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'confirmed');
+                $var[] = $p->estates()->first();
             }
-            foreach ($book as $b) {
-                if (isset($b) && $b->idBookingPack == Null) {
-                    array_push($tenant, $b->tenant()->first());
-                    array_push($person, $b->tenant()->first()->person()->first());
-                    array_push($booking, $b);
-                    array_push($estate, $var);
+            foreach ($var as $v) {
+                $book = $v->booking()->get()->where('status', '=', 'confirmed');
+                foreach ($book as $b) {
+                    if (isset($b) && $b->idBookingPack == Null) {
+                        array_push($tenant, $b->tenant()->first());
+                        array_push($person, $b->tenant()->first()->person()->first());
+                        array_push($booking, $b);
+                        array_push($estate, $v);
+                    }
                 }
             }
         }
@@ -203,19 +231,26 @@ class BookingController extends Controller
         $tenant = array();
         $person = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'rejected');
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
+                    }
+                }
             } else {
-                $var = $p->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'rejected');
+                $var[] = $p->estates()->first();
             }
-            foreach ($book as $b) {
-                if (isset($b) && $b->idBookingPack == Null) {
-                    array_push($tenant, $b->tenant()->first());
-                    array_push($person, $b->tenant()->first()->person()->first());
-                    array_push($booking, $b);
-                    array_push($estate, $var);
+            foreach ($var as $v) {
+                $book = $v->booking()->get()->where('status', '=', 'rejected');
+                foreach ($book as $b) {
+                    if (isset($b) && $b->idBookingPack == Null) {
+                        array_push($tenant, $b->tenant()->first());
+                        array_push($person, $b->tenant()->first()->person()->first());
+                        array_push($booking, $b);
+                        array_push($estate, $v);
+                    }
                 }
             }
         }
@@ -237,19 +272,26 @@ class BookingController extends Controller
         $tenant = array();
         $person = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'expired');
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
+                    }
+                }
             } else {
-                $var = $p->estates()->first();
-                $book = $var->booking()->get()->where('status', '=', 'expired');
+                $var[] = $p->estates()->first();
             }
-            foreach ($book as $b) {
-                if (isset($b) && $b->idBookingPack == Null) {
-                    array_push($tenant, $b->tenant()->first());
-                    array_push($person, $b->tenant()->first()->person()->first());
-                    array_push($booking, $b);
-                    array_push($estate, $var);
+            foreach ($var as $v) {
+                $book = $v->booking()->get()->where('status', '=', 'expired');
+                foreach ($book as $b) {
+                    if (isset($b) && $b->idBookingPack == Null) {
+                        array_push($tenant, $b->tenant()->first());
+                        array_push($person, $b->tenant()->first()->person()->first());
+                        array_push($booking, $b);
+                        array_push($estate, $v);
+                    }
                 }
             }
         }
