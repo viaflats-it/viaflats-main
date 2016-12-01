@@ -44,7 +44,6 @@ class Property extends Model
         return $this->hasMany('App\Room','idProperty');
     }
 
-
     public function address()
     {
         return $this->belongsTo('App\Address', 'idAddress');

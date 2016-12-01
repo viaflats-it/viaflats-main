@@ -336,7 +336,30 @@ class LandlordController extends Controller
     {
         $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
         $properties = $landlord->property()->get();
-        return view('landlord/my_properties',compact('properties'));
+        foreach ($properties as $property) {
+            //Get Title
+            if ($property->type == 0) {
+                $title[$property->idProperty] = 'House ' . $property->address()->first()->street;
+            } elseif ($property->type == 1) {
+                $title[$property->idProperty] = 'Apartment ' . $property->address()->first()->street;
+            } else {
+                $title[$property->idProperty] = 'Studio ' . $property->address()->first()->street;
+            }
+            //Get City
+            $prop_city[$property->idProperty] = $property->address()->first()->city;
+            //Get Area
+            $prop_area[$property->idProperty] = $property->area()->first()->label;
+
+            //Count estate foreach
+            if ($property->rooms()->first() != '') {
+                $nbEstate[$property->idProperty] = $property->rooms()->get()->count();
+                $picture[$property->idProperty] = $property->rooms()->first()->estates()->first()->picture;
+            } else {
+                $nbEstate[$property->idProperty] = $property->estates()->get()->count();
+                $picture[$property->idProperty] = $property->estates()->first()->picture;
+            }
+        }
+        return view('landlord/my_properties', compact('properties', 'prop_city', 'title', 'prop_area','nbEstate','picture'));
 
     }
 
@@ -369,60 +392,71 @@ class LandlordController extends Controller
     {
         $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
         $property = $landlord->property()->get();
+        $booking = array();
+        $pack = array();
         foreach ($property as $p) {
+            $var = array();
             if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-            } else {
-                $var = $p->estates()->first();
-            }
-            $book = $var->booking()->get();
-            foreach ($book as $b) {
-                $estate[$b->idBooking] = $var;
-                $person[$b->idBooking] = $b->tenant()->first()->person()->first();
-
-                //Countdown
-                if ($b->status == 'pending') {
-                    $count = LandlordController::countdown($b->creation_date);
-                    if ($count['status'] == 'expired') {
-                        $b->status = 'expired';
-                        $b->save();
-                    } else {
-                        $countdown[$b->idBooking] = $count;
-                    }
-                } elseif ($b->status == 'waiting') {
-                    $count = LandlordController::countdown($b->confirm_date);
-                    if ($count['status'] == 'expired') {
-                        $b->status = 'expired';
-                        $b->save();
-                    } else {
-                        $countdown[$b->idBooking] = $count;
+                $rooms = $p->rooms()->get();
+                foreach($rooms as $room){
+                    if( $room->estates()->first() != null ){
+                        $var[] = $room->estates()->first();
                     }
                 }
-
-                //Multi-booking
-                if ($b->idBookingPack != Null) {
-                    $pack[$b->idBookingPack] = $b->bookingPack()->first();
-                    $packEstate[$b->idBookingPack] = $b->estate()->first();
-                    $packPerson[$b->idBookingPack] = $b->tenant()->first()->person()->first();
-                    $bookingCount[$b->idBookingPack] = $b->bookingPack()->first()->bookings()->count();
-                    $checkin[$b->idBookingPack] = $b->checkin;
-                    $checkout[$b->idBookingPack] = $b->checkout;
-                    $status[$b->idBookingPack] = $b->status;
-                    if($p->type == 0){
-                        $title[$b->idBookingPack] = 'House '.$p->address()->first()->street;
-                    }elseif($p->type == 1){
-                        $title[$b->idBookingPack] = 'Apartment '.$p->address()->first()->street;
-                    }else{
-                        $title[$b->idBookingPack] = 'Studio '.$p->address()->first()->street;
+            } else {
+                $var[] = $p->estates()->first();
+            }
+            foreach ($var as $v){
+                $book = $v->booking()->get();
+                foreach ($book as $b) {
+                    //Countdown
+                    if ($b->status == 'pending') {
+                        $count = LandlordController::countdown($b->creation_date);
+                        if ($count['status'] == 'expired') {
+                            $b->status = 'expired';
+                            $b->save();
+                        } else {
+                            $countdown[$b->idBooking] = $count;
+                        }
+                    } elseif ($b->status == 'waiting') {
+                        $count = LandlordController::countdown($b->confirm_date);
+                        if ($count['status'] == 'expired') {
+                            $b->status = 'expired';
+                            $b->save();
+                        } else {
+                            $countdown[$b->idBooking] = $count;
+                        }
                     }
-                } else {
-                    $booking[$b->idBooking] = $b;
+
+                    //Multi-booking
+                    if ($b->idBookingPack != null) {
+                        $pack[$b->idBookingPack] = $b->bookingPack()->first();
+                        $packEstate[$b->idBookingPack] = $b->estate()->first();
+                        $packPerson[$b->idBookingPack] = $b->tenant()->first()->person()->first();
+                        $bookingCount[$b->idBookingPack] = $b->bookingPack()->first()->bookings()->count();
+                        $checkin[$b->idBookingPack] = $b->checkin;
+                        $checkout[$b->idBookingPack] = $b->checkout;
+                        $status[$b->idBookingPack] = $b->status;
+                        if ($p->type == 0) {
+                            $title[$b->idBookingPack] = 'House ' . $p->address()->first()->street;
+                        } elseif ($p->type == 1) {
+                            $title[$b->idBookingPack] = 'Apartment ' . $p->address()->first()->street;
+                        } else {
+                            $title[$b->idBookingPack] = 'Studio ' . $p->address()->first()->street;
+                        }
+                    } else {
+                        $booking[$b->idBooking] = $b;
+                        $estate[$b->idBooking] = $v;
+                        $person[$b->idBooking] = $b->tenant()->first()->person()->first();
+                    }
                 }
             }
         }
-        usort($pack,array($this,'compare'));
-        usort($booking, array($this, 'compare'));
-        return view('landlord/my_booking', compact('estate', 'booking', 'person', 'countdown', 'packEstate', 'pack','packPerson','bookingCount','checkin','checkout','title','status'));
+        usort($pack, array($this, 'compare'));
+        if($booking) {
+            usort($booking, array($this, 'compare'));
+        }
+        return view('landlord/my_booking', compact('estate', 'booking', 'person', 'countdown', 'packEstate', 'pack', 'packPerson', 'bookingCount', 'checkin', 'checkout', 'title', 'status'));
     }
 
     public function showUpdateAvailabilities()

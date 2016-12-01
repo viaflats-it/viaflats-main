@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <!--- Mettre photo de la propriété global -->
-                    <img src="property/{{$packEstate[$p->idBookingPack]['picture']}} " width="100" height="...">
+                    <img src="img/{{$packEstate[$p->idBookingPack]['picture']}} " width="100" height="...">
                 </div>
                 <div class="col-md-6">
                     <div> @lang('landlord.request_multiBooking') {{$p->idBookingPack}} @lang('landlord.for') {{$title[$p->idBookingPack]}}</div>
@@ -55,10 +55,11 @@
 
     <div id="allbooking">
         <br>
+
         @foreach($booking as $b)
             <div class="row">
                 <div class="col-md-4">
-                    <img src="property/{{$estate[$b->idBooking]['picture']}} " width="100" height="...">
+                    <img src="img/{{$estate[$b->idBooking]['picture']}} " width="100" height="...">
                 </div>
                 <div class="col-md-6">
                     <div> @lang('landlord.request_booking') {{$b->idBooking}} @lang('landlord.for') {{$estate[$b->idBooking]['title']}}</div>
@@ -269,7 +270,7 @@
                     $("#allbooking").append(
                             '<div class="row">' +
                             '<div class="col-md-4">' +
-                            '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                            '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
                             '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -311,7 +312,7 @@
                     $("#allbooking").append(
                             '<div class="row">' +
                             '<div class="col-md-4">' +
-                            '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                            '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
                             '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -344,7 +345,7 @@
                     $("#allbooking").append(
                             '<div class="row">' +
                             '<div class="col-md-4">' +
-                            '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                            '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
                             '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -373,7 +374,7 @@
                     $("#allbooking").append(
                             '<div class="row">' +
                             '<div class="col-md-4">' +
-                            '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                            '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
                             '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -402,7 +403,7 @@
                     $("#allbooking").append(
                             '<div class="row">' +
                             '<div class="col-md-4">' +
-                            '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                            '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
                             '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -434,7 +435,7 @@
                             $("#allbooking").append(
                                     '<div class="row">' +
                                     '<div class="col-md-4">' +
-                                    '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                                    '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
                                     '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -463,7 +464,7 @@
                             $("#allbooking").append(
                                     '<div class="row">' +
                                     '<div class="col-md-4">' +
-                                    '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                                    '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
                                     '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -483,7 +484,7 @@
                             $("#allbooking").append(
                                     '<div class="row">' +
                                     '<div class="col-md-4">' +
-                                    '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                                    '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
                                     '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -503,7 +504,7 @@
                             $("#allbooking").append(
                                     '<div class="row">' +
                                     '<div class="col-md-4">' +
-                                    '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                                    '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
                                     '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -523,7 +524,7 @@
                             $("#allbooking").append(
                                     '<div class="row">' +
                                     '<div class="col-md-4">' +
-                                    '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
+                                    '<img src="img/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
                                     '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
@@ -558,7 +559,7 @@
                         $('#multibooking').append(
                                 '<div class="row">' +
                                 '<div class="col-md-4">' +
-                                '<img src="property/' + data.estate[value.idBookingPack].picture + '" width="100" height="...">' +
+                                '<img src="img/' + data.estate[value.idBookingPack].picture + '" width="100" height="...">' +
                                 '</div>' +
                                 '<div class="col-md-6">' +
                                 '<div> @lang('landlord.request_multiBooking') ' + value.idBookingPack + ' @lang('landlord.for') ' + data.title[value.idBookingPack] + '</div>' +
