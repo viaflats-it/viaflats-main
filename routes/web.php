@@ -146,7 +146,10 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::get('showInfoTenant','BookingController@showInfoTenant');
     Route::get('confirmBooking','BookingController@confirmBooking');
     Route::post('rejectBooking','BookingController@rejectBooking');
-    Route::get('viewDetails','BookingController@viewDetails');
+    Route::get('DetailsBookingPack','BookingController@DetailsBookingPack');
+    Route::get('confirmBookingPack','BookingController@confirmBookingPack');
+    Route::get('showMultiBooking','BookingController@showMultiBooking');
+
 
 });
 

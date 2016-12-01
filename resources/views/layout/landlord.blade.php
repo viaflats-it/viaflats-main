@@ -73,7 +73,7 @@
       <!--content -->
       <div class="content">
           <div class="content-container">
-              @yield('contenu')
+              @yield('content')
           </div>
       </div>
       <!--/content -->

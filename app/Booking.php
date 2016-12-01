@@ -21,8 +21,14 @@ class Booking extends Model
         return $this->belongsTo('App\Estate', 'idEstate');
     }
 
-    public function tenant(){
-        return $this->belongsTo('App\Tenant','idTenant');
+    public function tenant()
+    {
+        return $this->belongsTo('App\Tenant', 'idTenant');
+    }
+
+    public function bookingPack()
+    {
+        return $this->belongsTo('App\Booking_pack', 'idBookingPack');
     }
 
 }

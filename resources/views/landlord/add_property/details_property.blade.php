@@ -1,7 +1,6 @@
 @extends('layout.landlord')
 
 @section('content')
-
     <div class="row detail_property_wrapper">
         <div class="col-md-12">
             <h3>@lang('landlord.details')</h3>

@@ -16,9 +16,38 @@ class ReservationController extends Controller
         $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->get()->sortByDesc('creation_date');
         $estate = array();
         foreach ($booking as $b) {
-            array_push($estate, $b->estate()->first());
+            $estate[$b->idBooking] = $b->estate()->first();
+            if($b->status == 'waiting'){
+                $count = ReservationController::countdown($b->confirm_date);
+                if($count['status'] == 'expired'){
+                    $b->status = 'expired';
+                    $b->save();
+                }else{
+                    $countdown[$b->idBooking] =$count;
+                }
+            }
         }
-        return view('tenant/my_reservation',compact('booking','estate'));
+        return view('tenant/my_reservation',compact('booking','estate','countdown'));
+    }
+
+    public function countdown($date)
+    {
+        $diff = strtotime($date) + 48 * 60 * 60 - time() - 3600;
+        $return = array();
+        $i_restantes = $diff / 60;
+        $H_restantes = $i_restantes / 60;
+        $d_restants = $H_restantes / 24;
+
+        if($diff < 0 ){
+            $return['status'] = 'expired';
+        }else{
+            $return['second'] = floor($diff % 60); // Secondes
+            $return['min'] = floor($i_restantes % 60); // Minutes
+            $return['hour'] = floor($H_restantes % 24); // Hour
+            $return['day'] = floor($d_restants); // Days
+            $return['status'] = 'notExpired';
+        }
+        return $return;
     }
 
     public function showPendingReservation()

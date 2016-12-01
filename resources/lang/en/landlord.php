@@ -83,26 +83,16 @@ return [
     'cancelall' => 'Cancel all',
     'cancel' => 'Cancel',
 
-
-                    /*----------------------------
-                                           ADD A PROPERTY
-                                                         ----------------------------*/
-
-    'details' => 'About the property',
-    'type' => 'Property\'s type',
-    'home' => 'Home',
-    'apartment' => 'Apartment',
-    'studio' => 'Studio',
-
                      /*----------------------------
                                              My Booking
                                                            ----------------------------*/
 
-    'request' => 'Booking request : ',
+    'request_booking' => 'Booking request : ',
+    'request_multiBooking' => 'MultiBooking request : ',
     'for' => 'for',
     'request_by' => 'Request By : ',
     'period' => 'Period : ',
-    'days' => 'Number of stay',
+    'days' => 'Number of days',
     'to' => 'to',
     'profit' => 'Profit : ',
     'guest' => 'Guest : ',
@@ -112,10 +102,15 @@ return [
     'submit' => 'Submit',
     'is_expired' => 'This booking is expired',
     'is_waiting' => 'You accept this booking ! You are now waiting for the payment from the tenant !',
+    'is_waiting_multi' => 'You have changed the booking dates. You have to wait for the answer of the tenants !',
     'is_rejected' => 'You reject this booking',
     'is_confirmed' => 'This booking is confirmed. Contact the tenant to arrange his coming ! ',
+    'is_confirmed_multi' => 'This booking is confirmed. Contact the tenants to arrange there coming ! ',
     'new_booking' => 'If the date don\'t fit you, you can send new dates for this booking to the tenant',
     'view_details' => 'View Details',
+    'button_confirmed' => 'Confirm Request',
+    'button_rejected' => 'Reject Request',
+    'multiBookingCount' => 'Number of booking : ',
 
                     /*----------------------------
                                              About the renter
@@ -149,7 +144,6 @@ return [
                                                          ----------------------------*/
 
     'details' => 'About the property',
-
     'type' => 'Property\'s type',
     'room_type'=> 'Room type, entire ou shared',
     'home' => 'Home',
@@ -168,8 +162,6 @@ return [
     'wsarrond' => 'What\'s around',
     'needhelp' => 'Need help ?',
     'needHelpText' => 'We will be more than happy to assist you in fill this form. Please contact one of our Viaflats assistant.',
-
-
     'entire' => 'Entire',
 
 

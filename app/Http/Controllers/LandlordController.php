@@ -9,20 +9,15 @@ use App\Fee;
 use App\Property;
 use App\Restriction;
 use App\Room;
-use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Landlord;
 use App\User;
-use App\Booking;
 use App\Payment_way;
-use Illuminate\support;
-use Illuminate\Support\Facades\Input;
 use Image;
 use App\City;
 use App\Area;
+use App\Booking_pack;
 use App\Type_room;
-use App\Tenant;
-use App\ParentTenant;
 
 
 class LandlordController extends Controller
@@ -109,8 +104,6 @@ class LandlordController extends Controller
             $roomsLabel[$room->idRoom] = $room->type_room()->first();
             $roomsAmenities[$room->idRoom] = $room->amenities()->get();
         }
-
-        return view('landlord/add_property/def_estate', compact('fees', 'roomsAmenities', 'area', 'property', 'rooms', 'restrictions', 'type', 'roomsLabel', 'address'));
 
         return view('landlord/add_property/def_estate_shared', compact('fees', 'roomsAmenities', 'area', 'property', 'room', 'restrictions', 'type', 'roomsLabel', 'address'));
 
@@ -278,7 +271,7 @@ class LandlordController extends Controller
 
     public function showFinalPreview()
     {
-        $property = Property::find(24);
+        $property = Property::find(5);
 
         if ($property->type == 0) {
 
@@ -339,47 +332,97 @@ class LandlordController extends Controller
         return view('landlord/preview', compact('idBedroom', 'roomEstateList', 'property', 'type', 'rooms', 'address', 'countInfo', 'roomsLabel', 'roomsAmenities', 'estatesList', 'estate'));
     }
 
-
     function showProperties()
     {
-        return view('landlord/my_properties');
+        $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
+        $properties = $landlord->property()->get();
+        return view('landlord/my_properties',compact('properties'));
 
     }
 
-    public function compare($a, $b) {
-        return strcmp($b->creation_date,$a->creation_date);
+    public function compare($a, $b)
+    {
+        return strcmp($b->creation_date, $a->creation_date);
+    }
+
+    public function countdown($date)
+    {
+        $diff = strtotime($date) + 48 * 60 * 60 - time();
+        $return = array();
+        $i_restantes = $diff / 60;
+        $H_restantes = $i_restantes / 60;
+        $d_restants = $H_restantes / 24;
+
+        if ($diff < 0) {
+            $return['status'] = 'expired';
+        } else {
+            $return['second'] = floor($diff % 60); // Secondes
+            $return['min'] = floor($i_restantes % 60); // Minutes
+            $return['hour'] = floor($H_restantes % 24); // Hour
+            $return['day'] = floor($d_restants); // Days
+            $return['status'] = 'notExpired';
+        }
+        return $return;
     }
 
     public function showBooking()
     {
         $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
         $property = $landlord->property()->get();
-        $estate = array();
-        $booking = array();
-        $tenant = array();
-        $person = array();
         foreach ($property as $p) {
-            if($p->rooms()->first() !=''){
+            if ($p->rooms()->first() != '') {
                 $var = $p->rooms()->first()->estates()->first();
-                array_push($estate,$var);
-
-            }else{
+            } else {
                 $var = $p->estates()->first();
-                array_push($estate,$var);
             }
             $book = $var->booking()->get();
-            foreach ($book as $b){
-                array_push($tenant,$b->tenant()->first());
-                array_push($person,$b->tenant()->first()->person()->first());
-                array_push($booking,$b);
+            foreach ($book as $b) {
+                $estate[$b->idBooking] = $var;
+                $person[$b->idBooking] = $b->tenant()->first()->person()->first();
 
+                //Countdown
+                if ($b->status == 'pending') {
+                    $count = LandlordController::countdown($b->creation_date);
+                    if ($count['status'] == 'expired') {
+                        $b->status = 'expired';
+                        $b->save();
+                    } else {
+                        $countdown[$b->idBooking] = $count;
+                    }
+                } elseif ($b->status == 'waiting') {
+                    $count = LandlordController::countdown($b->confirm_date);
+                    if ($count['status'] == 'expired') {
+                        $b->status = 'expired';
+                        $b->save();
+                    } else {
+                        $countdown[$b->idBooking] = $count;
+                    }
+                }
+
+                //Multi-booking
+                if ($b->idBookingPack != Null) {
+                    $pack[$b->idBookingPack] = $b->bookingPack()->first();
+                    $packEstate[$b->idBookingPack] = $b->estate()->first();
+                    $packPerson[$b->idBookingPack] = $b->tenant()->first()->person()->first();
+                    $bookingCount[$b->idBookingPack] = $b->bookingPack()->first()->bookings()->count();
+                    $checkin[$b->idBookingPack] = $b->checkin;
+                    $checkout[$b->idBookingPack] = $b->checkout;
+                    $status[$b->idBookingPack] = $b->status;
+                    if($p->type == 0){
+                        $title[$b->idBookingPack] = 'House '.$p->address()->first()->street;
+                    }elseif($p->type == 1){
+                        $title[$b->idBookingPack] = 'Apartment '.$p->address()->first()->street;
+                    }else{
+                        $title[$b->idBookingPack] = 'Studio '.$p->address()->first()->street;
+                    }
+                } else {
+                    $booking[$b->idBooking] = $b;
+                }
             }
         }
-        usort($booking, array($this,'compare'));
-        $tenant = array_unique($tenant);
-        $estate = array_unique($estate);
-        $person = array_unique($person);
-        return view('landlord/my_booking', compact('estate','booking','tenant','person'));
+        usort($pack,array($this,'compare'));
+        usort($booking, array($this, 'compare'));
+        return view('landlord/my_booking', compact('estate', 'booking', 'person', 'countdown', 'packEstate', 'pack','packPerson','bookingCount','checkin','checkout','title','status'));
     }
 
     public function showUpdateAvailabilities()
@@ -418,20 +461,19 @@ class LandlordController extends Controller
 
     public function updateAvailabilities()
     {
-        $week=array();
+        $week = array();
 
-        for($i=0; $i<24; $i++)
-        {
-            $week["monday_".$i]=\Input::all()["monday_".$i];
-            $week["tuesday_".$i]=\Input::all()["tuesday_".$i];
-            $week["wednesday_".$i]=\Input::all()["wednesday_".$i];
-            $week["thursday_".$i]=\Input::all()["thursday_".$i];
-            $week["friday_".$i]=\Input::all()["friday_".$i];
-            $week["saturday_".$i]=\Input::all()["saturday_".$i];
-            $week["sunday_".$i]=\Input::all()["sunday_".$i];
+        for ($i = 0; $i < 24; $i++) {
+            $week["monday_" . $i] = \Input::all()["monday_" . $i];
+            $week["tuesday_" . $i] = \Input::all()["tuesday_" . $i];
+            $week["wednesday_" . $i] = \Input::all()["wednesday_" . $i];
+            $week["thursday_" . $i] = \Input::all()["thursday_" . $i];
+            $week["friday_" . $i] = \Input::all()["friday_" . $i];
+            $week["saturday_" . $i] = \Input::all()["saturday_" . $i];
+            $week["sunday_" . $i] = \Input::all()["sunday_" . $i];
         }
         $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
-        $array=serialize($week);
+        $array = serialize($week);
         $landlord->contact_time = $array;
         $landlord->save();
         return \Redirect::to('profile');
@@ -447,18 +489,16 @@ class LandlordController extends Controller
 
         if ($validator->fails()) {
             return \Redirect::to('update_availabilities')->withErrors($validator);
-        }
-        else {
+        } else {
             $datebegin = strtotime($inputData['absence_begin']);
             $dateend = strtotime($inputData['absence_end']);
             $today = strtotime(date('Y-m-d'));
-            if($datebegin>$dateend || $datebegin<$today)
-            {
+            if ($datebegin > $dateend || $datebegin < $today) {
                 $validator->errors()->add('wrong', trans('landlord.wrong_dates'));
                 return \Redirect::to('update_availabilities')->withErrors($validator);
             }
             $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
-            $array=serialize(['first_day' => $inputData['absence_begin'], 'last_day' => $inputData['absence_end']]);
+            $array = serialize(['first_day' => $inputData['absence_begin'], 'last_day' => $inputData['absence_end']]);
             $landlord->contact_away = $array;
             $landlord->save();
         }
@@ -511,7 +551,8 @@ class LandlordController extends Controller
 
     }
 
-    public function updatePicture(){
+    public function updatePicture()
+    {
 
         $user = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
         if (\Input::file('image')) {
@@ -629,7 +670,6 @@ class LandlordController extends Controller
 
         return \Redirect::to('profile');
     }
-
 
     /* MANAGE ADD PROPERTY */
 
@@ -919,7 +959,7 @@ class LandlordController extends Controller
             $newRestriction = Restriction::find($restriction);
 
 
-                $estate->restrictions()->save($newRestriction);
+            $estate->restrictions()->save($newRestriction);
 
         }
 
@@ -937,13 +977,10 @@ class LandlordController extends Controller
                     $monthly = 1;
                 }
 
-                if ($estate->fees()->where('Estate_fee.idFee' , $key)->first() != null)
-                {
+                if ($estate->fees()->where('Estate_fee.idFee', $key)->first() != null) {
                     $estate->fees()->updateExistingPivot($key, ['price' => $fee, 'monthly' => $monthly]);
-                }
-                else
-                {
-                    $estate->fees()->save($newFee, ['price' => $fee , 'monthly' => $monthly]);
+                } else {
+                    $estate->fees()->save($newFee, ['price' => $fee, 'monthly' => $monthly]);
                 }
             }
         }

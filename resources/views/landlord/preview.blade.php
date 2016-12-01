@@ -151,7 +151,6 @@
             </div>
         </div>
     </div>
-    {{$rooms[1]}}
 
     <div id="modal" class="modal fade" role="dialog">
         <div class="modal-dialog">

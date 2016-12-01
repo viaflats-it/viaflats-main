@@ -1,6 +1,6 @@
 @extends('layout.landlord')
 
-@section('contenu')
+@section('content')
 
 <section class="section section-profile" id="changeProfile">
   <h1 class="title">@lang('landlord.profile')</h1>

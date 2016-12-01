@@ -12,21 +12,23 @@
 
     <!------- All Reservation -------->
     <div class="row" id="reservation">
-        <div style="display:none">{{$i=0}}</div>
-        @foreach($booking as $a)
-            <div class="col-md-4" id="#{{$a->idBooking}}">
-                <div>{{$estate[$i]['attributes']['title']}}</div>
-                <img src="property/{{$estate[$i]['attributes']['picture']}} " width="100" height="...">
-                <div> @lang('tenant.booking_request') {{$a->idBooking}} </div>
-                <div>{{$a->checkin}} @lang('tenant.to') {{$a->checkout}} </div>
-                <div> @lang('tenant.guest') {{$a->guest}}</div>
-                @if($a->status == 'waiting')
-                    <div> @lang('tenant.to_paid') {{$a->booking_fee}} €</div>
-                @elseif($a->status == 'rejected')
+        @foreach($booking as $b)
+            <div class="col-md-4" id="#{{$b->idBooking}}">
+                <div>{{$estate[$b->idBooking]['title']}}</div>
+                <img src="property/{{$estate[$b->idBooking]['picture']}} " width="100" height="...">
+                <div> @lang('tenant.booking_request') {{$b->idBooking}} </div>
+                <div>{{$b->checkin}} @lang('tenant.to') {{$b->checkout}} </div>
+                <div> @lang('tenant.guest') {{$b->guest}}</div>
+                @if($b->status == 'waiting')
+                    <div> @lang('tenant.to_paid') {{$b->booking_fee}} €</div>
+                    <p>{{$countdown[$b->idBooking]['day']}} Jour
+                        {{$countdown[$b->idBooking]['hour']}} Heure
+                        {{$countdown[$b->idBooking]['min']}} Min
+                        {{$countdown[$b->idBooking]['second']}} Seconde</p>
+                @elseif($b->status == 'rejected')
                     <div> @lang("tenant.reject_cause")</div>
                 @endif
             </div>
-            <div style="display:none">{{$i++}}</div>
         @endforeach
     </div>
 

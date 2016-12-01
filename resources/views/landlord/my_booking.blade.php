@@ -1,6 +1,6 @@
 @extends('layout.landlord')
 
-@section('contenu')
+@section('content')
     <!---- Different button for every case -------->
     <div style="text-align: center">
         <a id="pending" class="sortButton">@lang('tenant.pending')</a>
@@ -11,75 +11,101 @@
 
     </div>
 
+    <div id="multibooking">
+        <br>
+        @foreach($pack as $p)
+            <div class="row">
+                <div class="col-md-4">
+                    <!--- Mettre photo de la propriété global -->
+                    <img src="property/{{$packEstate[$p->idBookingPack]['picture']}} " width="100" height="...">
+                </div>
+                <div class="col-md-6">
+                    <div> @lang('landlord.request_multiBooking') {{$p->idBookingPack}} @lang('landlord.for') {{$title[$p->idBookingPack]}}</div>
+                    <div> @lang('landlord.request_by') {{$packPerson[$p->idBookingPack]['login']}} </div>
+                    <div> @lang('landlord.period') {{$checkin[$p->idBookingPack]}} @lang('landlord.to') {{$checkout[$p->idBookingPack]}}</div>
+                    <div> @lang('landlord.days') {{(strtotime($checkout[$p->idBookingPack])-strtotime($checkin[$p->idBookingPack]))/(60*60*24)}}</div>
+                    <div> @lang('landlord.multiBookingCount') {{$bookingCount[$p->idBookingPack]}}</div>
+
+                    <!---- Si Pending ---->
+                    <div>
+                        <button class='details' id="detailsPack{{$p->idBookingPack}}">
+                            @lang('landlord.view_details')
+                        </button>
+                        @if($status[$p->idBookingPack] == 'pending')
+                            <button id="confirmedPack{{$p->idBookingPack}}">
+                                @lang('landlord.button_confirmed')
+                            </button>
+                            <button id="rejectedPack{{$p->idBookingPack}}">
+                                @lang('landlord.button_rejected')
+                            </button>
+                            <p>
+                                Il reste :
+                                {{$countdown[$p->idBookingPack]['day']}} Jour
+                                {{$countdown[$p->idBookingPack]['hour']}} Heure
+                                {{$countdown[$p->idBookingPack]['min']}} Min
+                                {{$countdown[$p->idBookingPack]['second']}} Seconde
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                <div class="showDetails" id="showDetails{{$p->idBookingPack}}"></div>
+            </div>
+        @endforeach
+    </div>
 
     <div id="allbooking">
         <br>
         @foreach($booking as $b)
-            @foreach($estate as $e)
-                @if($b->idEstate == $e->idEstate)
-                    @foreach($tenant as $t)
-                        @if($t->idTenant == $b->idTenant)
-                            @foreach($person as $p)
-                                @if($p->idPerson == $t->idPerson)
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <img src="property/{{$e->picture}} " width="100" height="...">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div> @lang('landlord.request') {{$b->idBooking}} @lang('landlord.for') {{$e->title}}</div>
-                                            <div> @lang('landlord.request_by') <a class="booking{{$b->idBooking}}"
-                                                                                  id="#{{$p->idPerson}}">{{$p->login}}</a>
-                                            </div>
-                                            <div> @lang('landlord.period') {{$b->checkin}} @lang('landlord.to') {{$b->checkout}}</div>
-                                            <div> @lang('landlord.days') {{(strtotime($b->checkout)-strtotime($b->checkin))/(60*60*24)}}</div>
-                                            <div> @lang('landlord.profit') {{strtotime($b->creation_date)}} </div>
-
-                                            <div> @lang('landlord.guest') {{$b->guest}}</div>
-                                            @if($b->status == 'pending')
-                                                <p>
-                                                    Jour {{((strtotime($b->creation_date)+24*60*60)-time())/(60*60*24)%60}}
-                                                    Heure {{((strtotime($b->creation_date)+24*60*60)-time())/(60*60)%60}}
-                                                    Min {{((strtotime($b->creation_date)+24*60*60)-time())/(60)%60}}
-                                                    Seconde {{((strtotime($b->creation_date)+24*60*60)-time())%60}} <!--- Seconde --->
-                                                </p>
-                                                <div class="col-md-6">
-                                                    <div class="confirmedButton">
-                                                        <button id="confirmed{{$b->idBooking}}">
-                                                            Confirmed
-                                                        </button>
-                                                    </div>
-                                                    <div class="rejectedButton">
-                                                        <button id="rejected{{$b->idBooking}}">
-                                                            Reject Booking
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            @elseif($b->status =='waiting')
-                                                <div class="col-md-6">
-                                                    <p>@lang('landlord.is_waiting')</p>
-                                                </div>
-                                            @elseif($b->status == 'confirmed')
-                                                <div class="col-md-6">
-                                                    <p>@lang('landlord.is_confirmed')</p>
-                                                </div>
-                                            @elseif($b->status =='rejected')
-                                                <div class="col-md-6">
-                                                    <p>@lang('landlord.is_rejected')</p>
-                                                </div>
-                                            @elseif($b->status =='expired')
-                                                <div class="col-md-6">
-                                                    <p>@lang('landlord.is_expired')</p>
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <br>
-                                @endif
-                            @endforeach
-                        @endif
-                    @endforeach
-                @endif
-            @endforeach
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="property/{{$estate[$b->idBooking]['picture']}} " width="100" height="...">
+                </div>
+                <div class="col-md-6">
+                    <div> @lang('landlord.request_booking') {{$b->idBooking}} @lang('landlord.for') {{$estate[$b->idBooking]['title']}}</div>
+                    <div> @lang('landlord.request_by') <a class="booking{{$b->idBooking}}"
+                                                          id="#{{$person[$b->idBooking]['idPerson']}}">{{$person[$b->idBooking]['login']}}</a>
+                    </div>
+                    <div> @lang('landlord.period') {{$b->checkin}} @lang('landlord.to') {{$b->checkout}}</div>
+                    <div> @lang('landlord.days') {{(strtotime($b->checkout)-strtotime($b->checkin))/(60*60*24)}}</div>
+                    <div> @lang('landlord.profit') </div>
+                    <div> @lang('landlord.guest') {{$b->guest}}</div>
+                    @if($b->status == 'pending')
+                        <p>
+                            Il reste :
+                            {{$countdown[$b->idBooking]['day']}} Jour
+                            {{$countdown[$b->idBooking]['hour']}} Heure
+                            {{$countdown[$b->idBooking]['min']}} Min
+                            {{$countdown[$b->idBooking]['second']}} Seconde
+                        </p>
+                        <div class="col-md-6">
+                            <div>
+                                <button id="confirmedBooking{{$b->idBooking}}">
+                                    @lang('landlord.button_confirmed')
+                                </button>
+                                <button id="rejectedBooking{{$b->idBooking}}">
+                                    @lang('landlord.button_rejected')
+                                </button>
+                            </div>
+                        </div>
+                    @elseif($b->status =='waiting')
+                        <p>@lang('landlord.is_waiting')<p>
+                        <p>
+                            Il reste :
+                            {{$countdown[$b->idBooking]['day']}} Days
+                            {{$countdown[$b->idBooking]['hour']}} Hour
+                            {{$countdown[$b->idBooking]['min']}} Min
+                            {{$countdown[$b->idBooking]['second']}} Second
+                        </p>
+                    @elseif($b->status == 'confirmed')
+                        <p>@lang('landlord.is_confirmed')</p>
+                    @elseif($b->status =='rejected')
+                        <p>@lang('landlord.is_rejected')</p>
+                    @elseif($b->status =='expired')
+                        <p>@lang('landlord.is_expired')</p>
+                    @endif
+                </div>
+            </div>
+            <br>
         @endforeach
     </div>
 
@@ -198,6 +224,7 @@
                 <div class="modal-body">
                     {!! Form::open(['id' => 'rejectCauseForm']) !!}
                     {!! Form::hidden('idBooking',null,['id'=>'idBooking']) !!}
+                    {!! Form::hidden('type',null,['id'=>'type']) !!}
                     <div class="form-group">
                         {!! Form::select('rejectcause',trans('landlord.reject_causes'),null,['id'=> 'selectCause']) !!}
                     </div>
@@ -231,6 +258,7 @@
     </div>
 
     <script>
+
         function showPending() {
             var posting = $.ajax({
                 url: 'showPendingBooking',
@@ -244,7 +272,7 @@
                             '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
-                            '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                            '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                             '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                             '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                             '<div> @lang('landlord.profit') </div>' +
@@ -260,6 +288,10 @@
                             'Reject Booking' +
                             '</button>' +
                             '</div>' +
+                            'Il reste :' + data.countdown[value.idBooking].day + 'Days' +
+                            data.countdown[value.idBooking].hour + ' Hour' +
+                            data.countdown[value.idBooking].min + ' Min' +
+                            data.countdown[value.idBooking].second + 'Second' +
                             '</div>' +
                             '</div>' +
                             '</div>' +
@@ -282,13 +314,17 @@
                             '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
-                            '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                            '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                             '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                             '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                             '<div> @lang('landlord.profit') </div>' +
                             '<div> @lang('landlord.guest')' + value.guest + '</div>' +
                             '<div class="col-md-6">' +
                             '<p>@lang('landlord.is_waiting')</p>' +
+                            'Il reste :' + data.countdown[value.idBooking].day + 'Days' +
+                            data.countdown[value.idBooking].hour + ' Hour' +
+                            data.countdown[value.idBooking].min + ' Min' +
+                            data.countdown[value.idBooking].second + 'Second' +
                             '</div>' +
                             '</div>' +
                             '</div>' +
@@ -311,7 +347,7 @@
                             '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
-                            '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                            '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                             '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                             '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                             '<div> @lang('landlord.profit') </div>' +
@@ -340,7 +376,7 @@
                             '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
-                            '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                            '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                             '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                             '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                             '<div> @lang('landlord.profit') </div>' +
@@ -369,7 +405,7 @@
                             '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                             '</div>' +
                             '<div class="col-md-6">' +
-                            '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                            '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                             '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                             '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                             '<div> @lang('landlord.profit') </div>' +
@@ -386,6 +422,7 @@
         }
 
         function showAll() {
+
             var posting = $.ajax({
                 url: 'showMyBooking',
             });
@@ -400,7 +437,7 @@
                                     '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
-                                    '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                                    '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                                     '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                                     '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                                     '<div> @lang('landlord.profit') </div>' +
@@ -429,7 +466,7 @@
                                     '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
-                                    '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                                    '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                                     '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                                     '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                                     '<div> @lang('landlord.profit') </div>' +
@@ -449,7 +486,7 @@
                                     '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
-                                    '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                                    '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                                     '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                                     '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                                     '<div> @lang('landlord.profit') </div>' +
@@ -469,7 +506,7 @@
                                     '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
-                                    '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                                    '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                                     '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                                     '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                                     '<div> @lang('landlord.profit') </div>' +
@@ -489,7 +526,7 @@
                                     '<img src="property/' + data.estate[index].picture + '" width="100" height="...">' +
                                     '</div>' +
                                     '<div class="col-md-6">' +
-                                    '<div> @lang('landlord.request')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
+                                    '<div> @lang('landlord.request_booking')' + value.idBooking + ' @lang('landlord.for') ' + data.estate[index].title + '</div>' +
                                     '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '" id="#' + data.person[index].idPerson + '">' + data.person[index].login + '</a></div>' +
                                     '<div> @lang('landlord.period')' + value.checkin + '@lang('landlord.to')' + value.checkout + '</div>' +
                                     '<div> @lang('landlord.profit') </div>' +
@@ -507,25 +544,117 @@
             });
         }
 
+        function showMultiBooking(status) {
+            var posting = $.ajax({
+                url: 'showMultiBooking',
+                data: {
+                    'status': status,
+                }
+            });
+            posting.done(function (data) {
+                $('#multibooking').html('');
+                if (data.empty == false) {
+                    $(data.pack).each(function (index, value) {
+                        $('#multibooking').append(
+                                '<div class="row">' +
+                                '<div class="col-md-4">' +
+                                '<img src="property/' + data.estate[value.idBookingPack].picture + '" width="100" height="...">' +
+                                '</div>' +
+                                '<div class="col-md-6">' +
+                                '<div> @lang('landlord.request_multiBooking') ' + value.idBookingPack + ' @lang('landlord.for') ' + data.title[value.idBookingPack] + '</div>' +
+                                '<div> @lang('landlord.request_by')' + data.person[value.idBookingPack].login + '</div>' +
+                                '<div> @lang('landlord.period') ' + data.checkin[value.idBookingPack] + ' @lang('landlord.to') ' + data.checkout[value.idBookingPack] + ' </div>' +
+                                '<div> @lang('landlord.days') </div>' +
+                                '<div> @lang('landlord.multiBookingCount') ' + data.bookingCount[value.idBookingPack] + '</div>' +
+                                '</div>' +
+                                '</div>'
+                        );
+                        switch (data.status[value.idBookingPack]) {
+                            case 'pending' :
+                                $('#multibooking').append(
+                                        '<p> Il reste :' +
+                                        data.countdown[value.idBookingPack]['day'] + 'Days' +
+                                        data.countdown[value.idBookingPack]['hour'] + 'Hour' +
+                                        data.countdown[value.idBookingPack]['min'] + 'Min' +
+                                        data.countdown[value.idBookingPack]['second'] + 'Second' +
+                                        '</p>' +
+                                        '<button id="confirmedPack' + value.idBookingPack + '">@lang('landlord.button_confirmed')</button>' +
+                                        '<button id="rejectedPack' + value.idBookingPack + '">@lang('landlord.button_rejected')</button>' +
+                                        '<button class="details" id="detailsPack' + value.idBookingPack + '"> @lang('landlord.view_details') </button>' +
+                                        '<div class="showDetails" id="showDetails' + value.idBookingPack + '"></div>' +
+                                        '<br>'
+                                );
+                                break;
+                            case 'waiting':
+                                $('#multibooking').append(
+                                        '<p> @lang('landlord.is_waiting_multi')</p>' +
+                                        '<p> Il reste :' +
+                                        data.countdown[value.idBookingPack]['day'] + 'Days' +
+                                        data.countdown[value.idBookingPack]['hour'] + 'Hour' +
+                                        data.countdown[value.idBookingPack]['min'] + 'Min' +
+                                        data.countdown[value.idBookingPack]['second'] + 'Second' +
+                                        '</p>' +
+                                        '<button class="details" id="detailsPack' + value.idBookingPack + '"> @lang('landlord.view_details')</button>' +
+                                        '<div class="showDetails" id="showDetails' + value.idBookingPack + '"></div>' +
+                                        '<br>'
+                                );
+                                break;
+                            case 'confirmed' :
+                                $('#multibooking').append(
+                                        '<p> @lang('landlord.is_confirmed_multi')</p>' +
+                                        '<button class="details" id="detailsPack' + value.idBookingPack + '"> @lang('landlord.view_details') </button>' +
+                                        '<div class="showDetails" id="showDetails' + value.idBookingPack + '"></div>' +
+                                        '<br>'
+                                );
+                                break;
+                            case 'expired' :
+                                $('#multibooking').append(
+                                        '<p> @lang('landlord.is_expired')</p>' +
+                                        '<button class="details" id="detailsPack' + value.idBookingPack + '"> @lang('landlord.view_details') </button>' +
+                                        '<div class="showDetails" id="showDetails' + value.idBookingPack + '"></div>' +
+                                        '<br>'
+                                );
+                                break;
+                            case 'rejected' :
+                                $('#multibooking').append(
+                                        '<p> @lang('landlord.is_rejected')</p>' +
+                                        '<button class="details" id="detailsPack' + value.idBookingPack + '"> @lang('landlord.view_details') </button>' +
+                                        '<div class="showDetails" id="showDetails' + value.idBookingPack + '"></div>' +
+                                        '<br>'
+                                );
+                                break;
+                        }
+
+                    });
+                }
+            });
+        }
+
         function refresh() {
             var idSelected = $('.isSelected').attr('id');
             switch (idSelected) {
                 case 'pending':
+                    showMultiBooking('pending');
                     showPending();
                     break;
                 case 'waiting':
+                    showMultiBooking('waiting');
                     showWaiting();
                     break;
                 case 'confirmed':
+                    showMultiBooking('confirmed');
                     showConfirmed();
                     break;
                 case 'rejected':
+                    showMultiBooking('rejected');
                     showRejected();
                     break;
                 case 'expired' :
+                    showMultiBooking('expired');
                     showExpired();
                     break;
                 default :
+                    showMultiBooking('all');
                     showAll();
             }
         }
@@ -536,12 +665,14 @@
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
+                showMultiBooking('all');
                 showAll();
             } else {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
                 $(this).addClass('isSelected');
+                showMultiBooking('pending');
                 showPending();
             }
         });
@@ -552,12 +683,14 @@
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
+                showMultiBooking('all');
                 showAll();
             } else {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
                 $(this).addClass('isSelected');
+                showMultiBooking('waiting');
                 showWaiting();
             }
         });
@@ -568,12 +701,14 @@
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
+                showMultiBooking('all');
                 showAll();
             } else {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
                 $(this).addClass('isSelected');
+                showMultiBooking('confirmed');
                 showConfirmed();
             }
         });
@@ -584,12 +719,14 @@
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
+                showMultiBooking('all');
                 showAll();
             } else {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
                 $(this).addClass('isSelected');
+                showMultiBooking('rejected');
                 showRejected();
             }
         });
@@ -600,17 +737,33 @@
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
+                showMultiBooking('all');
                 showAll();
             } else {
                 $('.sortButton').each(function () {
                     $(this).removeClass("isSelected")
                 });
                 $(this).addClass('isSelected');
+                showMultiBooking('expired');
                 showExpired();
             }
         });
 
-        $("#allbooking").on("click", "[id^='#']", function (event) {
+        $(document).on('click', "[id^='confirmedBooking']", function (event) {
+            event.preventDefault();
+            var idB = $(this).attr('id').replace('confirmedBooking', '');
+            var posting = $.ajax({
+                url: 'confirmBooking',
+                data: {
+                    'idBooking': idB
+                }
+            });
+            posting.done(function () {
+                refresh();
+            });
+        });
+
+        $(document).on('click', "[id^='#']", function (event) {
             event.preventDefault();
             var idP = $(this).attr('id').replace('#', '');
             var idB = $(this).attr('class').replace('booking', '');
@@ -651,42 +804,21 @@
             });
         });
 
-        $("#allbooking").on('click', "[id^='confirmed']", function (event) {
-            event.preventDefault();
-            var idB = $(this).attr('id').replace('confirmed', '');
-            var posting = $.ajax({
-                url: 'confirmBooking',
-                data: {
-                    'idBooking': idB
-                }
-            });
-            posting.done(function () {
-                refresh();
-            });
-        });
-
-        $("#allbooking").on('click', "[id^='rejected']", function () {
-            var idBooking = $(this).attr('id').replace('rejected', '');
+        $(document).on('click', "[id^='rejectedBooking']", function (event) {
+            var idBooking = $(this).attr('id').replace('rejectedBooking', '');
+            $('#type').val('booking');
             $('#idBooking').val(idBooking);
             $("#rejectCause").modal();
         });
 
-        $("#allbooking").on('click',"[id^='info']",function(event){
-            var idBooking = $(this).attr('id').replace('info', '');
-            var posting = $.ajax({
-                url:'viewDetails',
-                data:{
-                    'idBooking' : idBooking,
-                }
-            });
-            posting.done(function(data){
-                $(this).addClass('detailsSelected');
-                $('#details'+data.booking.idBooking).append('hoi');
-                console.log(data);
-            })
+        $(document).on('click', "[id^='rejectedPack']", function (event) {
+            var idBooking = $(this).attr('id').replace('rejectedPack', '');
+            $('#type').val('pack');
+            $('#idBooking').val(idBooking);
+            $("#rejectCause").modal();
         });
 
-        $("#rejectCauseForm").on('submit', function (event) {
+        $(document).on('submit', "#rejectCauseForm", function (event) {
             event.preventDefault();
             var $form = $('#rejectCauseForm'),
                     url = "rejectBooking";
@@ -723,6 +855,60 @@
                     $('#rejectCause').modal('hide');
                     refresh();
                 }
+            });
+        });
+
+        $(document).on('click', "[id^='detailsPack']", function (event) {
+            var idP = $(this).attr('id').replace('detailsPack', '');
+            event.preventDefault();
+            if ($(this).hasClass('detailSelected')) {
+                $('.details').each(function () {
+                    $(this).removeClass("detailSelected")
+                });
+                $('.showDetails').html('');
+            } else {
+                $('.details').each(function () {
+                    $(this).removeClass("detailSelected")
+                });
+                $('.showDetails').html('');
+                $(this).addClass('detailSelected');
+                var posting = $.ajax({
+                    url: 'DetailsBookingPack',
+                    data: {
+                        'idPack': idP,
+                    }
+                });
+                posting.done(function (data) {
+                    $(data.booking).each(function (index, value) {
+                        $('#showDetails' + idP).append('<div class=row>' +
+                                '<div class="col-md-4">' +
+                                '<img src="property/' + data.estate[value.idBooking].picture + ' " width="100" height="...">' +
+                                '</div>' +
+                                '<div class="col-md-6">' +
+                                '<div> @lang('landlord.request_booking') ' + value.idBooking + ' @lang('landlord.for') ' + data.estate[value.idBooking].title + ' </div>' +
+                                '<div> @lang('landlord.request_by') <a class="booking' + value.idBooking + '"  id="#' + data.person[value.idBooking].idPerson + '">' + data.person[value.idBooking].login + '</a> </div>' +
+                                '<div> @lang('landlord.profit') </div>' +
+                                '<div> @lang('landlord.guest')' + value.guest + '</div>' +
+                                '</div>' +
+                                '</div>'
+                        );
+                    });
+                    console.log(data.booking);
+                });
+            }
+        });
+
+        $(document).on('click', "[id^='confirmedPack']", function (event) {
+            event.preventDefault();
+            var idP = $(this).attr('id').replace('confirmedPack', '');
+            var posting = $.ajax({
+                url: 'confirmBookingPack',
+                data: {
+                    'idPack': idP,
+                }
+            });
+            posting.done(function (data) {
+                refresh();
             });
         });
 
