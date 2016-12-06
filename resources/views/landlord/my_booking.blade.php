@@ -40,10 +40,7 @@
                             </button>
                             <p>
                                 Il reste :
-                                {{$countdown[$p->idBookingPack]['day']}} Jour
-                                {{$countdown[$p->idBookingPack]['hour']}} Heure
-                                {{$countdown[$p->idBookingPack]['min']}} Min
-                                {{$countdown[$p->idBookingPack]['second']}} Seconde
+
                             </p>
                         @endif
                     </div>
@@ -798,7 +795,7 @@
                 $("#expectedIn").html(data.tenant.expected_in);
                 $("#expectedOut").html(data.tenant.expected_out);
                 $(".wipeoff").html('');
-                if (data.booking == 'confirmed') {
+                if (data.status == 'confirmed') {
                     $("#moreinfo").hide();
                     $("#lastName").html(data.person.last_name);
                     $("#phone").html(data.person.phone);

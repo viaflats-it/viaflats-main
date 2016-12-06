@@ -274,6 +274,7 @@ class SearchController extends Controller
                     array_push($booked_before, $date);
                 }
             }
+
             if ($available == true) {
                 $type = $e->estateMorph()->first();
 

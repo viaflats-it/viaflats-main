@@ -553,7 +553,7 @@
         });
 
         $('#test').click(function () {
-            $("#ProfilPicture").modal({
+            $("#NextHomeStep").modal({
                 backdrop: 'static',
                 keyboard: false
             });

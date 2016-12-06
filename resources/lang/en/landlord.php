@@ -17,6 +17,7 @@ return [
                                              ----------------------------*/
     'first_name' => 'First Name',
     'last_name' => 'Last name',
+    'age' => 'Age',
     'email' => 'Email',
     'phone' => 'Phone',
     'login' => 'Log in',
@@ -111,6 +112,8 @@ return [
     'button_confirmed' => 'Confirm Request',
     'button_rejected' => 'Reject Request',
     'multiBookingCount' => 'Number of booking : ',
+    'changeCheckout' => 'Change date of check out',
+    'addComment' => 'You can add more info about you tenant : ',
 
                     /*----------------------------
                                              About the renter

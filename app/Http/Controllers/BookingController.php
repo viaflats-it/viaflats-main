@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Foreign_booking;
 use Illuminate\Http\Request;
 use App\Landlord;
 use App\User;
@@ -306,7 +307,12 @@ class BookingController extends Controller
 
     public function showInfoTenant()
     {
-        $booking = Booking::find(\Input::get('idBooking'));
+        if (\Input::get('idBooking') != 'null') {
+            $booking = Booking::find(\Input::get('idBooking'));
+            $status = $booking->status;
+        } else {
+            $status = 'confirmed';
+        }
         $person = User::find(\Input::get('idP'));
         $tenant = $person->tenant()->first();
         $parent = $tenant->parent()->first();
@@ -317,7 +323,7 @@ class BookingController extends Controller
             'person' => $person,
             'tenant' => $tenant,
             'expected_city' => $city,
-            'booking' => $booking->status,
+            'status' => $status,
             'address' => $address,
             'address_p' => $address_p,
             'parent' => $parent,
@@ -333,9 +339,24 @@ class BookingController extends Controller
     {
         $booking = Booking::find(\Input::get('idBooking'));
         $booking->status = 'waiting';
+
         $booking->confirm_date = date("Y-m-d h:i:s", time());
         $booking->save();
+        $estate->save();
         return $booking;
+    }
+
+    function getDatesBetween($dateIn, $dateOut)
+    {
+        $day = array(strtotime($dateIn));
+
+        $numDay = abs(strtotime($dateIn) - strtotime($dateOut)) / 60 / 60 / 24;
+
+        for ($i = 1; $i < $numDay + 1; $i++) {
+            array_push($day, strtotime("+{$i} day", strtotime($dateIn)));
+        }
+
+        return $day;
     }
 
     public function cancelBooking()
@@ -406,7 +427,7 @@ class BookingController extends Controller
                     $newBooking->idEstate = $booking->idEstate;
                     $newBooking->idCode = $booking->idCode;
                     $newBooking->guest = $booking->guest;
-                    $newBooking->confirm_date = date("Y-m-d h:i:s", time() + 60 * 60);
+                    $newBooking->confirm_date = date("Y-m-d h:i:s", time());
                     $newBooking->save();
                 }
                 $booking->status = 'rejected';
@@ -527,10 +548,60 @@ class BookingController extends Controller
         $pack = Booking_pack::find(\Input::get('idPack'));
         $bookings = $pack->bookings()->get();
         foreach ($bookings as $b) {
+            $bdate = BookingController::getDatesBetween($b->checkin,$b->checkout);
+            $estate = $b->estate()->first();
+            $booking_date = unserialize($estate->booking_date);
+            if($booking_date != null){
+                $booking_date = array_merge($booking_date,$bdate);
+            }else{
+                $booking_date = $bdate;
+            }
+            $estate->booking_date = serialize($booking_date);
+            $estate->save();
             $b->status = 'confirmed';
             $b->save();
         }
     }
+
+    public function changeCheckout()
+    {
+
+        $inputData = \Input::get('data');
+        parse_str($inputData, $Info);
+
+        $validator = \Validator::make($Info, [
+            'date' => 'required|date'
+        ]);
+
+
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray(),
+            ));
+        } else {
+            if($Info['type'] == 'booking'){
+                $booking = Booking::find($Info['idBooking']);
+                $booking->real_checkout = $Info['date'];
+                $booking->save();
+                return [
+                    'idEstate' => $booking->idEstate,
+                    'date' => $Info['date'],
+                ];
+            }else{
+                $foreignBooking = Foreign_booking::find($Info['idBooking']);
+                $foreignBooking->real_checkout = $Info['date'];
+                $foreignBooking->save();
+                return [
+                    'idEstate' => $foreignBooking->idEstate,
+                    'date' => $Info['date'],
+                ];
+            }
+
+
+        }
+    }
+
 
     function compare($a, $b)
     {

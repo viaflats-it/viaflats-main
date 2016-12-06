@@ -24,6 +24,20 @@
             </div>
         </div>
         <br>
+        <div>
+            <button> Edit Property  </button>
+            <button id="#{{$property->idProperty}}" class="manageTenant"> Manage My Tenant </button>
+        </div>
+        <br>
     @endforeach
+
+    <script>
+
+        $(".manageTenant").on('click',function () {
+            var id = $(this).attr('id').replace('#', '');
+            window.open("manageTenant?ref=" + id);
+        })
+
+    </script>
 
 @endsection

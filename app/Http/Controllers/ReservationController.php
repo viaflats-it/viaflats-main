@@ -17,17 +17,17 @@ class ReservationController extends Controller
         $estate = array();
         foreach ($booking as $b) {
             $estate[$b->idBooking] = $b->estate()->first();
-            if($b->status == 'waiting'){
+            if ($b->status == 'waiting') {
                 $count = ReservationController::countdown($b->confirm_date);
-                if($count['status'] == 'expired'){
+                if ($count['status'] == 'expired') {
                     $b->status = 'expired';
                     $b->save();
-                }else{
-                    $countdown[$b->idBooking] =$count;
+                } else {
+                    $countdown[$b->idBooking] = $count;
                 }
             }
         }
-        return view('tenant/my_reservation',compact('booking','estate','countdown'));
+        return view('tenant/my_reservation', compact('booking', 'estate', 'countdown'));
     }
 
     public function countdown($date)
@@ -38,9 +38,9 @@ class ReservationController extends Controller
         $H_restantes = $i_restantes / 60;
         $d_restants = $H_restantes / 24;
 
-        if($diff < 0 ){
+        if ($diff < 0) {
             $return['status'] = 'expired';
-        }else{
+        } else {
             $return['second'] = floor($diff % 60); // Secondes
             $return['min'] = floor($i_restantes % 60); // Minutes
             $return['hour'] = floor($H_restantes % 24); // Hour
@@ -125,7 +125,7 @@ class ReservationController extends Controller
         $id = \Input::get('ref');
         $booking = Booking::find($id);
         $estate = $booking->estate()->first();
-        return view('tenant/reservation-details',compact('booking','estate'));
+        return view('tenant/reservation-details', compact('booking', 'estate'));
     }
 
     public function deleteReservation()
@@ -134,6 +134,12 @@ class ReservationController extends Controller
         $booking->status = 'cancelled';
         $booking->save();
         \Redirect::to('my_reservation');
+    }
+
+    //Don't forget when tenant pay to add the dates to booking_dates in estate
+    public function waitingBooking()
+    {
+
     }
 
     public function update()

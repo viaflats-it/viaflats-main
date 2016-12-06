@@ -136,7 +136,7 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::get('complete_profile' , 'LandlordController@completeProfile');
     Route::post('complete_profile' , 'LandlordController@doCompleteProfile');
 
-    //Booking
+    /* BOOKING */
     Route::get('showMyBooking','BookingController@showMyBooking');
     Route::get('showPendingBooking','BookingController@showPendingBooking');
     Route::get('showWaitingBooking','BookingController@showWaitingBooking');
@@ -149,6 +149,13 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::get('DetailsBookingPack','BookingController@DetailsBookingPack');
     Route::get('confirmBookingPack','BookingController@confirmBookingPack');
     Route::get('showMultiBooking','BookingController@showMultiBooking');
+
+    /* MANAGE TENANT */
+    Route::get('manageTenant','PropertiesController@ShowManageTenant');
+    Route::post('addTenant','PropertiesController@addTenant');
+    Route::post('changeCheckout','BookingController@changeCheckout');
+    Route::get('showInfoForeignBooking','PropertiesController@showInfoForeignBooking');
+
 
 
 });
