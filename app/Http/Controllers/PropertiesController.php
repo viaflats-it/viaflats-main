@@ -149,15 +149,25 @@ class PropertiesController extends Controller
         } else {
             $estate = Estate::find($TenantInfo['idEstate']);
             $booking_date = unserialize($estate->booking_date);
-            foreach ($booking_date as $date) {
-                if (strtotime($TenantInfo['expected_in']) == $date || strtotime($TenantInfo['expected_in']) == $date) {
-                    return \Response::json(array(
-                        'fail' => true,
-                        'errors' => '',
-                        'msg_error' => 'This Property is already Booked',
-                    ));
-                    break;
+            if ($booking_date != null) {
+                foreach ($booking_date as $date) {
+                    if (strtotime($TenantInfo['expected_in']) == $date || strtotime($TenantInfo['expected_out']) == $date) {
+                        return \Response::json(array(
+                            'fail' => true,
+                            'errors' => '',
+                            'msg_error' => 'This Property is already Booked',
+                        ));
+                        break;
+                    }
                 }
+                $bookedDays = PropertiesController::getDateBooked($TenantInfo['expected_in'], $TenantInfo['expected_out']);
+                $booking_date = array_merge($booking_date, $bookedDays);
+                $estate->booking_date = serialize($booking_date);
+                $estate->save();
+            }else{
+                $bookedDays = PropertiesController::getDateBooked($TenantInfo['expected_in'], $TenantInfo['expected_out']);
+                $estate->booking_date = serialize($bookedDays);
+                $estate->save();
             }
             $Fbooking = new Foreign_booking();
             $Fbooking->first_name = $TenantInfo['first_name'];
@@ -169,10 +179,6 @@ class PropertiesController extends Controller
             $Fbooking->idEstate = $TenantInfo['idEstate'];
             $Fbooking->comment = $TenantInfo['comment'];
             $Fbooking->save();
-            $bookedDays = PropertiesController::getDateBooked($TenantInfo['expected_in'], $TenantInfo['expected_out']);
-            $booking_date = array_merge($booking_date, $bookedDays);
-            $estate->booking_date = serialize($booking_date);
-            $estate->save();
             return $Fbooking;
         }
     }

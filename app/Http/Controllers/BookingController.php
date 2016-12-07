@@ -9,6 +9,7 @@ use App\User;
 use App\Booking;
 use App\Booking_pack;
 use App\City;
+use App\Estate;
 use App\Http\Requests;
 use phpDocumentor\Reflection\Types\Null_;
 
@@ -548,15 +549,15 @@ class BookingController extends Controller
         $pack = Booking_pack::find(\Input::get('idPack'));
         $bookings = $pack->bookings()->get();
         foreach ($bookings as $b) {
-            $bdate = BookingController::getDatesBetween($b->checkin,$b->checkout);
+            $bdate = BookingController::getDatesBetween($b->checkin, $b->checkout);
             $estate = $b->estate()->first();
             $booking_date = unserialize($estate->booking_date);
-            if($booking_date != null){
-                $booking_date = array_merge($booking_date,$bdate);
-            }else{
+            if ($booking_date != null) {
+                $booking_date = array_merge($booking_date, $bdate);
+            } else {
                 $booking_date = $bdate;
             }
-            $estate->booking_date = serialize($booking_date);
+            $estate->booking_date = serialize(array_unique($booking_date));
             $estate->save();
             $b->status = 'confirmed';
             $b->save();
@@ -580,28 +581,41 @@ class BookingController extends Controller
                 'errors' => $validator->getMessageBag()->toArray(),
             ));
         } else {
-            if($Info['type'] == 'booking'){
+            if ($Info['type'] == 'booking') {
                 $booking = Booking::find($Info['idBooking']);
                 $booking->real_checkout = $Info['date'];
                 $booking->save();
+                BookingController::changeBookingDate($booking->checkin, $booking->checkout, $booking->real_checkout, $booking->idEstate);
                 return [
                     'idEstate' => $booking->idEstate,
                     'date' => $Info['date'],
                 ];
-            }else{
+            } else {
                 $foreignBooking = Foreign_booking::find($Info['idBooking']);
                 $foreignBooking->real_checkout = $Info['date'];
                 $foreignBooking->save();
+                BookingController::changeBookingDate($foreignBooking->checkin, $foreignBooking->checkout, $foreignBooking->real_checkout, $foreignBooking->idEstate);
                 return [
                     'idEstate' => $foreignBooking->idEstate,
                     'date' => $Info['date'],
                 ];
             }
-
-
         }
     }
 
+
+    public function changeBookingDate($dateIn, $dateOut, $dateRealOut, $idEstate)
+    {
+        $firstDate = BookingController::getDatesBetween($dateIn, $dateOut);
+        $estate = Estate::find($idEstate);
+        $newBookingDate = array();
+        $bookingDate = unserialize($estate->booking_date);
+        $newBookingDate = array_diff($bookingDate,$firstDate);
+        $newDate = BookingController::getDatesBetween($dateIn, $dateRealOut);
+        $newBookingDate = array_merge($newBookingDate,$newDate);
+        $estate->booking_date = serialize($newBookingDate);
+        $estate->save();
+    }
 
     function compare($a, $b)
     {

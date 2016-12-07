@@ -16,4 +16,9 @@ class Foreign_booking extends Model
 
     public $timestamps = false;
 
+    public function estate()
+    {
+        return $this->belongsTo('App\Estate', 'idEstate');
+    }
+
 }
