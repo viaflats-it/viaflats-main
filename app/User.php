@@ -31,6 +31,8 @@ class User extends Authenticatable
         'password',
     ];
 
+    public $timestamps = false;
+
     public function tenant()
     {
         return $this->hasOne('App\Tenant', 'idPerson');
@@ -40,5 +42,10 @@ class User extends Authenticatable
         return $this->hasOne('App\Landlord','idPerson');
     }
     public $timestamps = false;
-    
+
+
+    public function photographer()
+    {
+        return $this->hasOne('App\Photographer', 'idPerson');
+    }
 }

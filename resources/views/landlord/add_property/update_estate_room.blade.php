@@ -185,6 +185,7 @@
 
 
                     @if (isset($bathrooms))
+
                         <div class="form-group form-inline row">
                             {!! Form::label('privateBathroom', 'Private bathroom : ' , ['class' => 'col-md-4']) !!}
                             <div class="form-group">
@@ -199,7 +200,7 @@
                         <div id="selectBathroom" class="form-group form-inline row col-md-12 col-md-push-4"
                              style="display:none">
                             {!! Form::label('bathroomSize' , 'Bathroom Size : ') !!}
-                            {!! Form::select('bathroomSize', $bathrooms , $privateRooms['bathroom']->idRoom,['class' => 'form-control']) !!}
+                            {!! Form::select('bathroomSize', $bathrooms , isset($privateRooms['bathroom']) ? $privateRooms['bathroom']->idRoom : '',['class' => 'form-control']) !!}
                             {!! Form::label('m²') !!}
                         </div>
                     @endif

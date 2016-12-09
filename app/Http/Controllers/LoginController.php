@@ -120,7 +120,7 @@ class LoginController extends Controller
                     case 2:
                         return \Response::json(array(
                             'success' => true,
-                            'url_return' => ['index']
+                            'url_return' => ['photographer']
                         ));
                         break;
 
