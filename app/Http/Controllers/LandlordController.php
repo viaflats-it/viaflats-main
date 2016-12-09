@@ -112,7 +112,6 @@ class LandlordController extends Controller
 
         return view('landlord/add_property/def_estate', compact('fees', 'roomsAmenities', 'area', 'property', 'rooms', 'restrictions', 'type', 'roomsLabel', 'address'));
 
-        return view('landlord/add_property/def_estate_shared', compact('fees', 'roomsAmenities', 'area', 'property', 'room', 'restrictions', 'type', 'roomsLabel', 'address'));
 
     }
 
