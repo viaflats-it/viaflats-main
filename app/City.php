@@ -21,4 +21,9 @@ class City extends Model
 
 
     public $timestamps = false;
+
+    public function photographers()
+    {
+        return $this->hasMany('App\Photographer', 'idCity');
+    }
 }

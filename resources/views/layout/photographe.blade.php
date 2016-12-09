@@ -15,20 +15,8 @@
     {{ Html::style('../node_modules/material-design-icons-iconfont/dist/material-design-icons.css') }}
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 
-<!-- jQuery -->
+    <!-- jQuery -->
     <script src="{{URL::asset('js/app.js')}}"></script>
-
-    <script src="../node_modules/intl-tel-input/build/js/intlTelInput.js"></script>
-    <script src="../node_modules/moment/min/moment.min.js"></script>
-
-
-    <link rel="stylesheet" href="../node_modules/intl-tel-input/build/css/intlTelInput.css">
-
-    <!-- Include Date Range Picker -->
-    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-
 
 
 
@@ -45,31 +33,14 @@
                 </a>
             </li>
             <li>
-                <a href="profile">@lang('landlord.profile')</a>
+                <a href="profile">@lang('photographer.profile')</a>
             </li>
             <li>
-                <a href="add_property">@lang('landlord.add_property')</a>
+                <a href="my_appointment">@lang('photographer.my_appointment')</a>
             </li>
             <li>
-                <a href="my_properties">@lang('landlord.my_properties')</a>
+                <a href="my_availabilities">@lang('photographer.my_availabilities')</a>
             </li>
-            <li>
-                <a href="my_booking">@lang('landlord.my_booking')</a>
-            </li>
-            <li>
-                <a href="update_availabilities">@lang('landlord.update_availabilities')</a>
-            </li>
-            <li>
-                <a href="invoices">@lang('landlord.invoices')</a>
-            </li>
-            <li>
-                <a href="messages">@lang('landlord.messages')</a>
-            </li>
-            @if(Auth::user()->admin == 1)
-                <li>
-                    <span class="adminAddlandlord"><a href="addLandlord">@lang('landlord.adminAddlandlord')</a></span>
-                </li>
-                @endif
         </ul>
     </div>
     <!-- /#sidebar-wrapper -->

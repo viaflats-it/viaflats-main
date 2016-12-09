@@ -270,7 +270,7 @@ class LandlordController extends Controller
 
             }
         }
-//        return $privateRooms;
+
         return view('landlord/add_property/update_estate_room', compact('kitchens', 'toilets', 'privateRooms', 'restrictionsEstate', 'feesEstate', 'estate', 'range_period', 'bathrooms', 'roomLabel', 'fees', 'roomAmenities', 'area', 'property', 'room', 'restrictions', 'type', 'address'));
 
 
@@ -339,6 +339,28 @@ class LandlordController extends Controller
         return view('landlord/preview', compact('idBedroom', 'roomEstateList', 'property', 'type', 'rooms', 'address', 'countInfo', 'roomsLabel', 'roomsAmenities', 'estatesList', 'estate'));
     }
 
+    public function appointment()
+    {
+        $property = Property::find(24);
+        $city = City::find($property->area()->first()->idCity);
+        $photographers = $city->photographers()->get();
+
+        foreach ($photographers as $photographer) {
+            $blop = unserialize($photographer->availabilities);
+
+
+            if (is_array($blop) || is_object($blop))
+            {
+                foreach ($blop as $key => $value)
+                {
+                   $date[$key] = $value['date'];
+                }
+            }
+
+
+        }
+        return view('landlord/add_property/appointment', compact('city', 'property', 'date'));
+    }
 
     function showProperties()
     {
@@ -376,7 +398,6 @@ class LandlordController extends Controller
         return view('landlord/profile_landlord', compact('landlord'));
 
     }
-
 
     public function disable()
     {
@@ -829,16 +850,39 @@ class LandlordController extends Controller
             $range_period[$i]['price'] = \Input::get('priceRange.' . $i);
         }
 
+
         $estate->restrictions()->detach();
-        foreach (\Input::get('restriction') as $restriction) {
-            $newRestriction = Restriction::find($restriction);
+        if (\Input::get('restriction') != null) {
+            foreach (\Input::get('restriction') as $restriction) {
+                $newRestriction = Restriction::find($restriction);
 
 
                 $estate->restrictions()->save($newRestriction);
 
+            }
+        }
+        $estate->range_period = serialize($range_period);
+
+        $estate->privateRooms()->detach();
+
+        if (\Input::get('privateBathroom') == 1) {
+            $privateBathroom = Room::find(\Input::get('bathroomSize'));
+
+            $estate->privateRooms()->save($privateBathroom);
+
         }
 
-        $estate->range_period = serialize($range_period);
+        if (\Input::get('privateKitchen') == 1) {
+            $privateKitchen = Room::find(\Input::get('kitchenSize'));
+
+            $estate->privateRooms()->save($privateKitchen);
+        }
+
+        if (\Input::get('privateToilet') == 1) {
+            $privateToilet = Room::find(\Input::get('toiletSize'));
+
+            $estate->privateRooms()->save($privateToilet);
+        }
 
         $estate->save();
 //        return \Input::all();
@@ -852,13 +896,10 @@ class LandlordController extends Controller
                     $monthly = 1;
                 }
 
-                if ($estate->fees()->where('Estate_fee.idFee' , $key)->first() != null)
-                {
+                if ($estate->fees()->where('Estate_fee.idFee', $key)->first() != null) {
                     $estate->fees()->updateExistingPivot($key, ['price' => $fee, 'monthly' => $monthly]);
-                }
-                else
-                {
-                    $estate->fees()->save($newFee, ['price' => $fee , 'monthly' => $monthly]);
+                } else {
+                    $estate->fees()->save($newFee, ['price' => $fee, 'monthly' => $monthly]);
                 }
             }
         }
@@ -886,88 +927,135 @@ class LandlordController extends Controller
         $id = \Input::get('idRoom');
         $room = Room::find($id);
 
-
-        return \Redirect::to('showUpdateEstateRoom')->withID($id);
-
-        $estate = $room->estates()->first();
-        $range_period = $estate->range_period;
         $divGroup = "<div class='form-inline'>";
         $finDivGroup = "</div>";
 
         $content = $divGroup;
+        $content .= \Form::open(['url' => 'update_room', 'id' => 'formUpdateRoom']);
+        $content .= \Form::hidden('idRoom', $room->idRoom);
         $content .= \Form::label('size', 'Size : ', ['class' => 'col-md-3']);
         $content .= \Form::number('size', $room->size, ['class' => 'form-control']);
         $content .= $finDivGroup;
 
-        $content .= $divGroup;
-        $content .= \Form::label('guest', 'Guest : ', ['class' => 'col-md-3']);
-        $content .= \Form::number('guest', $estate->guest_nb, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        $content .= $divGroup;
-        $content .= \Form::label('shared', 'Shared : ', ['class' => 'col-md-3']);
-        $content .= \Form::select('shared', [0 => 'private', 1 => 'shared', 2 => 'couple'], $estate->shared, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        $content .= $divGroup;
-        $content .= \Form::label('rentalSub', 'Rental Sub : ', ['class' => 'col-md-3']);
-        $content .= \Form::select('rentalSub', [0 => 'unavailable', 1 => 'available'], $estate->rental_sub, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        $content .= $divGroup;
-        $content .= \Form::label('windows', 'Windows : ', ['class' => 'col-md-3']);
-        $content .= \Form::number('windows', $estate->windows, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        $content .= $divGroup;
-        $content .= \Form::label('streetSide', 'Steet Side : ', ['class' => 'col-md-3']);
-        $content .= \Form::select('streetSide', [0 => 'No', 1 => 'Yes'], $estate->street_side, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        $content .= $divGroup;
-        $content .= \Form::label('rent', 'Rent : ', ['class' => 'col-md-3']);
-        $content .= \Form::number('rent', $estate->rent, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        foreach (unserialize($range_period) as $period) {
-            $content .= $divGroup;
-            $content .= "<div id='rangePriceList' class='form-group'>";
-            $content .= \Form::label('rentRange', 'Rent range : ', ['class' => 'col-md-12']);
-
-            $content .= "<div class='row'>
-                                    <span class='col-md-5'>From month </span>";
-
-            $content .= \Form::number('from[]', $period['from'],
-                ['class' => 'form-control size50']);
-            $content .= "</div> 
-                                   
-                                   <div class='row'>
-                                   <span class='col-md-5'>To ...</span>";
-            $content .= \Form::number('to[]', $period['to'],
-                ['min' => 0, 'class' => 'form-control size50']);
-            $content .= "   </div> 
-   
-                                   <div class='row'>
-                                   <span class='col-md-5'>Range price :</span> ";
-            $content .= \Form::number('priceRange[]', $period['price'],
-                ['class' => 'form-control size30']);
-            $content .= "</div> 
-                      </div>";
-
-            $content .= $finDivGroup;
-        }
-
-        $content .= $divGroup;
-        $content .= \Form::label('miniStay', 'Minimum Stay : ', ['class' => 'col-md-3']);
-        $content .= \Form::number('miniStay', $estate->mini_stay, ['class' => 'form-control']);
-        $content .= $finDivGroup;
-
-        $content .= $divGroup;
-        $content .= \Form::label('booking', 'Rent : ', ['class' => 'col-md-3']);
-        $content .= \Form::number('rent', $estate->rent, ['class' => 'form-control']);
-        $content .= $finDivGroup;
 
         return $content;
     }
 
+    public function updateProperty()
+    {
+        $inputData = \Input::get('data');
+        parse_str($inputData, $formFields);
+
+        $validator = \Validator::make($formFields, [
+            'address' => 'required',
+            'city' => 'required|string',
+            'country' => 'required|string',
+            'size' => 'required|numeric',
+            'zip' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
+            $property = Property::find($formFields['idProperty']);
+            $address = $property->address()->first();
+
+            $address->street = $formFields['address'];
+            $address->city = $formFields['city'];
+            $address->country = $formFields['country'];
+            $property->size = $formFields['size'];
+            $address->zip = $formFields['zip'];
+
+            $address->save();
+            $property->save();
+
+        }
+
+    }
+
+    public function deleteEstate()
+    {
+
+
+        $validator = \Validator::make(\Input::all(), [
+            'idRoom' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
+            $room = Room::find(\Input::get('idRoom'));
+            $estate = $room->estates()->first();
+
+            $estate->status = 1;
+            $estate->save();
+
+        }
+    }
+
+    public function activateEstate()
+    {
+        $validator = \Validator::make(\Input::all(), [
+            'idRoom' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
+            $room = Room::find(\Input::get('idRoom'));
+            $estate = $room->estates()->first();
+
+            $estate->status = 2;
+            $estate->save();
+
+        }
+    }
+
+    public function updateRoom()
+    {
+        $inputData = \Input::get('data');
+        parse_str($inputData, $formFields);
+        $validator = \Validator::make($formFields, [
+            'idRoom' => 'required|integer',
+            'size' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
+            $room = Room::find($formFields['idRoom']);
+            $room->size = $formFields['size'];
+            $room->save();
+        }
+    }
+
+    public function deleteRoom()
+    {
+        $validator = \Validator::make(\Input::all(), [
+            'idRoom' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return \Response::json(array(
+                'fail' => true,
+                'errors' => $validator->getMessageBag()->toArray()
+            ));
+        } else {
+            $room = Room::find(\Input::get('idRoom'));
+            $room->delete();
+
+        }
+    }
 }

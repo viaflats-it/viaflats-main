@@ -37,4 +37,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Tenant', 'idPerson');
     }
+
+    public function photographer()
+    {
+        return $this->hasOne('App\Photographer', 'idPerson');
+    }
 }
