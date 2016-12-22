@@ -1,0 +1,14 @@
+
+.wrapper{
+  @include flexbox;
+  @include flex-direction(raw);
+  background-color: $schWhite;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  @import 'components/back.sidebar.scss';
+
+  @import 'components/back.content.scss';
+}

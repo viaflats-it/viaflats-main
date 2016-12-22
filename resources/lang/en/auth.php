@@ -18,11 +18,37 @@ return [
     'error' => 'Error: ',
     'errorPhone' => 'Phone number not correct',
     'success' => 'Login complete successfully ',
+    'home' => 'Home',
+    'close' => 'Close',
+
+
+    /* ------------------------------Sign Up/In Form-------------------------------- */
+
+    'login' => 'Login',
+    'signin' => 'SignIn',
+    'signup' => 'SignUp',
+    'logout' => 'Logout',
+    'signup_button' => 'SignUp',
+    'username' => 'Username',
+    'email' => 'Mail',
+    'phone' => 'Phone number',
+    'first_name' => 'First Name',
+    'last_name' => 'Last Name',
+    'password' => 'Password',
+    'confirm_password' => 'Password Confirmation',
+    'landlord' => "I'm a landlord",
+    'tenant' => "I'm a tenant",
+    'accept_terms' => 'You have to read the terms and conditions before signup !',
+    'accept_terms_' => 'If you sign up, it mean\'s you agree with them !',
     'button_facebook' => 'Facebook log in',
     'button_google' => 'Google log in',
     'social_disconnect' => 'log out',
     'fblogin' => 'Log in with Facebook',
     'googlelogin' => 'Or with Google',
+
+
+    /* ------------------------------Terms and conditions------------------------ */
+
     'terms' => ' Collective Content » means all content that Viaflats make available on the Site, including third party Content.
 - « Content » means the content (text, images, media) that Viaflats make available on the Site.
 - « User » means a User who navigates through [http://www.Viaflats.com/] and all pages of the Site.
@@ -39,6 +65,7 @@ return [
 - « Cancellation Policy » means the way a Member can cancel a Booking made on the Site
 - « Check in » means the entry date by the Tenant in the Accommodation
 - « Check out » means the leaving date of the Tenant in the Accommodation
-- « Taxes » means all applicable taxes (VAT, sales taxes) when a Tenant books an accommodation on Viaflats'
+- « Taxes » means all applicable taxes (VAT, sales taxes) when a Tenant books an accommodation on Viaflats',
+
 
 ];

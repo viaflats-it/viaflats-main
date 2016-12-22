@@ -9,15 +9,14 @@
                 <div class="col-md-8">
                     <h4>The property - {{$property->size}}m²</h4>
 
+                    {{$errors->first()}}
                     {!! Form::open(['url' => 'definition_estate' ]) !!}
 
                     <div class="form-group form-inline row">
                         {!! Form::label('guest', 'Guest number :' , ['class'=>'col-md-4']) !!}
-                        {!! Form::number('guest', 0, ['min' => '0','class'=>'form-control size30']) !!}
+                        {!! Form::number('guest', 1, ['min' => '0','class'=>'form-control size30']) !!}
                         <div class="form-group" style="margin-left: 20px">
-                            {!! Form::radio('radioShared' , 1, 0,['id'=>'shared']) !!}
-                            {!! Form::label('shared') !!}
-                            {!! Form::radio('radioShared' , 2, 0,['id'=>'couple']) !!}
+                            {!! Form::checkbox('radioShared' , 2, 0,['id'=>'couple']) !!}
                             {!! Form::label('couple') !!}
                         </div>
                     </div>
@@ -33,21 +32,35 @@
                             {!! Form::number('price', 0, ['step' => '0.01','min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
                             <span class="input-group-addon" style="">€/month</span>
                         </div>
-                        <button type="button" class="btn btn-viaflats" id="buttonShortStay">Define a short stay</button>
                     </div>
 
-                    <div class="form-group form-inline row" id="shortStay" style="display: none">
-                        {!! Form::label('shortStay', 'Short stay :', ['class'=>'col-md-4']) !!}
-                        <div class="input-group col-md-8" style="display: inline-flex">
-                            {!! Form::number('shortStay', 0, ['min' => '0','class'=>'form-control size20', 'style'=> 'float : right']) !!}
-                            <span class="input-group-addon" style="">Days</span>
-                            <div class="input-group" style="display: inline-flex">
-                                {!! Form::number('shortPrice', 0, ['step'=>'0.01','min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
-                                <span class="input-group-addon" style="">€/month</span>
+                    <div class="form-group form-inline row">
+
+                        {!! Form::label('priceRange', 'Range Price :', ['class' => 'col-md-4']) !!}
+
+                        <div id="rangePriceList" class="form-group col-md-12">
+                            <div id="rangePrice1">
+                                <div class="col-md-12">
+                                    <span class="col-md-3">From month </span>
+                                    {!! Form::number('from[]' ,0,
+                                        ['readonly', 'class' => 'form-control', 'id' => 'from1']) !!}
+                                    <span> --> </span>
+                                    {!! Form::number('to[]', null,
+                                        ['min' => 0,'class' => 'form-control', 'placeholder'=> 'to...', 'id'=>'to1' ]) !!}
+                                </div>
+                                <div class="col-md-12">
+                                    <span class="col-md-3">Range's Price : </span>
+                                    {!! Form::number('priceRange[]', null,
+                                            ['id'=>'priceRange1','class' => 'form-control', 'placeholder' => '€ for the range']) !!}
+                                    <button  type="button" id="bRange1" class="btn btn-default addRange"
+                                             style="float: right; margin-right: 15%">Add a Range
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <p>@lang('landlord.shortStayExplication')</p>
+
                     </div>
+
                     <div class="form-group form-inline row">
                         {!! Form::label('fee', 'Extra fee(s) :', ['class'=>'col-md-4']) !!}
                         <button type="button" class="btn btn-viaflats" id="buttonFee" style="margin-bottom: 30px">+</button>
@@ -81,24 +94,29 @@
 
                     <div class="form-group">
                         {!! Form::radio('bookingInfo' , 0, 0,['id'=>'book_nothing']) !!}
+
                         {!! Form::label('book_nothing') !!}
                         {!! Form::radio('bookingInfo' , 1, 0,['id'=>'book_flex']) !!}
                         {!! Form::label('book_flex') !!}
-                        {!! Form::radio('bookingInfo' , 2, 0, ['id'=>'book_preference']) !!}
+                        {!! Form::radio('bookingInfo' , 2, 0
+                                                , ['id'=>'book_preference']) !!}
                         {!! Form::label('book_preference') !!}
-
                     </div>
 
                     <div class="form-group form-inline row" id="booking_flex" style="display:none">
                         {!! Form::label('bookingFlex', 'Booking Flexibility :' , ['class'=>'col-md-4']) !!}
-                        {!! Form::number('bookingFlex', 0, ['min' => '0','class'=>'form-control size30']) !!}
+                        {!! Form::number('bookingFlex', 0,
+                                        ['min' => '0','class'=>'form-control size30']) !!}
                     </div>
 
-                    <div id="booking_preference row" style="display:none">
-                        <div class="form-group form-inline">
+
+                    <div id="booking_preference" style="display:none">
+                        <div class="form-group form-inline row">
                             {!! Form::label('prefCheckin', 'Check in Preference :', ['class'=>'col-md-4']) !!}
                             <div class="input-group" style="display: inline-flex">
-                                {!! Form::number('prefCheckin', 0, ['max'=> '31' , 'min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
+                                {!! Form::number('prefCheckin', 0, [
+                                                'max'=> '31' , 'min' => '0','class'=>'form-control size40',
+                                                        'style'=> 'float : right']) !!}
                                 <span class="input-group-addon" style="">each month</span>
                             </div>
                         </div>
@@ -106,15 +124,35 @@
                         <div class="form-group form-inline row">
                             {!! Form::label('prefCheckout', 'Check out Preference :', ['class'=>'col-md-4']) !!}
                             <div class="input-group" style="display: inline-flex">
-                                {!! Form::number('prefCheckout', 0, ['max'=> '31' , 'min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
+                                {!! Form::number('prefCheckout', 0, ['max'=> '31' ,
+                                            'min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
                                 <span class="input-group-addon" style="">each month</span>
                             </div>
                         </div>
                     </div>
 
+
+                    <div class="form-group form-inline row">
+                        {!! Form::label('windows', 'Windows number :', ['class' => 'col-md-4']) !!}
+                        {!! Form::number('windows', 0, ['min' => '0','class'=>'form-control size30']) !!}
+                        <div class="form-group">
+                            {!! Form::select('glazing' , [1 => 'Double Glazing' , 0 => 'Simple Glazing'],0,
+                                 ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group form-inline row">
+                        {!! Form::label('disposition', 'Disposition : ', ['class' => 'col-md-4']) !!}
+                        {!! Form::select('disposition', [1 => 'Street Side', 0 => 'Other'], null,
+                                        ['class' => 'form-control']) !!}
+                    </div>
+
+
                     <div class="form-group form-inline row">
                         {!! Form::label('rentalSub', 'Rental subsidies available :', ['class'=>'col-md-4']) !!}
-                        {!! Form::checkbox('rentalSub', 1, 0, ['class'=>'form-control bigCheckbox']) !!}
+                        {!! Form::select('rentalSub', [0 => 'Rental Sub unavailable', 1 => 'Rental Sub available'],
+                                        null, ['class'=>'form-control']) !!}
                     </div>
 
 
@@ -122,7 +160,7 @@
                         {!! Form::label('restriction', 'Restriction :', ['class'=>'col-md-4']) !!}
                         <div class="form-inline">
                             @foreach($restrictions as $restriction)
-                                {!! Form::checkbox('restriction[]', $restriction->idRestriction,  null,
+                                {!! Form::checkbox('restriction[]', $restriction->idRestriction,0,
                                         ['class'=>'form-control', 'id' => 'restriction-'.$restriction->idRestriction]) !!}
                                 {!! Form::label('restriction-'.$restriction->idRestriction, $restriction->label ,
                                 ["style" => 'color: #89898a; margin-right:10px']) !!}
@@ -130,15 +168,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        {!! Form::label('availability', 'Availabilities : ', ['class'=>'col-md-4']) !!}
-                        <div class="form-inline">
-                            {!! Form::text('dateIn' ,null,  ['class' => 'form-control']) !!}
-                        </div>
 
-                    </div>
 
-                    {!! Form::submit('Post', ['class' => 'btn btn-default hover_viaflats form-control']) !!}
+                    {!! Form::submit('Update', ['class' => 'btn btn-default hover_viaflats form-control']) !!}
                     {!! Form::close() !!}
 
                 </div>
@@ -192,6 +224,19 @@
 
         });
 
+        $('#couple').on('change', function() {
+            if (this.checked)
+            {
+                $('#guest').val(2);
+                $('#guest').prop('readOnly', true);
+            }
+            else
+            {
+                $('#guest').val(1);
+                $('#guest').prop('readOnly', false);
+            }
+        });
+
         $('#book_flex').on('click', function () {
             $('#booking_preference').hide();
             $('#booking_flex').show();
@@ -229,6 +274,25 @@
 
                 fees.hide();
             }
+        });
+
+        $('#rangePriceList').on('click', '.addRange', function () {
+            clone = $('#rangePrice1').clone();
+            var regex = /[0-9]+/g;
+            var thisId = parseInt(regex.exec(this.id)[0]);
+            var nextId = thisId + 1;
+            clone.find('#from1').val($('#to'+thisId).val());
+            clone.find('#to1').val('');
+            clone.find('#priceRange1').val('');
+
+            clone.find('#from1').attr('id' , 'from'+nextId);
+            clone.find('#to1').attr('id' , 'to'+nextId);
+            clone.find('#priceRange1').attr('id', 'priceRange'+nextId);
+            clone.find('#bRange1').attr('id', 'bRange'+nextId);
+
+            clone.attr('id', 'rangePrice'+nextId);
+
+            clone.children().appendTo('#rangePriceList');
         });
     </script>
 @endsection

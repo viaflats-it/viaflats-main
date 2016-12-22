@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Landlord extends Model
 {
-    protected $table= 'landlord';
+    protected $table = 'landlord';
 
     protected $primaryKey = 'idLandlord';
 
     protected $fillable = [
-        'idLandlord', 'corporate', 'account_state', 'about', 'verified', 'idPerson'
+        'idLandlord', 'corporate', 'account_state', 'about', 'verified', 'idPerson', 'response_time'
     ];
 
     /**
@@ -32,4 +32,15 @@ class Landlord extends Model
     {
         return $this->hasOne('App\User', 'idPerson');
     }
+
+    public function payment_way()
+    {
+        return $this->belongsToMany('App\Payment_way', 'Payment_way_landlord', 'idLandlord', 'idPayment');
+    }
+
+    public function property()
+    {
+        return $this->hasMany('App\Property','idLandlord');
+    }
+
 }

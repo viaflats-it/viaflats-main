@@ -1,17 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
-session_start();
-
-
-use App\Http\Requests;
+use App\Address;
 use App\Landlord;
 use App\Mail\ConfirmationMailTenant;
 use App\Mail\ConfirmationMailLandlord;
 use App\Tenant;
 use Illuminate\Support;
 use App\User;
-
+use App\Parents;
 use Facebook;
 use Google_Client;
 use Google_Service_Oauth2;
@@ -21,34 +18,68 @@ class LoginController extends Controller
     public function signUp()
     {
         $rules = array(
-            'login' => 'required|max:255',
+            'login' => 'required|unique:person,login|max:255',
             'first-name' => 'required|max:255',
             'last-name' => 'required|max:255',
             'email' => 'required|email|unique:person,email|max:255',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required|min:6',
+            'phone' => 'required|unique:person,phone',
             'type' => 'required',
         );
 
-        $message = array(
-            'required' => 'The :attribute is required',
-            'type.required' => 'You have to check one of this box',
-            'accepted' => 'You have to accept the terms and conditions',
-        );
+        $validator = \Validator::make(\Input::all(), $rules);
 
-        $validator = \Validator::make(\Input::all(), $rules, $message);
+        if ($validator->fails()) {
+            return \Redirect::back()->withErrors($validator)->withinput();
+        }
+        $confirmation_code = str_random(40);
+        $user = User::create([
+            'login' => \Input::get('login'),
+            'password' => \Hash::make(\Input::get('password')),
+            'first_name' => \Input::get('first-name'),
+            'last_name' => \Input::get('last-name'),
+            'email' => \Input::get('email'),
+            'type_person' => \Input::get('type'),
+            'confirmation_code' => $confirmation_code
+        ]);
 
-    if ($validator->fails()){
-        return \Redirect::to('/')->withErrors($validator)->withinput();
+        //Send mail confirmation And create Tenant or Landlord
+        if ($user->type_person == 0) {
+            //\Mail::to(\Input::get('email'))->send(new ConfirmationMailTenant($user));
+            $address = New Address;
+            $addressParents = New Address;
+            $tenant = New Tenant;
+            $parent = New Parents;
+            $address->save();
+            $addressParents->save();
+            $address->tenant()->save($user->tenant()->save($tenant));
+            $addressParents->parent()->save($tenant->parent()->save($parent));
+
+        } elseif ($user->type_person == 1) {
+            //\Mail::to(\Input::get('email'))->send(new ConfirmationMailLandlord($user));
+            Landlord::create([
+                'idPerson' => $user->idPerson,
+            ]);
+        }
+
+        //Log in
+        /*if (\Auth::attempt(array('login' => \Input::get('login'), 'password' => \Input::get('password')))) {
+            $id = \Auth::user()->idPerson;
+            if (!empty(Tenant::where('idPerson', '=', $id)->first())) {
+                return \Redirect::to('tenant');
+            } elseif (!empty(Landlord::where('idPerson', '=', $id))) {
+                return \Redirect::to('landlord');
+            } elseif (!empty(Photographer::where('idPerson', '=', $id))) {
+                $user = Photographer::where('idPerson', '=', $id)->first();
+                return \Redirect::to('photographer');
+            }
+        }*/
+
+        return \Redirect::to('tenant');
+        //return \Redirect::to('index');
     }
 
-    User::create([
-        'login'=> \Input::get('login'),
-        'password'=> \Hash::make(\Input::get('password'))
-    ]);
-
-    return \Redirect::to('index');
-}
     public function signIn()
     {
         $inputData = \Input::get('data');
@@ -95,9 +126,7 @@ class LoginController extends Controller
 
 
                 }
-            }
-            else
-            {
+            } else {
                 return \Response::json(array(
                     'fail' => true,
                     'errors' => [trans('auth.failed')]
@@ -116,7 +145,7 @@ class LoginController extends Controller
     public function signUpGoogle()
     {
         $client = new Google_Client();
-        $client->setAuthConfig('C:\wamp\www\Viaflats\config\credentials.json');
+        $client->setAuthConfig('..\config\credentials.json');
         $client->setScopes(['profile', 'email']);
         $client->setAccessType('offline');
         $client->setApplicationName('Viaflats');
@@ -144,6 +173,7 @@ class LoginController extends Controller
                 'login' => $id,
                 'email'=> $email,
                 'password' => \Hash::make('google_'.$email.$fname.$lname),
+                'profile_picture' => $picture,
                 'first_name' => $fname,
                 'last_name' => $lname,
                 ]);
@@ -167,6 +197,8 @@ class LoginController extends Controller
                 $user->first_name = $fname;
             if($user->last_name != $lname)
                 $user->last_name = $lname;
+            if($user->profile_picture != $picture)
+                $user->profile_picture = $picture;
             $user->password = \Hash::make('google_'.$email.$fname.$lname);
             $user->save();
 
@@ -183,7 +215,7 @@ class LoginController extends Controller
         $fb = new Facebook\Facebook(['app_id' => '220761998341263',
             'app_secret' => 'ed4cb1999a7d9ff37b4054c7befb282f',
             'default_graph_version' => 'v2.5',]);
-
+        
         //Get the token after the user clicked on the button
         //Displays errors
         if(!isset($_SESSION['facebook_access_token']))
@@ -193,22 +225,22 @@ class LoginController extends Controller
             $accessToken = $helper->getAccessToken();
         } catch(Facebook\Exceptions\FacebookResponseException $e) {
                 // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                echo 'Graph returned an error: ' . $e->getMessage();
+                exit;
+            } catch (Facebook\Exceptions\FacebookSDKException $e) {
                 // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
 
         //Put the token into a session variable
         if (isset($accessToken)) {
             // Logged in!
             $_SESSION['facebook_access_token'] = (string) $accessToken;
 
-            // Now you can redirect to another page and use the
-            // access token from $_SESSION['facebook_access_token']
-        }
+                // Now you can redirect to another page and use the
+                // access token from $_SESSION['facebook_access_token']
+            }
 
         //Get user data
         $response = $fb->get('/me?fields=id,first_name, last_name,link,email,age_range', $_SESSION['facebook_access_token']);
@@ -222,6 +254,7 @@ class LoginController extends Controller
                 'login' => $userNode['id'],
                 'email'=> $userNode['email'],
                 'password' => \Hash::make('facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']),
+                'profile_picture' => 'http://graph.facebook.com/'.$userNode['id'].'/picture',
                 'first_name' => $userNode['first_name'],
                 'last_name' => $userNode['last_name'],
                 ]);
@@ -243,6 +276,8 @@ class LoginController extends Controller
                     $user->first_name = $userNode['first_name'];
                 if($user->last_name != $userNode['last_name'])
                     $user->last_name = $userNode['last_name'];
+                if($user->profile_picture != 'http://graph.facebook.com/'.$userNode['id'].'/picture')
+                    $user->profile_picture = 'http://graph.facebook.com/'.$userNode['id'].'/picture';
             $user->password = \Hash::make('facebook_'.$userNode['email'].$userNode['first_name'].$userNode['last_name']);
             $user->save();
 
@@ -253,18 +288,20 @@ class LoginController extends Controller
     return \Redirect::to('index');
 }
 
-public function forgotPassword()
-{
+    public function forgotPassword()
+    {
 
-}
-public function sendConfirmationMail()
-{
+    }
 
-}
-public function show()
-{
+    public function sendConfirmationMail()
+    {
 
-}
+    }
+
+    public function show()
+    {
+
+    }
 
 public function logOut(){
     \Auth::logout();

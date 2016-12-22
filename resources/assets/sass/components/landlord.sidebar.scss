@@ -1,0 +1,229 @@
+$sidebarWidth: 330px;
+$sidebarmMobileWidth: 165px;
+$sidebarMinimize: 50px;
+$sidebarColor: #212121;
+$sidebartextColor: #818181;
+$cubic-bezier: cubic-bezier(.5,.03,.52,.93);
+$transitionMini: cubic-bezier(.87,-.41,.19,1.44);
+.sidebar {
+  margin: 0;
+  height: 100%;
+  background-color: $sidebarColor;
+  width: $sidebarWidth;
+  overflow: hidden;
+  border-right: 2px solid $baseThemePurple;
+  user-select: none;
+  @include flexbox;
+  @include transition(all 0.8s $transitionMini);
+  .sidebar-container {
+    position: relative;
+    width: 100%;
+    .sidebar-header{
+      position: relative;
+      @include flexbox;
+      @include flex-direction(row);
+      .fa{
+        cursor: pointer;
+        color: $sidebartextColor;
+        margin: 10px 5px;
+        @include font-size(20px);
+        @include transition(all 0.8s $transitionMini);
+        &:hover{
+          @include transition(all 0.3s $cubic-bezier);
+          color: $schWhite;
+        }
+        @media screen and (max-width: $mobile) {
+          margin: 7px 3px;
+        }
+      }
+      .fa-home{
+        color: $baseThemePurple;
+      }
+      .fa-bell{
+        color: $schGreen;
+      }
+      .fa-sign-out{
+        color: $schRed;
+      }
+      .fa-bars{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: scale(0) translate(-50%, -50%);
+        margin: auto;
+        z-index: -1;
+      }
+    }
+    .sidebar-nav {
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      @include flexbox;
+      @include flex-direction(column);
+      li {
+        @include flexbox;
+        cursor: pointer;
+        margin: 5px 0;
+        padding: 10px 0 10px 40px;
+        white-space: nowrap;
+        overflow: hidden;
+        @include transition(all 0.3s $cubic-bezier);
+        @media screen and (max-width: $mobile) {
+          margin: 2px 0;
+          padding: 7px 0 7px 0px;
+        }
+        list-style: none;
+        &:hover {
+          background-color: $Darkthem;
+          & > a {
+            color: $schWhite;
+          }
+          & > .fa {
+            color: $schWhite;
+          }
+        }
+        & > a {
+          @include transition(all 0.3s $cubic-bezier);
+          @include Lato {
+            color: $sidebartextColor;
+            text-decoration: none;
+            @media screen and (max-width: $mobile) {
+              @include font-size(8px);
+            }
+          }
+        }
+        & > .fa{
+          @include transition(all 0.3s $cubic-bezier);
+          margin: auto 10px;
+          @include font-size(16px);
+          color: $sidebartextColor;
+          @media screen and (max-width: $mobile) {
+            margin: auto 5px;
+            @include font-size(8px);
+          }
+        }
+        &:first-child {
+          cursor: default;
+          padding: inherit;
+          .image-profile {
+            overflow: hidden;
+            margin: 0px auto 5px auto;
+            width: 118px;
+            height: 118px;
+            border-radius: 50%;
+            background-color: $baseThemePurple;
+            border: 2px solid $schWhite;
+            @include transition(all 0.8s $transitionMini);
+            @media screen and (max-width: $mobile) {
+              width: 58px;
+              height: 58px;
+            }
+          }
+          &:hover {
+            background-color: inherit;
+            color: inherit;
+          }
+        }
+        &:last-child{
+          cursor: pointer;
+          padding: inherit;
+          margin: 30px auto;
+          & > .fa{
+            @include transition(all 0.8s $transitionMini);
+            width: 100%;
+            margin: auto;
+            @include font-size(20px);
+            @media screen and (max-width: $mobile) {
+            @include font-size(15px);
+            }
+          }
+          &:hover{
+            background-color: inherit;
+          }
+        }
+      }
+      .admin{
+        background-color: $schPink;
+        & > a {
+          color: $schWhite;
+        }
+        & > .fa {
+          color: $schWhite;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: $mobile) {
+    width: $sidebarmMobileWidth;
+  }
+}
+.sidebar-active{
+  width: $sidebarMinimize;
+  .sidebar-container {
+    .sidebar-header{
+      & > .fa-home{
+        @include opacity(0);
+        transform: translate(10px, 0px);
+        @media screen and (max-width: $mobile) {
+          transform: translate(8px, 0px);
+        }
+        background: transparent;
+      }
+      & > .fa-sign-out{
+        transform: translate(-47px, 0px);
+        @media screen and (max-width: $mobile) {
+          transform: translate(-41px, 0px);
+        }
+        @include opacity(0);
+        background: transparent;
+      }
+      & > .fa-bell{
+        transform: translate(-19px, 0px);
+        @media screen and (max-width: $mobile) {
+          transform: translate(-17px, 0px);
+        }
+        @include opacity(0);
+        background: transparent;
+      }
+      & > .fa-bars{
+        @include animation('fa-bars-out 0.8s forwards');
+        z-index: 1;
+      }
+    }
+    .sidebar-nav{
+      li{
+        padding: inherit;
+        .fa{
+          @include font-size(20px);
+          @include animation('fa-out 0.8s forwards');
+        }
+        &:first-child{
+          .image-profile{
+            height: 50%;
+          }
+        }
+        &:last-child{
+          .fa{
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@include keyframes(fa-bars-out) {
+    90%{  transform: scale(0) translate(-50%, -50%); }
+    100%{  transform: scale(1) translate(-50%, -50%); }
+}
+
+@include keyframes(fa-out) {
+  99%{ margin: auto 10px; }
+  100%{ margin: auto; }
+}
+
+@include keyframes(fa-out-mobile) {
+  99%{ margin: auto 5px; }
+  100%{ margin: auto; }
+}

@@ -83,7 +83,7 @@ html, body {
     color: #9982bb;
 }
 
-.def-estate label 
+.def-estate label
 {
     color: #9982bb;
     margin-bottom: 20px;
@@ -537,11 +537,10 @@ html, body {
     .delimiter {
         margin-top: 50px;
         margin-bottom: 50px;
-        
+
         width: 100%;
         height: 1px;
         background-color: lightgray;
 
     }
 }
-

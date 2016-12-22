@@ -20,7 +20,7 @@
                                         ['class' => 'checkbox col-md-2' , 'id' => 'amenity-'.$amenity->idAmenity]) !!}
                                 {!! Form::label('amenity-'.$amenity->idAmenity, trans('landlord.'.$amenity->label) ) !!}
                                 {!! Form::number('number['.$amenity->idAmenity.']' , 0 ,
-                                        ['class' => 'form-control' ,'style' => 'display:none', 'id'=>'number-'.$amenity->idAmenity]) !!}
+                                        ['class' => 'form-control' , 'id'=>'number-'.$amenity->idAmenity]) !!}
                             </div>
                         </div>
                     @endforeach
@@ -40,32 +40,13 @@
        $(".checkbox").change(function() {
            if (this.checked){
                $('#number-'+this.value).val(1);
-               $('#number-'+this.value).show();
            }
            else {
                $('#number-'+this.value).val(0);
-               $('#number-'+this.value).hide();
            }
 
        });
 
-       $('label').click(function(e) {
-           e.preventDefault();
-            var idInput = $('#'+$(this).attr('for'));
-           console.log(idInput.val());
-           if( idInput.prop('checked') == true)
-           {
-               idInput.prop('checked', false);
-               $('#number-'+idInput.val()).val(0);
-               $('#number-'+idInput.val()).hide();
-
-           }
-           else {
-               idInput.prop('checked', true);
-               $('#number-'+idInput.val()).val(1);
-               $('#number-'+idInput.val()).show();
-           }
-       });
     </script>
 
 @endsection

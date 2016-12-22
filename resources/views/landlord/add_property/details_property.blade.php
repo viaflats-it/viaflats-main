@@ -1,7 +1,6 @@
 @extends('layout.landlord')
 
 @section('content')
-
     <div class="row detail_property_wrapper">
         <div class="col-md-12">
             <h3>@lang('landlord.details')</h3>
@@ -12,34 +11,47 @@
                     {!! Form::hidden('ID', '5') !!}
                     {!! Form::label('type' , trans('landlord.type'). ' :') !!}
                     <div class="form-group">
-                        <input type='radio' name='type' value='0' id="radio_home"/><label for="radio_home"></label>
-                        <input type='radio' name='type' value='1' id="radio_apartment"/><label
-                                for="radio_apartment"></label>
-                        <input type='radio' name='type' value='2' id="radio_studio"/><label
-                                for="radio_studio"></label>
+                        <input type='radio' name='type' value='0' id="radio_home"
+                                {{isset($property) ? $property->type == 0 ? 'checked' : '' : ''}}/>
+                        <label for="radio_home"></label>
+
+                        <input type='radio' name='type' value='1' id="radio_apartment"
+                                {{isset($property) ? $property->type == 1 ? 'checked' : '' : ''}}/>
+                        <label for="radio_apartment"></label>
+
+                        <input type='radio' name='type' value='2' id="radio_studio"
+                                {{isset($property) ? $property->type == 2 ? 'checked' : '' : ''}}/>
+                        <label for="radio_studio"></label>
+
                         @if ($errors->has('type'))
                             <span class="help-block">
                                         <strong>{{$errors->first('type')}}</strong>
                                 </span>
                         @endif
+
                     </div>
 
                     {!! Form::label('room_type', trans('landlord.room_type').' :') !!}
                     <div class="form-group">
-                        <input type='radio' name='room_type' value='0' id="radio_entire"/><label
-                                for="radio_entire"></label>
-                        <input type='radio' name='room_type' value='1' id="radio_shared"/><label
-                                for="radio_shared"></label>
+                        <input type='radio' name='room_type' value='0' id="radio_entire"
+                                {{isset($property) ? $property->shared == 0 ? 'checked' : '' : ''}}/>
+                        <label for="radio_entire"></label>
+
+                        <input type='radio' name='room_type' value='1' id="radio_shared"
+                                {{isset($property) ? $property->shared == 1 ? 'checked' : '' : ''}}/>
+                        <label for="radio_shared"></label>
+
                         @if ($errors->has('room_type'))
                             <span class="help-block">
                                         <strong>{{$errors->first('room_type')}}</strong>
                                 </span>
                         @endif
+
                     </div>
 
                     {!! Form::label('Tsize', trans('landlord.Tsize').' :')!!}
                     <div class="input-group size30 {{$errors->has('Tsize') ? 'has-error' : ''}}">
-                        {!! Form::number('Tsize', null, ['class'=>'form-control', 'id'=>'Tsize']) !!}
+                        {!! Form::number('Tsize', isset($property) ? $property->size : '', ['class'=>'form-control', 'id'=>'Tsize']) !!}
                         <div class="input-group-addon" style="font-size: 1.2em;background-color: #9982bb;color:#ecf0f1">
                             m²
                         </div>
@@ -53,7 +65,7 @@
                         {!! Form::label('streetNumber', trans('landlord.streetNumber').' :',
                                         ['class'=>'col-md-3 control-label', ]) !!}
                         <div class="col-sm-4">
-                            {!! Form::number('streetNumber', null,
+                            {!! Form::number('streetNumber',  isset($property) ? $address->street_number : '',
                                   ['class'=>'form-control', 'id'=>'streetNumber', 'placeholder'=> trans('landlord.streetNumber')]) !!}
                         </div>
                         @if ($errors->has('streetNumber'))
@@ -68,66 +80,66 @@
                         {!! Form::label('street', trans('landlord.street').' :',
                                         ['class'=>'col-md-3 control-label', ]) !!}
                         <div class="col-sm-8">
-                            {!! Form::text('street', null,
+                            {!! Form::text('street',  isset($property) ? $address->street : '',
                                  ['class'=>'form-control', 'id'=>'street', 'placeholder'=> trans('landlord.street')]) !!}
-                       </div>
+                        </div>
                         @if ($errors->has('street'))
                             <br/>
                             <span class="help-block">
                                         <strong>{{$errors->first('street')}}</strong>
                                 </span>
                         @endif
-                   </div>
+                    </div>
 
-                   <div class="form-group {{$errors->has('complement') ? 'has-error' : ''}}">
-                       {!! Form::label('complement', trans('landlord.complement').' :',
-                                       ['class'=>'col-md-3 control-label', ]) !!}
-                       <div class="col-sm-8">
-                           {!! Form::text('complement', null,
-                                 ['class'=>'form-control', 'id'=>'complement', 'placeholder'=> trans('landlord.complement')]) !!}
-                       </div>
-                       @if ($errors->has('complement'))
-                           <br/>
-                           <span class="help-block">
+                    <div class="form-group {{$errors->has('complement') ? 'has-error' : ''}}">
+                        {!! Form::label('complement', trans('landlord.complement').' :',
+                                        ['class'=>'col-md-3 control-label', ]) !!}
+                        <div class="col-sm-8">
+                            {!! Form::text('complement',  isset($property) ? $address->complement : '',
+                                  ['class'=>'form-control', 'id'=>'complement', 'placeholder'=> trans('landlord.complement')]) !!}
+                        </div>
+                        @if ($errors->has('complement'))
+                            <br/>
+                            <span class="help-block">
                                         <strong>{{$errors->first('complement')}}</strong>
                                 </span>
-                       @endif
-                   </div>
+                        @endif
+                    </div>
 
-                   <div class="form-group {{$errors->has('zip') ? 'has-error' : ''}}">
-                       {!! Form::label('zip', trans('landlord.zip').' :',
-                                      ['class'=>'col-md-3 control-label', ]) !!}
-                       <div class="col-sm-4">
-                           {!! Form::text('zip', null,
-                                 ['class'=>'form-control', 'id'=>'zip', 'placeholder'=> trans('landlord.zip')]) !!}
-                       </div>
-                       @if ($errors->has('zip'))
-                           <br/>
-                           <span class="help-block">
+                    <div class="form-group {{$errors->has('zip') ? 'has-error' : ''}}">
+                        {!! Form::label('zip', trans('landlord.zip').' :',
+                                       ['class'=>'col-md-3 control-label', ]) !!}
+                        <div class="col-sm-4">
+                            {!! Form::text('zip',  isset($property) ? $address->zip : '',
+                                  ['class'=>'form-control', 'id'=>'zip', 'placeholder'=> trans('landlord.zip')]) !!}
+                        </div>
+                        @if ($errors->has('zip'))
+                            <br/>
+                            <span class="help-block">
                                         <strong>{{$errors->first('zip')}}</strong>
                                 </span>
-                       @endif
-                   </div>
-                   <div class="form-group {{$errors->has('city') ? 'has-error' : ''}}">
-                       {!! Form::label('city', trans('landlord.city').' :',
-                                      ['class'=>'col-md-3 control-label', ]) !!}
-                       <div class="col-sm-8">
-                           {!! Form::select('city',[ 'default' => trans('landlord.city')] + $City, null,
-                                ['class'=>'form-control', 'id'=>'city']) !!}
-                       </div>
-                       @if ($errors->has('city'))
-                           <br/>
-                           <span class="help-block">
+                        @endif
+                    </div>
+                    <div class="form-group {{$errors->has('city') ? 'has-error' : ''}}">
+                        {!! Form::label('city', trans('landlord.city').' :',
+                                       ['class'=>'col-md-3 control-label', ]) !!}
+                        <div class="col-sm-8">
+                            {!! Form::select('city',[ 'default' => trans('landlord.city')] + $City,  isset($property) ? $address->city : '',
+                                 ['class'=>'form-control', 'id'=>'city']) !!}
+                        </div>
+                        @if ($errors->has('city'))
+                            <br/>
+                            <span class="help-block">
                                         <strong>{{$errors->first('city')}}</strong>
                                 </span>
-                       @endif
-                   </div>
+                        @endif
+                    </div>
 
-                    <div class="form-group {{$errors->has('area') ? 'has-error' : ''}}" id="areaDiv" style="display: none">
+                    <div class="form-group {{$errors->has('area') ? 'has-error' : ''}}" id="areaDiv">
                         {!! Form::label('area', trans('landlord.area').' :',
                                        ['class'=>'col-md-3 control-label', ]) !!}
                         <div class="col-sm-8">
-                            {!! Form::select('area', [''=>''], null,
+                            {!! Form::select('area', [''=>''],  isset($property) ? $property->idArea : '',
                                  ['class'=>'form-control', 'id'=>'area']) !!}
                         </div>
                         @if ($errors->has('area'))
@@ -138,48 +150,48 @@
                         @endif
                     </div>
 
-                   <div class="form-group {{$errors->has('country') ? 'has-error' : ''}}">
-                       {!! Form::label('country', trans('landlord.country').' :',
-                                      ['class'=>'col-md-3 control-label', ]) !!}
-                       <div class="col-sm-8">
-                           {!! Form::text('country', null,
-                                ['class'=>'form-control', 'id'=>'country', 'placeholder'=> trans('landlord.country')]) !!}
-                       </div>
-                       @if ($errors->has('country'))
-                           <br/>
-                           <span class="help-block">
+                    <div class="form-group {{$errors->has('country') ? 'has-error' : ''}}">
+                        {!! Form::label('country', trans('landlord.country').' :',
+                                       ['class'=>'col-md-3 control-label', ]) !!}
+                        <div class="col-sm-8">
+                            {!! Form::text('country', isset($property) ? $address->country : '',
+                                 ['class'=>'form-control', 'id'=>'country', 'placeholder'=> trans('landlord.country')]) !!}
+                        </div>
+                        @if ($errors->has('country'))
+                            <br/>
+                            <span class="help-block">
                                         <strong>{{$errors->first('country')}}</strong>
                                 </span>
-                       @endif
-                   </div>
+                        @endif
+                    </div>
 
 
-                   <h3>Area</h3>
+                    <h3>Area</h3>
 
-                   <div class="form-group {{$errors->has('wsarrond') ? 'has-error' : ''}}">
-                       {!! Form::label('wsarrond', trans('landlord.wsarrond').' :',
-                                      ['class'=>'col-md-3 control-label', ]) !!}
-                       <div class="col-sm-8">
-                           {!! Form::text('wsarrond', null,
-                                ['class'=>'form-control', 'id'=>'country', 'placeholder'=> trans('landlord.wsarrond')]) !!}
-                       </div>
-                       @if ($errors->has('wsarrond'))
-                           <br/>
-                           <span class="help-block">
+                    <div class="form-group {{$errors->has('wsarrond') ? 'has-error' : ''}}">
+                        {!! Form::label('wsarrond', trans('landlord.wsarrond').' :',
+                                       ['class'=>'col-md-3 control-label', ]) !!}
+                        <div class="col-sm-8">
+                            {!! Form::text('wsarrond', null,
+                                 ['class'=>'form-control', 'id'=>'country', 'placeholder'=> trans('landlord.wsarrond')]) !!}
+                        </div>
+                        @if ($errors->has('wsarrond'))
+                            <br/>
+                            <span class="help-block">
                                         <strong>{{$errors->first('wsarrond')}}</strong>
                                 </span>
-                       @endif
-                   </div>
-                   <div id="updated_map"></div>
+                        @endif
+                    </div>
+                    <div id="updated_map"></div>
 
-                   <div class="form-group">
-                       <div id="map" style="display: inline-flex"></div>
-                       <i class="material-icons" onclick="fillInAddress()"
-                          style="cursor: pointer;background-color: #9982bb; color: white;">cached</i>
-                   </div>
-                   <br/>
-                   <button class="btn btn-default hover_viaflats form-control">Continue</button>
-                   {!! Form::close() !!}
+                    <div class="form-group">
+                        <div id="map" style="display: inline-flex"></div>
+                        <i class="material-icons" onclick="fillInAddress()"
+                           style="cursor: pointer;background-color: #9982bb; color: white;">cached</i>
+                    </div>
+                    <br/>
+                    <button class="btn btn-default hover_viaflats form-control">Continue</button>
+                    {!! Form::close() !!}
                 </div> {{--Fin col md 8--}}
 
 
@@ -230,6 +242,20 @@
     </div> {{--Fin class Row--}}
 
     <script>
+
+        $(document).ready(function () {
+            var val = $('#city').val();
+            var idProperty = '{{isset($property) ? $property->idProperty : '0'}}';
+            if (val != '' && val != 'default') {
+                setArea(val, idProperty);
+            }
+            else if (val == 'default') {
+                $('#area').empty();
+                $('#areaDiv').hide();
+            }
+        });
+
+
         $('#detail_property input').on('change', function () {
             var value = $('input[name=type]:checked', '#detail_property').val();
             var value_room = $('input[name=room_type]:checked', '#detail_property').val();
@@ -279,7 +305,6 @@
             }
 
 
-
         });
 
         var wrap = $("#recap_details");
@@ -293,29 +318,33 @@
             }
         });
 
-        $('#city').on('change', function() {
-            var val = $(this).val(); // on récupère la valeur de la city
-            if(val != '' && val != 'default') {
+        function setArea(val, idProperty){
+
                 $('#area').empty(); // on vide la liste des départements
 
                 $.ajax({
                     url: 'get_area',
-                    data: 'idCity='+ val, // on envoie $_GET['id_region']
-                    dataType: 'json',
-                    success: function(json) {
-                        $.each(json, function(index, value) {
-                            $('#area').append('<option value="'+ index +'">'+ value +'</option>');
-                        });
+                    data: 'idCity=' + val + '&idProperty=' + idProperty, // on envoie $_GET['id_region']
+                    success: function (data) {
+                        console.log(data);
+                        $('#area').append(data);
                     }
                 });
                 $('#areaDiv').show();
 
 
+
+        };
+
+        $('#city').on('change', function () {
+            var val = $(this).val(); // on récupère la valeur de la city
+            var idProperty = 0;
+            if (val != '' && val != 'default') {
+                setArea(val, idProperty);
             }
-            else if(val == 'default'){
+            else if (val == 'default') {
                 $('#area').empty();
                 $('#areaDiv').hide();
-
             }
         });
 
@@ -350,7 +379,7 @@
             var address = '';
             address = address + $('#streetNumber').val() + ',';
             address = address + $('#street').val() + ',';
-            address = address + $('#complement').val() + ',';
+//            address = address + $('#complement').val() + ',';
             address = address + $('#city').find(":selected").text() + ',';
             address = address + $('#zip').val() + ',';
             address = address + $('#country').val();
@@ -363,7 +392,7 @@
 
                     $('#Recapaddress').html(address);
 
-                     placeMarker(results[0].geometry.location);
+                    placeMarker(results[0].geometry.location);
 
                     var content = "<div class='alert alert-success'><span>Map successfully update</span></div>";
                     $('#updated_map').html(content);
@@ -387,7 +416,7 @@
             });
 
             function placeMarker(location) {
-                if ( marker ) {
+                if (marker) {
                     marker.setPosition(location);
                 } else {
                     marker = new google.maps.Marker({

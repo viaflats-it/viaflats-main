@@ -1,0 +1,169 @@
+@mixin label($animation) {
+  @include transition( 0.2s $animation);
+  width: 100%;
+  @include Lato{
+    font-weight: bold;
+  };
+  padding: 3px 0px;
+  @content;
+}
+
+@mixin input($animation) {
+  margin: 0;
+  padding: 8px 6px;
+  @include x-appearance(none);
+  @include rounded(0px);
+  border: 1px solid $borderInput;
+  background-color: $backgroundWhite;
+  @include Lato;
+  @include transition( 0.2s $animation);
+  @include box-shadow(0px, 1px, 1px, rgba(0,0,0,0.05));
+  &:focus, &:active{
+    border: 1px solid $baseThemePurple;
+  }
+  &:hover{
+    border: 1px solid $baseThemePurple;
+    @include box-shadow(0px, 0px, 3px, $baseThemePurple);
+  }
+  @content;
+}
+
+@mixin select($animation){
+  margin: 0;
+  position: relative;
+  @include flexbox;
+  @include flex-direction(column);
+  input{
+    position: absolute;
+    border: none;
+    background: transparent;
+    outline: 0;
+    cursor: pointer;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 439.4px;
+    @media screen and (max-width: $mobile) {
+      width: 199.4px;
+    }
+    color: transparent;
+    @include rounded(0px);
+    margin: 0;
+    padding: 0;
+    @include x-appearance(none);
+    @include transition( 0.2s $animation);
+    &:focus, &:active{
+      border: 1px solid $baseThemePurple;
+      &:hover{
+        border: 1px solid $baseThemePurple;
+        @include box-shadow(0px, 0px, 0px, $baseThemePurple);
+      }
+    }
+    &:hover{
+      border: 1px solid $baseThemePurple;
+      @include box-shadow(0px, 0px, 3px, $baseThemePurple);
+    }
+  }
+  .fa{
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    @include transition( 0.2s $animation);
+    @include transform(translateY(-50%));
+  }
+  .input-hover{
+    margin: 0;
+    padding: 8px 6px;
+    @include rounded(0px);
+    border: 1px solid $borderInput;
+    background-color: $backgroundWhite;
+    @include Lato;
+    @include transition( 0.2s $animation);
+    @media screen and (max-width: $mobile) {
+      @include font-size(10px);
+    }
+  }
+  .dropwdown-ul{
+    z-index: -1;
+    position: absolute;
+    margin: 0;
+    padding: 0px;
+    background-color: $backgroundWhite;
+    top: 0;
+    border-left: 1px solid $baseThemePurple;
+    border-bottom: 1px solid $baseThemePurple;
+    border-right: 1px solid $baseThemePurple;
+    list-style: none;
+    cursor: pointer;
+    width: 439.4px;
+    @media screen and (max-width: $mobile) {
+      width: 199.4px;
+      top: -5px;
+    }
+    @include opacity(0);
+    @include transition( 0.2s $animation);
+    .dropwdown-li{
+      @include Lato();
+      @media screen and (max-width: $mobile) {
+        @include font-size(10px);
+      }
+      padding: 4px 6px;
+      &:hover{
+        background-color: $baseThemePurple;
+        color: $white;
+      }
+    }
+  }
+  & > input:focus ~ .fa{
+    @include transform(translateY(-50%) rotate(180deg));
+  }
+  & > input:focus ~ .dropwdown-ul{
+    z-index: 999999;
+    @include transform(translateY(35px));
+    @include opacity(1);
+  }
+  @content;
+}
+
+@mixin textarea($animation) {
+  resize: none;
+  @include input($animation);
+  @content;
+}
+
+@mixin checkBox($animation){
+  @include input($animation);
+  @content;
+}
+
+@mixin phone($animation) {
+  @include input($animation);
+  width: 100%;
+  padding-right: 6px;
+  padding-left: 52px;
+}
+
+@mixin button($animation, $color, $bg, $hover){
+  cursor: pointer;
+  padding: 8px 6px;
+  @include x-appearance(none);
+  @include rounded(0px);
+  border-radius: 0;
+  border: 1px solid $borderInput;
+  background-color: $bg;
+  @include Lato{
+    color: $color;
+  };
+  @include box-shadow(0px, 1px, 1px, rgba(0,0,0,0.05));
+  @include transition( 0.2s $animation);
+  &:hover{
+    border: 1px solid $hover;
+    @include box-shadow(0px, 0px, 3px, $hover);
+  }
+  &:focus, &:active{
+    border: 1px solid $hover;
+  }
+
+  @content;
+}

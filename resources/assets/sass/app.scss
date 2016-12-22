@@ -1,10 +1,39 @@
 
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+/* Fonts & Vars also base template & mixins */
 
-// Variables
-@import "variables";
+@import 'inc/fonts';
+@import 'inc/vars';
+@import 'inc/mixins';
+@import 'inc/bases';
+@import 'inc/font-awesome/font-awesome';
+@import 'inc/forms';
 
-// Bootstrap
+/*
+intl-tel-input modify
+
+$flagsImagePath: "../images/flags/" !default; in ../../../node_modules/intl-tel-input/src/css/intlTelInput.scss:
+
+*/
+
+@import 'inc/intl-tel-input/src/css/intlTelInput';
+
+/* Dropzone */
+
+@import 'inc/dropzone/basic';
+@import 'inc/dropzone/dropzone';
+
+/* Jquery-ui */
+
+@import "inc/jquery-ui/assets/sass/jquery-ui";
+
+/* Views */
+
+@import 'pages/back';
+
+
+/* Components */
+
+
+/* Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "boot";
+*/

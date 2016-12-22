@@ -26,4 +26,10 @@ class City extends Model
     {
         return $this->hasMany('App\Photographer', 'idCity');
     }
+
+    public function city()
+    {
+        return $this->find(all);
+    }
+
 }

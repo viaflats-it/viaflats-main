@@ -41,5 +41,9 @@ class Room extends Model
         return $this->morphMany('App\Estate', 'estateMorph' , 'type_element' , 'idElement');
     }
 
+    public function media_room()
+    {
+        return $this->hasMany('App\Media_room', 'idRoom');
+    }
 
 }

@@ -6,41 +6,46 @@ use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
 {
-    protected $table = 'property';
+    //
+    protected $table= 'property';
 
     protected $primaryKey = 'idProperty';
+
     protected $fillable = [
-        'idLandlord', 'type', 'shared', 'idArea', 'size', 'creation_date'
+        'idProperty', 'idLandlord', 'type', 'shared', 'idArea', 'size'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    protected $dates = ['creation_date'];
 
-
-    public function rooms()
-    {
-        return $this->hasMany('App\Room', 'idProperty');
-    }
-
-
-    public function address()
-    {
-        return $this->belongsTo('App\Address', 'idAddress');
-    }
+    public $timestamps = false;
 
     public function area()
     {
         return $this->belongsTo('App\Area', 'idArea');
     }
 
+    public function landlord()
+    {
+        return $this->belongsTo('App\Landlord', 'idLandlord');
+    }
+
+    public function property_restrictions()
+    {
+        return $this->hasMany('App\Property_restriction', 'idProperty');
+    }
 
     public function estates()
     {
         return $this->morphMany('App\Estate', 'estateMorph', 'type_element', 'idElement');
     }
 
-    public $timestamps = false;
+    public function rooms()
+    {
+        return $this->hasMany('App\Room','idProperty');
+    }
+
+    public function address()
+    {
+        return $this->belongsTo('App\Address', 'idAddress');
+    }
 }

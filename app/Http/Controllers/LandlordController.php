@@ -10,16 +10,16 @@ use App\Fee;
 use App\Property;
 use App\Restriction;
 use App\Room;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Landlord;
 use App\User;
+use App\Payment_way;
 use Illuminate\support;
 use Illuminate\Support\Facades\Input;
 use Image;
 use App\City;
 use App\Area;
+use App\Booking_pack;
 use App\Type_room;
 use App\Tenant;
 use App\ParentTenant;
@@ -29,15 +29,19 @@ class LandlordController extends Controller
 {
     public function showDetailsProperty()
     {
-        $City = City::pluck('libelle', 'idCity')->all();
+        $City = City::pluck('libelle', 'idCity')->all(); //get all cities
 
-        return view('landlord/add_property/details_property', compact('City'));
+        if (\Session::get('idProperty')) {  //if an property already exist in this session
+            $property = Property::find(\Session::get('idProperty'));
+            $address = $property->address()->first();
+        }
+
+        return view('landlord/add_property/details_property', compact('City', 'property', 'address'));
     }
 
     public function showDefinitionProperty()
     {
-
-        $piecesList = Type_room::pluck('label', 'idTypeRoom')->map(function ($pieces) {
+        $piecesList = Type_room::where('label', '!=', 'studio')->pluck('label', 'idTypeRoom')->map(function ($pieces) {
             return trans(sprintf('landlord.%s', $pieces));
         })->toArray();
 
@@ -47,14 +51,33 @@ class LandlordController extends Controller
         return view('landlord/add_property/def_prop', compact('piecesList', 'pieces', 'fields', 'ID'));
     }
 
+    public function showDefinitionAreaStudio()
+    {
+        if (!\Session::has('idProperty')) {
+            return \Redirect::to('add_property');
+        }
+
+        $property = Property::find(\Session::get('idProperty'));
+        $amenities = Amenities::all();
+        return view('landlord/add_property/def_area_studio', compact('property', 'amenities'));
+    }
+
     public function showDefinitionArea()
     {
-        $numb = \Input::get('number');
-        $property = Property::find(24);
 
+        if (!\Input::has('number')) {
+            return \Redirect::to('definition_area?number=0');
+        } elseif (!\Session::has('idProperty')) {
+            return \Redirect::to('add_property');
+        }
+        $redirect = "";
+        $numb = \Input::get('number');
+        $property = Property::find(\Session::get('idProperty'));
+
+        $idBedRoom = Type_room::where('label' , 'bedroom')->first()->idTypeRoom;
 
         if ($property->shared == 1) {
-            $rooms = $property->rooms->where('idTypeRoom', '!=', 3);
+            $rooms = $property->rooms->where('idTypeRoom', '!=', $idBedRoom);
             $key = 0;
             foreach ($rooms as $room) {
                 if ($room != null) {
@@ -62,28 +85,50 @@ class LandlordController extends Controller
                     $key++;
                 }
             }
-
+            $redirect = 'definition_estate_shared?number=0';
         } else {
             $roomArray = $property->rooms;
+            $redirect = 'definition_estate';
         }
 
 
         if (isset($roomArray[$numb])) {
             $room = $roomArray[$numb];
         } else {
-            return \Redirect::to('definition_estate');
+            return \Redirect::to($redirect);
         }
-
 
         $typeRoom = $room->type_room()->first();
         $amenities = $typeRoom->amenities()->get();
 
         return view('landlord/add_property/def_area', compact('room', 'typeRoom', 'amenities', 'numb'));
+
+
+
     }
 
     public function showDefinitionEstate()
     {
-        $property = Property::find(24);
+//        $property = Property::find(\Session::get('idProperty'));
+        $property = Property::find(\Session::get('idProperty'));
+
+        $typeRoom = \DB::table('type_room')->get();
+
+        foreach ($typeRoom as $value) {
+            if ($value->label == 'bedroom')
+                $idBedroom = $value->idTypeRoom;
+
+            if ($value->label == 'bathroom')
+                $idBathRoom = $value->idTypeRoom;
+
+            if ($value->label == 'toilet')
+                $idToilet = $value->idTypeRoom;
+
+            if ($value->label == 'kitchen')
+                $idKitchen = $value->idTypeRoom;
+        }
+
+
         $restrictions = Restriction::all();
         $type = "";
         $address = $property->address()->first();
@@ -105,21 +150,37 @@ class LandlordController extends Controller
         }
 
         $rooms = $property->rooms()->get();
-        foreach ($rooms as $room) {
-            $roomsLabel[$room->idRoom] = $room->type_room()->first();
-            $roomsAmenities[$room->idRoom] = $room->amenities()->get();
+
+        foreach ($rooms as $value) {
+            $roomsLabel[$value->idRoom] = $value->type_room()->first();
+            $roomsAmenities[$value->idRoom] = $value->amenities()->get();
         }
 
-        return view('landlord/add_property/def_estate', compact('fees', 'roomsAmenities', 'area', 'property', 'rooms', 'restrictions', 'type', 'roomsLabel', 'address'));
 
+        foreach ($rooms as $singleRoom) {
+            switch ($singleRoom->idTypeRoom) {
+                case $idBathRoom :
+                    $bathrooms[$singleRoom->idRoom] = $singleRoom->size;
+                    break;
+
+                case $idToilet :
+                    $toilets[$singleRoom->idRoom] = $singleRoom->size;
+                    break;
+
+                case $idKitchen :
+                    $kitchens[$singleRoom->idRoom] = $singleRoom->size;
+
+            }
+        }
+
+        return view('landlord/add_property/def_estate', compact('roomsAmenities','roomsLabel','kitchens', 'toilets', 'privateRooms', 'restrictionsEstate', 'feesEstate', 'estate', 'range_period', 'bathrooms', 'roomLabel', 'fees', 'roomAmenities', 'area', 'property', 'rooms', 'restrictions', 'type', 'address'));
 
     }
 
     public function showDefinitionEstateShared()
     {
-        $property = Property::find(24);
-
-
+//      $property = Property::find(\Session::get('idProperty'));
+        $property = Property::find(\Session::get('idProperty'));
         $numb = \Input::get('number');
         $typeRoom = \DB::table('type_room')->get();
 
@@ -129,6 +190,12 @@ class LandlordController extends Controller
 
             if ($value->label == 'bathroom')
                 $idBathRoom = $value->idTypeRoom;
+
+            if ($value->label == 'toilet')
+                $idToilet = $value->idTypeRoom;
+
+            if ($value->label == 'kitchen')
+                $idKitchen = $value->idTypeRoom;
         }
 
         $rooms = $property->rooms()->get();
@@ -162,21 +229,37 @@ class LandlordController extends Controller
         }
 
 
-        $bathroom = $property->rooms()->where('idTypeRoom', '=', $idBathRoom)->pluck('size', 'idRoom');
-
         foreach ($rooms as $value) {
             $roomsLabel[$value->idRoom] = $value->type_room()->first();
             $roomsAmenities[$value->idRoom] = $value->amenities()->get();
         }
 
-        return view('landlord/add_property/def_estate_shared', compact('bathroom', 'numb', 'roomsLabel', 'rooms', 'fees', 'roomsAmenities', 'area', 'property', 'room', 'restrictions', 'type', 'address'));
+
+        foreach ($rooms as $singleRoom) {
+            switch ($singleRoom->idTypeRoom) {
+                case $idBathRoom :
+                    $bathrooms[$singleRoom->idRoom] = $singleRoom->size;
+                    break;
+
+                case $idToilet :
+                    $toilets[$singleRoom->idRoom] = $singleRoom->size;
+                    break;
+
+                case $idKitchen :
+                    $kitchens[$singleRoom->idRoom] = $singleRoom->size;
+
+            }
+        }
+
+
+        return view('landlord/add_property/def_estate_shared', compact('toilets','kitchens','bathrooms', 'numb', 'roomsLabel', 'rooms', 'fees', 'roomsAmenities', 'area', 'property', 'room', 'restrictions', 'type', 'address'));
 
 
     }
 
     public function showUpdateEstateRoom()
     {
-        $property = Property::find(24);
+        $property = Property::find(\Session::get('idProperty'));
 
         $typeRoom = \DB::table('type_room')->get();
 
@@ -277,7 +360,8 @@ class LandlordController extends Controller
 
     public function showFinalPreview()
     {
-        $property = Property::find(24);
+        $property = Property::find(\Session::get('idProperty'));
+        $property = Property::find(13);
 
         if ($property->type == 0) {
 
@@ -340,7 +424,11 @@ class LandlordController extends Controller
 
     public function appointment()
     {
-        $property = Property::find(24);
+        $property = Property::find(\Session::get('idProperty'));
+
+        $property->status = true;
+        $property->save();
+
         $city = City::find($property->area()->first()->idCity);
         $photographers = $city->photographers()->get();
 
@@ -348,11 +436,9 @@ class LandlordController extends Controller
             $blop = unserialize($photographer->availabilities);
 
 
-            if (is_array($blop) || is_object($blop))
-            {
-                foreach ($blop as $key => $value)
-                {
-                   $date[$key] = $value['date'];
+            if (is_array($blop) || is_object($blop)) {
+                foreach ($blop as $key => $value) {
+                    $date[$key] = $value['date'];
                 }
             }
 
@@ -363,14 +449,129 @@ class LandlordController extends Controller
 
     function showProperties()
     {
-        return view('landlord/my_properties');
+        $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
+        $properties = $landlord->property()->get();
+        foreach ($properties as $property) {
+            //Get Title
+            if ($property->type == 0) {
+                $title[$property->idProperty] = 'House ' . $property->address()->first()->street;
+            } elseif ($property->type == 1) {
+                $title[$property->idProperty] = 'Apartment ' . $property->address()->first()->street;
+            } else {
+                $title[$property->idProperty] = 'Studio ' . $property->address()->first()->street;
+            }
+            //Get City
+            $prop_city[$property->idProperty] = $property->address()->first()->city;
+            //Get Area
+            $prop_area[$property->idProperty] = $property->area()->first()->label;
 
+            //Count estate foreach
+            if ($property->rooms()->first() != '') {
+                $nbEstate[$property->idProperty] = $property->rooms()->get()->count();
+                $picture[$property->idProperty] = $property->rooms()->first()->estates()->first()->picture;
+            } else {
+                $nbEstate[$property->idProperty] = $property->estates()->get()->count();
+                $picture[$property->idProperty] = $property->estates()->first()->picture;
+            }
+        }
+        return view('landlord/my_properties', compact('properties', 'prop_city', 'title', 'prop_area', 'nbEstate', 'picture'));
+
+    }
+
+    public function compare($a, $b)
+    {
+        return strcmp($b->creation_date, $a->creation_date);
+    }
+
+    public function countdown($date)
+    {
+        $diff = strtotime($date) + 48 * 60 * 60 - time();
+        $return = array();
+        $i_restantes = $diff / 60;
+        $H_restantes = $i_restantes / 60;
+        $d_restants = $H_restantes / 24;
+
+        if ($diff < 0) {
+            $return['status'] = 'expired';
+        } else {
+            $return['second'] = floor($diff % 60); // Secondes
+            $return['min'] = floor($i_restantes % 60); // Minutes
+            $return['hour'] = floor($H_restantes % 24); // Hour
+            $return['day'] = floor($d_restants); // Days
+            $return['status'] = 'notExpired';
+        }
+        return $return;
     }
 
     public function showBooking()
     {
-        return view('landlord/my_booking');
+        $landlord = User::find(\Auth::user()->idPerson)->landlord()->first();
+        $property = $landlord->property()->get();
+        $booking = array();
+        $pack = array();
+        foreach ($property as $p) {
+            $var = array();
+            if ($p->rooms()->first() != '') {
+                $rooms = $p->rooms()->get();
+                foreach ($rooms as $room) {
+                    if ($room->estates()->first() != null) {
+                        $var[] = $room->estates()->first();
+                    }
+                }
+            } else {
+                $var[] = $p->estates()->first();
+            }
+            foreach ($var as $v) {
+                $book = $v->booking()->get();
+                foreach ($book as $b) {
+                    //Countdown
+                    if ($b->status == 'pending') {
+                        $count = LandlordController::countdown($b->creation_date);
+                        if ($count['status'] == 'expired') {
+                            $b->status = 'expired';
+                            $b->save();
+                        } else {
+                            $countdown[$b->idBooking] = $count;
+                        }
+                    } elseif ($b->status == 'waiting') {
+                        $count = LandlordController::countdown($b->confirm_date);
+                        if ($count['status'] == 'expired') {
+                            $b->status = 'expired';
+                            $b->save();
+                        } else {
+                            $countdown[$b->idBooking] = $count;
+                        }
+                    }
 
+                    //Multi-booking
+                    if ($b->idBookingPack != null) {
+                        $pack[$b->idBookingPack] = $b->bookingPack()->first();
+                        $packEstate[$b->idBookingPack] = $b->estate()->first();
+                        $packPerson[$b->idBookingPack] = $b->tenant()->first()->person()->first();
+                        $bookingCount[$b->idBookingPack] = $b->bookingPack()->first()->bookings()->count();
+                        $checkin[$b->idBookingPack] = $b->checkin;
+                        $checkout[$b->idBookingPack] = $b->checkout;
+                        $status[$b->idBookingPack] = $b->status;
+                        if ($p->type == 0) {
+                            $title[$b->idBookingPack] = 'House ' . $p->address()->first()->street;
+                        } elseif ($p->type == 1) {
+                            $title[$b->idBookingPack] = 'Apartment ' . $p->address()->first()->street;
+                        } else {
+                            $title[$b->idBookingPack] = 'Studio ' . $p->address()->first()->street;
+                        }
+                    } else {
+                        $booking[$b->idBooking] = $b;
+                        $estate[$b->idBooking] = $v;
+                        $person[$b->idBooking] = $b->tenant()->first()->person()->first();
+                    }
+                }
+            }
+        }
+        usort($pack, array($this, 'compare'));
+        if ($booking) {
+            usort($booking, array($this, 'compare'));
+        }
+        return view('landlord/my_booking', compact('estate', 'booking', 'person', 'countdown', 'packEstate', 'pack', 'packPerson', 'bookingCount', 'checkin', 'checkout', 'title', 'status'));
     }
 
     public function showUpdateAvailabilities()
@@ -393,9 +594,64 @@ class LandlordController extends Controller
 
     public function showProfile()
     {
-        $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
-        return view('landlord/profile_landlord', compact('landlord'));
 
+        $payment = array();
+        foreach (Payment_way::all() as $p) {
+            $payment[$p->idPayment] = $p->label;
+        }
+        $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
+        $land_payment = array();
+        foreach ($landlord->payment_way()->get() as $p) {
+            array_push($land_payment, $p->idPayment);
+        }
+        return view('landlord/profile_landlord', compact('landlord', 'payment', 'land_payment'));
+
+    }
+
+    public function updateAvailabilities()
+    {
+        $week = array();
+
+        for ($i = 0; $i < 24; $i++) {
+            $week["monday_" . $i] = \Input::all()["monday_" . $i];
+            $week["tuesday_" . $i] = \Input::all()["tuesday_" . $i];
+            $week["wednesday_" . $i] = \Input::all()["wednesday_" . $i];
+            $week["thursday_" . $i] = \Input::all()["thursday_" . $i];
+            $week["friday_" . $i] = \Input::all()["friday_" . $i];
+            $week["saturday_" . $i] = \Input::all()["saturday_" . $i];
+            $week["sunday_" . $i] = \Input::all()["sunday_" . $i];
+        }
+        $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
+        $array = serialize($week);
+        $landlord->contact_time = $array;
+        $landlord->save();
+        return \Redirect::to('profile');
+    }
+
+    public function updateAbsences()
+    {
+        $rules = ['absence_begin' => 'required', 'absence_end' => 'required'];
+        $inputData = ['absence_begin' => \Input::get('absence_begin'), 'absence_end' => \Input::get('absence_end')];
+
+        $validator = \Validator::make(\Input::all(), $rules);
+
+
+        if ($validator->fails()) {
+            return \Redirect::to('update_availabilities')->withErrors($validator);
+        } else {
+            $datebegin = strtotime($inputData['absence_begin']);
+            $dateend = strtotime($inputData['absence_end']);
+            $today = strtotime(date('Y-m-d'));
+            if ($datebegin > $dateend || $datebegin < $today) {
+                $validator->errors()->add('wrong', trans('landlord.wrong_dates'));
+                return \Redirect::to('update_availabilities')->withErrors($validator);
+            }
+            $landlord = Landlord::where('idPerson', '=', \Auth::user()->idPerson)->first();
+            $array = serialize(['first_day' => $inputData['absence_begin'], 'last_day' => $inputData['absence_end']]);
+            $landlord->contact_away = $array;
+            $landlord->save();
+        }
+        return \Redirect::to('profile');
     }
 
     public function disable()
@@ -452,7 +708,7 @@ class LandlordController extends Controller
             $image = \Input::file('image');
             $filename = \Auth::user()->idPerson . '.' . $image->getClientOriginalExtension();
 
-            $path = public_path('profilepics/' . $filename);
+            $path = public_path('images/profiles/' . $filename);
 
             Image::make($image->getRealPath())->save($path);
             $user->profile_picture = $filename;
@@ -515,9 +771,11 @@ class LandlordController extends Controller
         $landlord->corporate = $userData['corporate'];
         $landlord->company_website = $userData['company_web'];
         $landlord->save();
-
-
-//        }
+        if (isset($formFields['payment_way'])) {
+            $landlord->payment_way()->sync($formFields['payment_way']);
+        } else {
+            $landlord->payment_way()->detach();
+        }
     }
 
     public function verifyAccount($code)
@@ -570,6 +828,7 @@ class LandlordController extends Controller
 
     public function postDetailsProperty()
     {
+//        return \Input::all();
         $validator = \Validator::make(\Input::all(), [
             'type' => 'required',
             'room_type' => 'required',
@@ -578,7 +837,7 @@ class LandlordController extends Controller
             'street' => 'required',
             'zip' => 'required|alpha_num',
             'city' => 'required',
-            'area' => 'required',
+//            'area' => 'required',
             'country' => 'required'
             // 'wsarrond' => 'required',
         ]);
@@ -587,9 +846,13 @@ class LandlordController extends Controller
             return \Redirect::to('add_property')->withErrors($validator)->withinput();
         }
 
-        $property = new Property();
+        if (\Session::get('idProperty')) {
+            $property = Property::find(\Session::get('idProperty'));
+        } else {
+            $property = new Property();
+            $property->idLandlord = \Auth::user()->landlord()->first()->idLandlord;
+        }
 
-        $property->idLandlord = \Auth::user()->idPerson;
         $property->type = \Input::get('type');
         $property->shared = \Input::get('room_type');
         $property->idArea = \Input::get('area');
@@ -608,15 +871,28 @@ class LandlordController extends Controller
         $address->save();
         $address->property()->save($property);
 
-        \Session::put('ID', $property->idProperty);
+        \Session::put('idProperty', $property->idProperty);
 
-        return \Redirect::to('definition_property');
+
+        if ($property->type == 2) {
+            $idStudio = Type_room::where('label', 'studio')->first()->idTypeRoom;
+
+            $room = new Room();
+            $room->size = $property->size;
+            $room->idTypeRoom = $idStudio;
+
+            $property->rooms()->save($room);
+
+            return \Redirect::to('definition_area?number=0');
+        } else {
+            return \Redirect::to('definition_property');
+        }
     }
 
     public function postDefinitionProperty()
     {
-//        return \Input::all();
-        $property = Property::find(24);
+//       return \Input::all();
+        $property = Property::find(\Session::get('idProperty'));
         $numberValue = \Input::get('number');
         $count = 0;
 
@@ -656,6 +932,7 @@ class LandlordController extends Controller
 
         $room = Room::find(\Input::get('room'));
 
+        $room->amenities()->detach();
         foreach (\Input::get('amenities') as $amenity) {
             $new = Amenities::find($amenity);
             $number = \Input::get('number');
@@ -679,25 +956,31 @@ class LandlordController extends Controller
             'prefCheckin' => 'integer',
             'prefCheckout' => 'integer',
             'rentalSub' => 'integer',
-            'dateIn' => 'required',
-            'bookingFlex' => 'integer'
+            'bookingFlex' => 'integer',
+            'glazing' => 'required',
+            'windows' => 'required|min:0|integer',
+            'disposition' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return \Redirect::to('definition_estate')->withErrors($validator)->withinput();
+            return \Redirect::to('definition_estate')->withErrors($validator);
         }
 
         $estate = New Estate();
+        $property = Property::find(\Session::get('idProperty'));
+
         $estate->guest_nb = \Input::get('guest');
+        $estate->shared = \Input::get('radioShared') == null ? '0' : \Input::get('radioShared');
         $estate->rent = \Input::get('price');
         $estate->mini_stay = \Input::get('miniRent');
         $estate->booking_flexibility = \Input::get('bookingFlex');
         $estate->checkin_preference = \Input::get('prefCheckin');
         $estate->checkout_preference = \Input::get('prefCheckout');
-        $estate->rental_sub = \Input::get('rentalSub') ? \Input::get('rentaSub') : 0;
+        $estate->rental_sub = \Input::get('rentalSub');
+        $estate->windows = \Input::get('windows');
+        $estate->double_glazing = \Input::get('glazing');
+        $estate->street_side = \Input::get('disposition');
         $estate->furnished = \Input::get('furnished');
-
-        $property = Property::find(24);
 
         $range_period = array();
         for ($i = 0; $i < count(\Input::get('priceRange')); $i++) {
@@ -711,16 +994,34 @@ class LandlordController extends Controller
 
         $property->estates()->save($estate);
 
+
+        $estate->restrictions()->detach();
+        if (\Input::get('restriction') != null) {
+            foreach (\Input::get('restriction') as $restriction) {
+                $newRestriction = Restriction::find($restriction);
+
+
+                $estate->restrictions()->save($newRestriction);
+
+            }
+        }
+
+
         foreach (\Input::get('priceFee') as $key => $fee) {
             if ($fee > 0) {
                 $newFee = Fee::find($key);
 
                 if (\Input::get('slide.' . $key) == "1") {
-                    $monthly = 1;
-                } else {
                     $monthly = 0;
+                } else {
+                    $monthly = 1;
                 }
-                $estate->fees()->save($newFee, ['price' => $fee, 'monthly' => $monthly]);
+
+                if ($estate->fees()->where('Estate_fee.idFee', $key)->first() != null) {
+                    $estate->fees()->updateExistingPivot($key, ['price' => $fee, 'monthly' => $monthly]);
+                } else {
+                    $estate->fees()->save($newFee, ['price' => $fee, 'monthly' => $monthly]);
+                }
             }
         }
 
@@ -849,7 +1150,6 @@ class LandlordController extends Controller
             $range_period[$i]['price'] = \Input::get('priceRange.' . $i);
         }
 
-
         $estate->restrictions()->detach();
         if (\Input::get('restriction') != null) {
             foreach (\Input::get('restriction') as $restriction) {
@@ -910,8 +1210,25 @@ class LandlordController extends Controller
     public function getArea()
     {
         $idCity = \Input::get('idCity');
-        $Area = Area::where('idCity', '=', $idCity)->pluck('label', 'idArea');
-        return json_encode($Area->all());
+        $idProperty = \Input::get('idProperty');
+        $areaDefault = 0;
+
+        if ($idProperty != 0) {
+            $property = Property::find($idProperty);
+            $areaDefault = $property->area()->first()->idArea;
+        }
+
+        $area = Area::where('idCity', '=', $idCity)->get();
+
+        $content = "";
+
+        foreach ($area as $singleArea) {
+            $content .= '<option value="' . $singleArea->idArea . '"';
+            $content .= $singleArea->idArea == $areaDefault ? 'selected' : '';
+            $content .= '>' . $singleArea->label . '</option>';
+        }
+
+        return $content;
     }
 
     public function getTranslation()

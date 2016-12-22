@@ -1,7 +1,7 @@
-<?php
+<?php 
 
 $client = new Google_Client();
-$client->setAuthConfig('../config\credentials.json');
+$client->setAuthConfig('../config/credentials.json');
 $client->setScopes(['profile', 'email']);
 // Your redirect URI can be any registered URI, but in this example
 // we redirect back to this same page

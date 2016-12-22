@@ -6,21 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
-    protected $table = 'area';
+    //
+    protected $table= 'area';
 
     protected $primaryKey = 'idArea';
+
     protected $fillable = [
-        'label','idCity'
+        'idArea', 'idCity', 'label'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-
-
     public $timestamps = false;
+
+    public function city()
+    {
+        return $this->belongsTo('App\City', 'idCity');
+    }
+
+    public function Property()
+    {
+        return $this->hasOne('App\Property', 'idArea');
+    }
 
     public function properties(){
         return $this->hasMany('App\Property','idArea');

@@ -39,24 +39,28 @@
                         {!! Form::label('priceRange', 'Range Price :', ['class' => 'col-md-4']) !!}
 
                         <div id="rangePriceList" class="form-group col-md-12">
-                            <div id="rangePrice1">
-                                <div class="col-md-12">
-                                    <span class="col-md-3">From month </span>
-                                    {!! Form::number('from[]' ,0,
-                                        ['readonly', 'class' => 'form-control', 'id' => 'from1']) !!}
-                                    <span> --> </span>
-                                    {!! Form::number('to[]', null,
-                                        ['min' => 0,'class' => 'form-control', 'placeholder'=> 'to...', 'id'=>'to1' ]) !!}
+                                <div id="rangePrice1">
+                                    <div class="col-md-12">
+                                        <span class="col-md-3">From month </span>
+                                        {!! Form::number('from[]' ,0,
+                                            ['readonly','class' => 'form-control', 'id' => 'from1']) !!}
+                                        <span> --> </span>
+                                        {!! Form::number('to[]',0,
+                                            ['min' => 0,'class' => 'form-control', 'id'=>'to1' ]) !!}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <span class="col-md-3">Range's Price : </span>
+                                        {!! Form::number('priceRange[]', 0,
+                                                ['id'=>'priceRange1','class' => 'form-control']) !!}
+
+                                        <button type="button" id="bRange1" class="btn btn-default addRange"
+                                                style="margin-left:20px">Add Range
+                                        </button>
+                                        <button type="button" id="bRangeDelete1" class="btn btn-default delRange"
+                                                style=" margin-right: 15%" disabled >Delete
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <span class="col-md-3">Range's Price : </span>
-                                    {!! Form::number('priceRange[]', null,
-                                            ['id'=>'priceRange1','class' => 'form-control', 'placeholder' => '€ for the range']) !!}
-                                    <button  type="button" id="bRange1" class="btn btn-default addRange"
-                                            style="float: right; margin-right: 15%">Add a Range
-                                    </button>
-                                </div>
-                            </div>
                         </div>
 
                     </div>
@@ -95,37 +99,28 @@
 
                     <div class="form-group">
                         {!! Form::radio('bookingInfo' , 0, 0,['id'=>'book_nothing']) !!}
+
                         {!! Form::label('book_nothing') !!}
-                        {!! Form::radio('bookingInfo' , 1, 0,['id'=>'book_flex']) !!}
+                        {!! Form::radio('bookingInfo' , 1, 0 ,['id'=>'book_flex']) !!}
                         {!! Form::label('book_flex') !!}
-                        {!! Form::radio('bookingInfo' , 2, 0, ['id'=>'book_preference']) !!}
+                        {!! Form::radio('bookingInfo' , 2,  0, ['id'=>'book_preference']) !!}
                         {!! Form::label('book_preference') !!}
                     </div>
 
-                    <div class="form-group form-inline row">
-                        {!! Form::label('windows', 'Windows number :', ['class' => 'col-md-4']) !!}
-                        {!! Form::number('windows', 0, ['min' => '0','class'=>'form-control size30']) !!}
-                        <div class="form-group">
-                            {!! Form::select('glazing' , [1 => 'Double Glazing' , 0 => 'Simple Glazing'], null ,
-                                 ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-
-
-                    <div class="form-group form-inline row">
-                        {!! Form::label('disposition', 'Disposition : ', ['class' => 'col-md-4']) !!}
-                        {!! Form::select('disposition', [1 => 'Street Side', 0 => 'Other'], null, ['class' => 'form-control']) !!}
-                    </div>
-                    <div class="form-group form-inline" id="booking_flex" style="display:none">
+                    <div class="form-group form-inline row" id="booking_flex" style="display:none">
                         {!! Form::label('bookingFlex', 'Booking Flexibility :' , ['class'=>'col-md-4']) !!}
-                        {!! Form::number('bookingFlex', 0, ['min' => '0','class'=>'form-control size30']) !!}
+                        {!! Form::number('bookingFlex', 0,
+                                        ['min' => '0','class'=>'form-control size30']) !!}
                     </div>
+
 
                     <div id="booking_preference" style="display:none">
                         <div class="form-group form-inline row">
                             {!! Form::label('prefCheckin', 'Check in Preference :', ['class'=>'col-md-4']) !!}
                             <div class="input-group" style="display: inline-flex">
-                                {!! Form::number('prefCheckin', 0, ['max'=> '31' , 'min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
+                                {!! Form::number('prefCheckin', 0, [
+                                                'max'=> '31' , 'min' => '0','class'=>'form-control size40',
+                                                        'style'=> 'float : right']) !!}
                                 <span class="input-group-addon" style="">each month</span>
                             </div>
                         </div>
@@ -133,15 +128,34 @@
                         <div class="form-group form-inline row">
                             {!! Form::label('prefCheckout', 'Check out Preference :', ['class'=>'col-md-4']) !!}
                             <div class="input-group" style="display: inline-flex">
-                                {!! Form::number('prefCheckout', 0, ['max'=> '31' , 'min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
+                                {!! Form::number('prefCheckout',0, ['max'=> '31' ,
+                                            'min' => '0','class'=>'form-control size40', 'style'=> 'float : right']) !!}
                                 <span class="input-group-addon" style="">each month</span>
                             </div>
                         </div>
                     </div>
 
+
+                    <div class="form-group form-inline row">
+                        {!! Form::label('windows', 'Windows number :', ['class' => 'col-md-4']) !!}
+                        {!! Form::number('windows', 0, ['min' => '0','class'=>'form-control size30']) !!}
+                        <div class="form-group">
+                            {!! Form::select('glazing' , [1 => 'Double Glazing' , 0 => 'Simple Glazing'],0,
+                                 ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group form-inline row">
+                        {!! Form::label('disposition', 'Disposition : ', ['class' => 'col-md-4']) !!}
+                        {!! Form::select('disposition', [1 => 'Street Side', 0 => 'Other'], 0,
+                                        ['class' => 'form-control']) !!}
+                    </div>
+
+
                     <div class="form-group form-inline row">
                         {!! Form::label('rentalSub', 'Rental subsidies available :', ['class'=>'col-md-4']) !!}
-                        {!! Form::select('rentalSub', [0 => 'Rental Sub unavailable', 1 => 'Rental Sub available'], 0, ['class'=>'form-control']) !!}
+                        {!! Form::select('rentalSub', [0 => 'Rental Sub unavailable', 1 => 'Rental Sub available'],0, ['class'=>'form-control']) !!}
                     </div>
 
 
@@ -149,7 +163,7 @@
                         {!! Form::label('restriction', 'Restriction :', ['class'=>'col-md-4']) !!}
                         <div class="form-inline">
                             @foreach($restrictions as $restriction)
-                                {!! Form::checkbox('restriction[]', $restriction->idRestriction, null,
+                                {!! Form::checkbox('restriction[]', $restriction->idRestriction,0,
                                         ['class'=>'form-control', 'id' => 'restriction-'.$restriction->idRestriction]) !!}
                                 {!! Form::label('restriction-'.$restriction->idRestriction, $restriction->label ,
                                 ["style" => 'color: #89898a; margin-right:10px']) !!}
@@ -157,31 +171,77 @@
                         </div>
                     </div>
 
-                    <div class="form-group form-inline row">
-                        {!! Form::label('privateBathroom', 'Private bathroom : ' , ['class' => 'col-md-4']) !!}
-                        <div class="form-group">
-                        {!! Form::radio('privateBathroom', 1 , null, ['id' => 'privateBathRoomYes']) !!}
-                        {!! Form::label('privateBathRoomYes' , 'Yes') !!}
-                        {!! Form::radio('privateBathroom', 0, null, ['id' => 'privateBathRoomNo']) !!}
-                        {!! Form::label('privateBathRoomNo' , 'No') !!}
+
+                    @if (isset($bathrooms))
+
+                        <div class="form-group form-inline row">
+                            {!! Form::label('privateBathroom', 'Private bathroom : ' , ['class' => 'col-md-4']) !!}
+                            <div class="form-group">
+                                {!! Form::radio('privateBathroom', 1 , 0,
+                                ['id' => 'privateBathRoomYes']) !!}
+                                {!! Form::label('privateBathRoomYes' , 'Yes') !!}
+                                {!! Form::radio('privateBathroom', 0, 0, ['id' => 'privateBathRoomNo']) !!}
+                                {!! Form::label('privateBathRoomNo' , 'No') !!}
+                            </div>
                         </div>
-                    </div>
 
-                    <div id="selectBathroom" class="form-group form-inline row col-md-12 col-md-push-4" style="display:none">
-                        {!! Form::label('bathroomId' , 'Bathroom Size : ') !!}
-                        {!! Form::select('bathroomId', $bathroom , 0,['class' => 'form-control']) !!}
-                        {!! Form::label('m²') !!}
-                    </div>
+                        <div id="selectBathroom" class="form-group form-inline row col-md-12 col-md-push-4"
+                             style="display:none">
+                            {!! Form::label('bathroomSize' , 'Bathroom Size : ') !!}
+                            {!! Form::select('bathroomSize', $bathrooms , 0,['class' => 'form-control']) !!}
+                            {!! Form::label('m²') !!}
+                        </div>
+                    @endif
 
-                        {{--<div class="form-group row">--}}
-                            {{--{!! Form::label('availability', 'Availabilities : ', ['class'=>'col-md-4']) !!}--}}
-                            {{--<div class="form-inline">--}}
-                                {{--{!! Form::text('dateIn' ,null,  ['class' => 'form-control']) !!}--}}
-                            {{--</div>--}}
+                    @if (isset($toilets))
+                        <div class="form-group form-inline row">
+                            {!! Form::label('privateToilet', 'Private Toilet : ' , ['class' => 'col-md-4']) !!}
+                            <div class="form-group">
+                                {!! Form::radio('privateToilet', 1 , 0,
+                                ['id' => 'privateToiletYes']) !!}
+                                {!! Form::label('privateToiletYes' , 'Yes') !!}
+                                {!! Form::radio('privateToilet', 0,  0, ['id' => 'privateToiletNo']) !!}
+                                {!! Form::label('privateToiletNo' , 'No') !!}
+                            </div>
+                        </div>
 
-                        {{--</div>--}}
+                        <div id="selectToilet" class="form-group form-inline row col-md-12 col-md-push-4"
+                             style="display:none">
+                            {!! Form::label('toiletSize' , 'Toilet Size : ') !!}
+                            {!! Form::select('toiletSize', $toilets , 0,['class' => 'form-control']) !!}
+                            {!! Form::label('m²') !!}
+                        </div>
+                    @endif
 
-                    {!! Form::submit('Post', ['class' => 'btn btn-default hover_viaflats form-control']) !!}
+                    @if (isset($kitchens))
+                        <div class="form-group form-inline row">
+                            {!! Form::label('privateKitchen', 'Private Kitchen : ' , ['class' => 'col-md-4']) !!}
+                            <div class="form-group">
+                                {!! Form::radio('privateKitchen', 1 , 0,
+                                ['id' => 'privateKitchenYes']) !!}
+                                {!! Form::label('privateKitchenYes' , 'Yes') !!}
+                                {!! Form::radio('privateKitchen', 0, 0, ['id' => 'privateKitchenNo']) !!}
+                                {!! Form::label('privateKitchenNo' , 'No') !!}
+                            </div>
+                        </div>
+
+                        <div id="selectKitchen" class="form-group form-inline row col-md-12 col-md-push-4"
+                             style="display:none">
+                            {!! Form::label('kitchenSize' , 'Kitchen Size : ') !!}
+                            {!! Form::select('kitchenSize', $kitchens , 0,['class' => 'form-control']) !!}
+                            {!! Form::label('m²') !!}
+                        </div>
+                    @endif
+
+                    {{--<div class="form-group row">--}}
+                    {{--{!! Form::label('availability', 'Availabilities : ', ['class'=>'col-md-4']) !!}--}}
+                    {{--<div class="form-inline">--}}
+                    {{--{!! Form::text('dateIn' ,null,  ['class' => 'form-control']) !!}--}}
+                    {{--</div>--}}
+
+                    {{--</div>--}}
+
+                    {!! Form::submit('Update', ['class' => 'btn btn-default hover_viaflats form-control']) !!}
                     {!! Form::close() !!}
 
                 </div>
@@ -287,11 +347,6 @@
             }
         });
 
-        $('#privateBathroom').on('change', function(){
-            alert('ok');
-           $('#selectBathroom').show();
-        });
-
         $('input:radio[name="privateBathroom"]').change(
                 function () {
                     if (this.id == 'privateBathRoomYes') {
@@ -302,11 +357,33 @@
                     }
                 });
 
+        $('input:radio[name="privateToilet"]').change(
+                function () {
+                    if (this.id == 'privateToiletYes') {
+                        $('#selectToilet').show();
+                    }
+                    else if (this.id == "privateToiletNo") {
+                        $('#selectToilet').hide();
+                    }
+                });
+
+
+        $('input:radio[name="privateKitchen"]').change(
+                function () {
+                    if (this.id == 'privateKitchenYes') {
+                        $('#selectKitchen').show();
+                    }
+                    else if (this.id == "privateKitchenNo") {
+                        $('#selectKitchen').hide();
+                    }
+                });
+
         $('#rangePriceList').on('click', '.addRange', function () {
             clone = $('#rangePrice1').clone();
             var regex = /[0-9]+/g;
             var thisId = parseInt(regex.exec(this.id)[0]);
             var nextId = thisId + 1;
+
             clone.find('#from1').val($('#to'+thisId).val());
             clone.find('#to1').val('');
             clone.find('#priceRange1').val('');
@@ -315,10 +392,31 @@
             clone.find('#to1').attr('id' , 'to'+nextId);
             clone.find('#priceRange1').attr('id', 'priceRange'+nextId);
             clone.find('#bRange1').attr('id', 'bRange'+nextId);
+            clone.find('#bRangeDelete1').attr('id', 'bRangeDelete'+nextId);
 
             clone.attr('id', 'rangePrice'+nextId);
 
+            $(this).prop('disabled', true);
+
+            clone.find('#bRange' + nextId).prop('disabled', false);
+
             clone.children().appendTo('#rangePriceList');
-        })
+
+        });
+
+        $('#rangePriceList').on('click', '.delRange',function() {
+            var regex = /[0-9]+/g;
+            var thisId = parseInt(regex.exec(this.id)[0]);
+
+            if(thisId > 1)
+            {
+                var prevId = thisId -1 ;
+                $('#bRange'+prevId).prop('disabled' , false);
+                $('#bRangeDelete'+prevId).prop('disabled' , false);
+                $('#rangePrice'+thisId).remove();
+            }
+
+
+        });
     </script>
 @endsection
