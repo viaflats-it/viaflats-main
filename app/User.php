@@ -41,8 +41,6 @@ class User extends Authenticatable
     public function landlord(){
         return $this->hasOne('App\Landlord','idPerson');
     }
-    public $timestamps = false;
-
 
     public function photographer()
     {

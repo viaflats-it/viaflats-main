@@ -151,7 +151,7 @@
                                 <div class="col-md-11">
                                     <h5>@lang('landlord.'.$roomsLabel[$singleRoom->idRoom]->label)
                                         - {{$singleRoom->size}}
-                                        m²
+    a                                     m²
                                         :</h5>
                                     <div class="infoBlock">
                                         <div class="col-md-12">

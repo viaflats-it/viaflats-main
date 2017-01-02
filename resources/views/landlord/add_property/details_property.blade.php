@@ -193,28 +193,27 @@
 
                     <div class="recap">
                         <h3>@lang('landlord.details')</h3>
-
                         <div class="row">
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <i class="material-icons md-36" style="color: #9982bb;">domain</i>
-                            </div>
-                            <div class="col-md-7" style="display:inline-flex;color : #717172; font-size:1.2em">
+                            </div> --}}
+                            <div class="col-md-7" style="color : #717172; font-size:1.2em">
                                 <div id="Recaptype"></div>
-                                <div style="float:right; margin: auto;" id="Recapsize"></div>
+                                <span style="float:right; margin: auto;" id="Recapsize"></span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <i class="material-icons md-inactive md-36" style="color: #9982bb;">lock_outline</i>
-                            </div>
+                            </div> --}}
                             <div class="col-md-7" style="color : #717172; font-size:1.2em">
                                 <div id="Recaptype_room"></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <i class="material-icons md-36" style="color: #9982bb;">map</i>
-                            </div>
+                            </div> --}}
                             <div class="col-md-7" style="color : #717172; font-size:1.2em">
                                 <div id="Recapaddress"></div>
                             </div>
@@ -272,8 +271,8 @@
                     break;
             }
             if ($(this).attr('name') == 'Tsize') {
-                var size = $('#Tsize').val();
-                var size = '<span>' + size + ' m²</span>';
+                var test = $('#Tsize').val();
+                var size = '<span>' + test + ' m²</span>';
                 $('#Recapsize').html(size);
             }
 

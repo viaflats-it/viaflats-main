@@ -13,14 +13,16 @@
                 @if($status[$estate->idEstate] == 'Booked')
                     @if($TypeTenant[$estate->idEstate])
                         <div> {{$status[$estate->idEstate]}} until <span
-                                    id="checkoutDate{{$estate->idEstate}}">{{$DCheckout[$estate->idEstate]}}</span> from <a
+                                    id="checkoutDate{{$estate->idEstate}}">{{$DCheckout[$estate->idEstate]}}</span> from
+                            <a
                                     id="#{{$Tenant[$estate->idEstate]->idPerson}}">
                                 {{$Tenant[$estate->idEstate]->login}}
                             </a></div>
                         <button id="check{{$booking[$estate->idEstate]->idBooking}}"> Change checkout</button>
                     @else
                         <div> {{$status[$estate->idEstate]}} until <span
-                                    id="checkoutDate{{$estate->idEstate}}">{{$DCheckout[$estate->idEstate]}}</span> from <a
+                                    id="checkoutDate{{$estate->idEstate}}">{{$DCheckout[$estate->idEstate]}}</span> from
+                            <a
                                     id="FB{{$foreignB[$estate->idEstate]->idForeignBooking}}">
                                 {{$foreignB[$estate->idEstate]->first_name}}
                             </a></div>
@@ -375,7 +377,7 @@
             $("#changeCheck").modal();
         });
 
-        $(document).on('click',"[id^='FB']",function(event){
+        $(document).on('click', "[id^='FB']", function (event) {
             event.preventDefault();
             var idFB = $(this).attr('id').replace('FB', '');
             var posting = $.ajax({
@@ -384,7 +386,7 @@
                     'idFB': idFB,
                 }
             });
-            posting.done(function(data){
+            posting.done(function (data) {
                 $('#firstNameFB').html(data.FBooking['first_name']);
                 $('#ageFB').html(data.FBooking['age']);
                 $('#studentFB').html(data.FBooking['student']);
@@ -398,7 +400,7 @@
         $("#changeCheckForm").on('submit', function (event) {
             event.preventDefault();
             var $form = $('#changeCheckForm');
-                    url = "changeCheckout";
+            url = "changeCheckout";
             var posting = $.ajax({
                 method: "POST",
                 url: url,
@@ -420,7 +422,7 @@
                     $('#changeCheck').modal('show');
                 } else {
                     $('#changeCheck').modal('hide');
-                    $("#checkoutDate"+data.idEstate).html(data.date);
+                    $("#checkoutDate" + data.idEstate).html(data.date);
                 }
             });
         });

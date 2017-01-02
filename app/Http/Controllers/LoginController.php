@@ -54,7 +54,7 @@ class LoginController extends Controller
             $address->save();
             $addressParents->save();
             $address->tenant()->save($user->tenant()->save($tenant));
-            $addressParents->parent()->save($tenant->parent()->save($parent));
+            $addressParents->Parent()->save($tenant->parent()->save($parent));
 
         } elseif ($user->type_person == 1) {
             //\Mail::to(\Input::get('email'))->send(new ConfirmationMailLandlord($user));
@@ -64,7 +64,7 @@ class LoginController extends Controller
         }
 
         //Log in
-        /*if (\Auth::attempt(array('login' => \Input::get('login'), 'password' => \Input::get('password')))) {
+        if (\Auth::attempt(array('login' => \Input::get('login'), 'password' => \Input::get('password')))) {
             $id = \Auth::user()->idPerson;
             if (!empty(Tenant::where('idPerson', '=', $id)->first())) {
                 return \Redirect::to('tenant');
@@ -74,7 +74,7 @@ class LoginController extends Controller
                 $user = Photographer::where('idPerson', '=', $id)->first();
                 return \Redirect::to('photographer');
             }
-        }*/
+        }
 
         return \Redirect::to('tenant');
         //return \Redirect::to('index');

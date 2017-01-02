@@ -34,6 +34,6 @@ class Address extends Model
     }
     public function Parent()
     {
-        return $this->hasOne('App\Parent', 'idAddress');
+        return $this->hasOne('App\Parents', 'idAddress');
     }
 }

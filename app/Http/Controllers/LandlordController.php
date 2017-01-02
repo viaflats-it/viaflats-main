@@ -194,9 +194,7 @@ class LandlordController extends Controller
                 $idKitchen = $value->idTypeRoom;
         }
 
-
         $room = Room::find(\Input::get('id'));
-
         $estate = $room->estates()->first();
         $restrictions = Restriction::all();
         $type = "";
@@ -326,7 +324,6 @@ class LandlordController extends Controller
 
         foreach ($rooms as $room) {
 
-
             $room->idTypeRoom == $idBedroom ? $countInfo['bedroom'] = $countBedroom++ : '';
             $room->idTypeRoom == $idBathRoom ? $countInfo['bathroom'] = $countBathroom++ : '';
 
@@ -381,8 +378,8 @@ class LandlordController extends Controller
 
             //Count estate foreach
             if ($property->rooms()->first() != '') {
-                $nbEstate[$property->idProperty] = $property->rooms()->get()->count();
-                $picture[$property->idProperty] = $property->rooms()->first()->estates()->first()->picture;
+                $nbEstate[$property->idProperty] = $property->rooms()->get()->where('idTypeRoom','3')->count();
+                $picture[$property->idProperty] = $property->rooms()->where('idTypeRoom','3')->first()->estates()->first()->picture;
             } else {
                 $nbEstate[$property->idProperty] = $property->estates()->get()->count();
                 $picture[$property->idProperty] = $property->estates()->first()->picture;
@@ -761,7 +758,7 @@ class LandlordController extends Controller
 
         $property = new Property();
 
-        $property->idLandlord = \Auth::user()->idPerson;
+        $property->idLandlord = \Auth::user()->landlord()->first()->idLandlord;
         $property->type = \Input::get('type');
         $property->shared = \Input::get('room_type');
         $property->idArea = \Input::get('area');
@@ -1106,7 +1103,6 @@ class LandlordController extends Controller
         $content .= \Form::label('size', 'Size : ', ['class' => 'col-md-3']);
         $content .= \Form::number('size', $room->size, ['class' => 'form-control']);
         $content .= $finDivGroup;
-
 
         return $content;
     }

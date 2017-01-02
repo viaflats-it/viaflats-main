@@ -25,7 +25,7 @@
         </div>
         <br>
         <div>
-            <button> Edit Property  </button>
+            <button id="edit{{$property->idProperty}}" class="editProperty"> Edit Property  </button>
             <button id="#{{$property->idProperty}}" class="manageTenant"> Manage My Tenant </button>
         </div>
         <br>
@@ -36,8 +36,12 @@
         $(".manageTenant").on('click',function () {
             var id = $(this).attr('id').replace('#', '');
             window.open("manageTenant?ref=" + id);
-        })
+        });
 
+        $(".editProperty").on('click',function(){
+            var id = $(this).attr('id').replace('edit', '');
+            window.open("manageProperty?ref=" + id);
+        });
     </script>
 
 @endsection

@@ -58,16 +58,16 @@
                                 </div>
                             </div>
                             {{--<div class="form-group col-md-12">--}}
-                                {{--<div class="col-md-3">--}}
-                                    {{--{{ Form::label('furnished-'.$piece->idTypeRoom.'', trans('landlord.furnished'). ' :',--}}
-                                    {{--['class'=> 'control-label' ]) }}--}}
-                                {{--</div>--}}
+                            {{--<div class="col-md-3">--}}
+                            {{--{{ Form::label('furnished-'.$piece->idTypeRoom.'', trans('landlord.furnished'). ' :',--}}
+                            {{--['class'=> 'control-label' ]) }}--}}
+                            {{--</div>--}}
 
-                                {{--<div class="col-md-4">--}}
-                                    {{--{{ Form::select('furnished-'.$piece->idTypeRoom.'', ['1' => trans('landlord.yes'), '0' => trans('landlord.no')], 1,--}}
-                                                        {{--['class' => 'form-control']) }}--}}
+                            {{--<div class="col-md-4">--}}
+                            {{--{{ Form::select('furnished-'.$piece->idTypeRoom.'', ['1' => trans('landlord.yes'), '0' => trans('landlord.no')], 1,--}}
+                            {{--['class' => 'form-control']) }}--}}
 
-                                {{--</div>--}}
+                            {{--</div>--}}
 
                             {{--</div>--}}
                             <div class="col-md-3 col-lg-push-2">
@@ -85,7 +85,6 @@
                     {{ Form::submit('Continue', ['class' => 'btn btn-default hover_viaflats form-control disabled' , 'id' => 'submit']) }}
                     {!! Form::close() !!}
                 </div>{{--Fin col md 8--}}
-
 
                 <div class="col-md-3" id="recap_details">
 
@@ -110,11 +109,8 @@
 
             </div>
 
-
         </div> {{--Fin class Row--}}
-
     </div> {{--Fin col md 12--}}
-    </div> {{--Fin class Row--}}
 
 
 
@@ -136,7 +132,7 @@
 
             if (Math.floor(value) == value && $.isNumeric(value) && value > 0) {
                 value = parseInt(value) - 1;
-                if(value >= 0 ){
+                if (value >= 0) {
                     deleteSizeField(label[2]);
                 }
 
@@ -224,19 +220,19 @@
 
             var pieces = [<?php echo json_encode($pieces)?>];
             $.each(pieces, function (index, value) {
-               $.each(value, function (index, valueObj) {
-                   var valNumb = $('#number-' + valueObj.idTypeRoom).val();
-                   var valSize = $('#size-' + valueObj.idTypeRoom).val();
-                    if (valNumb != 0 && valSize != 0){
+                $.each(value, function (index, valueObj) {
+                    var valNumb = $('#number-' + valueObj.idTypeRoom).val();
+                    var valSize = $('#size-' + valueObj.idTypeRoom).val();
+                    if (valNumb != 0 && valSize != 0) {
                         addRecap(valueObj);
                     }
-               })
+                })
             })
         }
 
         function addSizeField(id) {
 
-                var numbVal = $('#number-' + id).val();
+            var numbVal = $('#number-' + id).val();
             if (numbVal != 1) {
                 var copie = $('.sizefield-' + id + '1').clone();
                 var label = copie.find('#labelSize').html();
@@ -249,13 +245,11 @@
                 label = label.replace('1', parseInt(numbVal));
                 copie.find('#labelSize').html(label);
 
-                name = name.replace('['+id+'][1]', '['+id+'][' + parseInt(numbVal) + ']');
+                name = name.replace('[' + id + '][1]', '[' + id + '][' + parseInt(numbVal) + ']');
                 copie.find('#size-' + id + '_1').attr('name', name);
 
                 idValue = idValue.replace('_1', '_' + parseInt(numbVal));
                 copie.find('#size-' + id + '_1').attr('id', idValue);
-
-
 
 
                 copie.css('display', 'block');
@@ -272,9 +266,9 @@
         function deleteSizeField(id) {
 
             var numbVal = $('#number-' + id).val();
-            if(numbVal == 1 ){
+            if (numbVal == 1) {
                 $('.sizefield-' + id + '1').hide();
-            }else{
+            } else {
                 $('.sizefield-' + id + numbVal).remove();
             }
         }

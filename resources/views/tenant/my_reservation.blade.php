@@ -11,11 +11,11 @@
     </div>
 
     <!------- All Reservation -------->
-    <div class="row" id="reservation">
+    <div id="reservation">
         @foreach($booking as $b)
             <div class="col-md-4" id="#{{$b->idBooking}}">
                 <div>{{$estate[$b->idBooking]['title']}}</div>
-                <img src="property/{{$estate[$b->idBooking]['picture']}} " width="100" height="...">
+                <img src="img/{{$estate[$b->idBooking]['picture']}} " width="100" height="...">
                 <div> @lang('tenant.booking_request') {{$b->idBooking}} </div>
                 <div>{{$b->checkin}} @lang('tenant.to') {{$b->checkout}} </div>
                 <div> @lang('tenant.guest') {{$b->guest}}</div>
@@ -42,12 +42,12 @@
                 $("#reservation").html("");
                 $(data.booking).each(function (index, value) {
                     $("#reservation").append(
-                            '<div class="col-md-4" id="#' + value.idBooking + '" style="width: 300px;">' +
+                            '<div class="col-md-4" id="#' + data.booking[index].idBooking + '" style="width: 300px;">' +
                             '<div>' + data.estate[index].title + '</div>' +
-                            '<img src="property/' + data.estate[index].picture +
+                            '<img src="img/' + data.estate[index].picture +
                             '"width="100" height="...">' +
-                            '<div> @lang('tenant.booking_request')' + value.idBooking + '</div>' +
-                            '<div>' + value.checkin + ' @lang('tenant.to')' + value.checkout + '</div>' +
+                            '<div> @lang('tenant.booking_request')' + data.booking[index].idBooking + '</div>' +
+                            '<div>' + data.booking[index].checkin + ' @lang('tenant.to')' + data.booking[index].checkout + '</div>' +
                             '<div> @lang('tenant.guest')' + data.estate[index].guest_nb + '</div>' +
                             '</div> <br>'
                     );
@@ -64,14 +64,14 @@
                 $("#reservation").html("");
                 $(data.booking).each(function (index, value) {
                     $("#reservation").append(
-                            '<div id="#' + value.idBooking + '" style="width: 300px;">' +
+                            '<div id="#' + data.booking[index].idBooking + '" style="width: 300px;">' +
                             '<div>' + data.estate[index].title + '</div>' +
-                            '<img src="property/' + data.estate[index].picture +
+                            '<img src="img/' + data.estate[index].picture +
                             '"width="100" height="...">' +
-                            '<div> @lang('tenant.booking_request') ' + value.idBooking + '</div>' +
-                            '<div> ' + value.checkin + ' @lang('tenant.to')' + value.checkout + '</div>' +
+                            '<div> @lang('tenant.booking_request') ' + data.booking[index].idBooking + '</div>' +
+                            '<div> ' +data.booking[index].checkin+ ' @lang('tenant.to')' + data.booking[index].checkout + '</div>' +
                             '<div> @lang('tenant.guest')' + data.estate[index].guest_nb + '</div>' +
-                            '<div> @lang('tenant.to_paid')' + value.booking_fee + '</div>' +
+                            '<div> @lang('tenant.to_paid')' + data.booking[index].booking_fee+ '</div>' +
                             '</div> <br>'
                     );
                 });
@@ -91,7 +91,7 @@
                     $("#reservation").append(
                             '<div id="#' + value.idBooking + '" style="width: 300px;">' +
                             '<div>' + data.estate[index].title + '</div>' +
-                            '<img src="property/' + data.estate[index].picture +
+                            '<img src="img/' + data.estate[index].picture +
                             '"width="100" height="...">' +
                             '<div> @lang('tenant.booking_request')' + value.idBooking + '</div>' +
                             '<div>' + value.checkin + ' @lang('tenant.to')' + value.checkout + '</div>' +
@@ -114,7 +114,7 @@
                         $("#reservation").append(
                                 '<div id="#' + value.idBooking + '"style="width:300px;border:dashed">' +
                                 '<div>' + data.estate[index].title + '</div>' +
-                                '<img src="property/' + data.estate[index].picture +
+                                '<img src="img/' + data.estate[index].picture +
                                 '"width="100" height="...">' +
                                 '<div> @lang('tenant.booking_request')' + value.idBooking + '</div>' +
                                 '<div> Period ' + value.checkin + '@lang('tenant.to')' + value.checkout + '</div>' +
@@ -125,7 +125,7 @@
                         $("#reservation").append(
                                 '<div id="#' + value.idBooking + '"style="width:300px;border:dashed;" >' +
                                 '<div>' + data.estate[index].title + '</div>' +
-                                '<img src="property/' + data.estate[index].picture +
+                                '<img src="img/' + data.estate[index].picture +
                                 '"width="100" height="...">' +
                                 '<div> @lang('tenant.booking_request')' + value.idBooking + '</div>' +
                                 '<div> ' + value.checkin + ' @lang('tenant.to') ' + value.checkout + '</div>' +
@@ -150,7 +150,7 @@
                     $("#reservation").append(
                             '<div id="#' + value.idBooking + '" style="width: 300px;">' +
                             '<div>' + data.estate[index].title + '</div>' +
-                            '<img src="property/' + data.estate[index].picture +
+                            '<img src="img/' + data.estate[index].picture +
                             '"width="100" height="...">' +
                             '<div> @lang('tenant.booking_request') ' + value.idBooking + '</div>' +
                             '<div>' + value.checkin + '@lang('tenant.to')' + value.checkout + '</div>' +

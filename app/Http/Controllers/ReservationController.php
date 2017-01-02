@@ -66,7 +66,7 @@ class ReservationController extends Controller
 
     public function showWaitingReservation()
     {
-        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', '=', 'waiting')->get()->sortByDesc('creation_date');
+        $booking = User::find(\Auth::user()->idPerson)->tenant()->first()->booking()->where('status', 'waiting')->get()->sortByDesc('creation_date');
         $estate = array();
         foreach ($booking as $b) {
             array_push($estate, $b->estate()->first());

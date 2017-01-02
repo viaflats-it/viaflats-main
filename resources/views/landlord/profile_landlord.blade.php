@@ -53,31 +53,6 @@
   </div>
 </section>
 
-<section class="section section-password" id="changePassword">
-  <h1 class="title">@lang('landlord.changePassword')</h1>
-  <div class="container">
-    {!! Form::open(['id' => 'updatePassword', 'class' => 'form', 'url' => 'updatePassword']) !!}
-    <div class="form-container">
-      <span class="sucess-message" id="successMessagePassword"></span>
-      <div class="form-group" id="actual_password_has_error">
-        {!! Form::label('actual_password', trans('landlord.actual_password')) !!}
-        {!! Form::password('actual_password', ['class' => 'form-control']) !!}
-        <span class="error-message" id="actual_password_error"></span>
-      </div>
-      <div class="form-group" id="new_password_has_error">
-        {!! Form::label('new_password', trans('landlord.new_password')) !!}
-        {!! Form::password('new_password', ['class' => 'form-control']) !!}
-        <span <span class="error-message" id="new_password_error"></span>
-        {!! Form::label('new_password_confirmation', trans('landlord.new_password_confirmation')) !!}
-        {!! Form::password('new_password_confirmation', ['class' => 'form-control']) !!}
-        <span <span class="error-message" id="new_password_confirmation_error"></span>
-      </div>
-      {!! Form::submit(trans('landlord.update'), ['class'=>'btn btn-submit']) !!}
-    </div>
-    {!! Form::close() !!}
-  </div>
-</section>
-
 <section class="section section-information" id="changeInformation">
   <h1 class="title">@lang('landlord.moreInformation')</h1>
   <div class="container">
@@ -122,30 +97,19 @@
         </div>
         {!! Form::label(trans('landlord.corporate')) !!}
       </div>
-      {!! Form::label(trans('landlord.paymentType')) !!}
-      <div class="form-group inline" id="payment">
-          @foreach($payment as $key=>$p)
-            @if ($key <= 3)
-              {!! Form::label('payment_way[]',$p) !!}
-              <div class="radio-container">
-              {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
-                <span class="radio-style"></span>
-              </div>
-            @endif
-          @endforeach
-      </div>
-      <!-- WE MAY FIND ANOTHER SOLUTION HERE -->
-      <div class="form-group inline" id="payment">
-          @foreach($payment as $key=>$p)
-            @if ($key > 3)
-              {!! Form::label('payment_way[]',$p) !!}
-              <div class="radio-container">
-              {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
-                <span class="radio-style"></span>
-              </div>
-            @endif
-          @endforeach
-      </div>
+        {!! Form::label(trans('landlord.paymentType')) !!}
+    <!-- WE MAY FIND ANOTHER SOLUTION HERE -->
+        <div class="form-group inline" id="payment">
+            @foreach($payment as $p)
+                @if ($p <= 3)
+                    {!! Form::label($p) !!}
+                    <div class="radio-container">
+                        {!!Form::checkbox('payment_way[]',array_search($p,$payment),(in_array(array_search($p,$payment),$land_payment)) ? 'true' : '', ['class' => 'radio'])!!}
+                        <span class="radio-style"></span>
+                    </div>
+                @endif
+            @endforeach
+        </div>
       <div class="form-group">
         {!! Form::label('company_web' ,trans('landlord.company_web')) !!}
         {!! Form::text('company_web', $landlord->company_website , ['class' => 'form-control']) !!}
@@ -154,6 +118,31 @@
     </div>
     {!! Form::close() !!}
   </div>
+</section>
+
+<section class="section section-password" id="changePassword">
+    <h1 class="title">@lang('landlord.changePassword')</h1>
+    <div class="container">
+        {!! Form::open(['id' => 'updatePassword', 'class' => 'form', 'url' => 'updatePassword']) !!}
+        <div class="form-container">
+            <span class="sucess-message" id="successMessagePassword"></span>
+            <div class="form-group" id="actual_password_has_error">
+                {!! Form::label('actual_password', trans('landlord.actual_password')) !!}
+                {!! Form::password('actual_password', ['class' => 'form-control']) !!}
+                <span class="error-message" id="actual_password_error"></span>
+            </div>
+            <div class="form-group" id="new_password_has_error">
+                {!! Form::label('new_password', trans('landlord.new_password')) !!}
+                {!! Form::password('new_password', ['class' => 'form-control']) !!}
+                <span <span class="error-message" id="new_password_error"></span>
+                {!! Form::label('new_password_confirmation', trans('landlord.new_password_confirmation')) !!}
+                {!! Form::password('new_password_confirmation', ['class' => 'form-control']) !!}
+                <span <span class="error-message" id="new_password_confirmation_error"></span>
+            </div>
+            {!! Form::submit(trans('landlord.update'), ['class'=>'btn btn-submit']) !!}
+        </div>
+        {!! Form::close() !!}
+    </div>
 </section>
 
 <script type="text/javascript">

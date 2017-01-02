@@ -97,8 +97,8 @@ Route::group(['middleware' => 'auth'], function() {
 Route::group(['middleware' => 'landlord'], function() {
     Route::get('landlord', 'LandlordController@showProfile');
 
-    Route::get('profile', 'LandlordController@showProfile');
-    Route::post('profile', 'LandlordController@updateProfile');
+    Route::get('profile_landlord', 'LandlordController@showProfile');
+    Route::post('profile_landlord', 'LandlordController@updateProfile');
 
     Route::post('landlord_picture', 'LandlordController@updatePicture');
     Route::post('updatePassword', 'LandlordController@updatePassword');
@@ -127,7 +127,6 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::post('activate_estate', 'LandlordController@activateEstate');
     Route::post('delete_room', 'LandlordController@deleteRoom');
     Route::post('update_room', 'LandlordController@updateRoom');
-
 
     /* AJAX */
     Route::get('get_area', 'LandlordController@getArea');
@@ -164,7 +163,13 @@ Route::group(['middleware' => 'landlord'], function() {
     Route::post('changeCheckout','BookingController@changeCheckout');
     Route::get('showInfoForeignBooking','PropertiesController@showInfoForeignBooking');
 
-
+    /* MANAGE PROPERTY */
+    Route::get('manageProperty','PropertiesController@ShowManageProperty');
+    Route::get('showEdit','PropertiesController@showUpdateBedroom');
+    Route::get('showInfoBedroom','PropertiesController@showInfoBedroom');
+    Route::post('updateBedroom','PropertiesController@updateBedroom');
+    Route::get('showInfoRoom','PropertiesController@showInfoRoom');
+    Route::get('showEditRoom','PropertiesController@showUpdateRoom');
 
 });
 

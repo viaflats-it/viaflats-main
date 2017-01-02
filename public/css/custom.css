@@ -1,126 +1,304 @@
 
-.iti-flag {background-image: url("~intl-tel-input/build/img/flags.png");}
+.iti-flag {
+    background-image: url("~intl-tel-input/build/img/flags.png");
+}
 
 body {
     overflow-x: hidden;
+    color: #717172 !important;
 }
 
-.details{
-    display: none;
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.detail_property_wrapper h3 {
+    margin-left: 70px;
+    margin-bottom: 50px;
+}
+
+.group_details {
+    margin-left: 15px;
+    margin-bottom: 50px;
+}
+
+.recap_fixed {
+    position: fixed !important;
+    width: 20% !important;
+    display: inline-table !important;
+    top: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#map {
+    height: 400px;
+    width: 80%;
+}
+
+.size80 {
+    width: 80% !important;
+}
+
+.size70 {
+    width: 70% !important;
+}
+
+.size60 {
+    width: 60% !important;
+}
+
+.size50 {
+    width: 50% !important;
+}
+
+.size40 {
+    width: 40% !important;
+}
+
+.size30 {
+    width: 30% !important;
+}
+
+.size20 {
+    width: 20% !important;
+}
+
+.bigCheckbox {
+    height: 20px !important;
+    width: 20px !important;
+}
+.hover_viaflats:hover
+{
+    background-color: #9982bb !important;
+    color: #FFFFFF !important;
+}
+
+
+.def-estate h4
+{
+    margin-bottom: 20px;
+    color: #9982bb;
+}
+
+.def-estate label
+{
+    color: #9982bb;
+    margin-bottom: 20px;
 }
 
 /* Toggle Styles */
 
-#radio_home ,
+#radio_home,
 #radio_apartment,
-#radio_studio{
+#radio_studio,
+#radio_entire,
+#radio_shared,
+#book_flex,
+#book_preference,
+#book_nothing{
     display: none;
 }
 
 #radio_home + label,
 #radio_apartment + label,
-#radio_studio + label{
+#radio_studio + label {
     display: inline-flex;
 }
-#radio_home + label
-{
+
+#radio_home + label {
     background: url("../img/house.png") no-repeat center;
     background-size: 30%;
     height: 125px;
     width: 200px;
-    display:inline-block;
+    display: inline-block;
     padding: 0 0 0 0px;
 }
-#radio_home:checked + label
-{
+
+#radio_home:checked + label {
 
     background: url("../img/house_checked.png") no-repeat center;
     background-size: 35%;
     border: solid 2px deepskyblue;
     height: 125px;
     width: 200px;
-    display:inline-block;
+    display: inline-block;
     padding: 0 0 0 0px;
 }
 
-#radio_apartment + label
-{
+#radio_apartment + label {
     background: url("../img/building.png") no-repeat center;
     background-size: 30%;
     height: 125px;
     width: 200px;
-    display:inline-block;
+    display: inline-block;
     padding: 0 0 0 0px;
 }
-#radio_apartment:checked + label
-{
+
+#radio_apartment:checked + label {
 
     background: url("../img/building_checked.png") no-repeat center;
     background-size: 35%;
     border: solid 2px deepskyblue;
     height: 125px;
     width: 200px;
-    display:inline-block;
+    display: inline-block;
     padding: 0 0 0 0px;
 }
 
-#radio_studio + label
-{
+#radio_studio + label {
     background: url("../img/studio.png") no-repeat center;
     background-size: 50%;
     height: 125px;
     width: 200px;
-    display:inline-block;
+    display: inline-block;
     padding: 0 0 0 0px;
 }
-#radio_studio:checked + label
-{
+
+#radio_studio:checked + label {
 
     background: url("../img/studio_checked.png") no-repeat center;
     background-size: 60%;
     border: solid 2px deepskyblue;
     height: 125px;
     width: 200px;
-    display:inline-block;
+    display: inline-block;
     padding: 0 0 0 0px;
 }
 
-.adminAddLandlord
-{
+#radio_entire + label {
+    background: url("../img/entire.png") no-repeat center;
+    background-size: 30%;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#radio_entire:checked + label {
+
+    background: url("../img/entire_checked.png") no-repeat center;
+    background-size: 35%;
+    border: solid 2px deepskyblue;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#radio_shared + label {
+    background: url("../img/private.png") no-repeat center;
+    background-size: 20%;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#radio_shared:checked + label {
+
+    background: url("../img/private_checked.png") no-repeat center;
+    background-size: 25%;
+    border: solid 2px deepskyblue;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+
+#book_nothing + label {
+    background: url("../img/nothing.png") no-repeat center;
+    background-size: 50%;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#book_flex + label {
+    background: url("../img/house.png") no-repeat center;
+    background-size: 30%;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#book_preference + label {
+    background: url("../img/house.png") no-repeat center;
+    background-size: 30%;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+
+#book_nothing:checked + label {
+
+    background: url("../img/nothing_checked.png") no-repeat center;
+    background-size: 25%;
+    border: solid 2px deepskyblue;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#book_flex:checked + label {
+
+    background: url("../img/private_checked.png") no-repeat center;
+    background-size: 25%;
+    border: solid 2px deepskyblue;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+#book_preference:checked + label {
+
+    background: url("../img/private_checked.png") no-repeat center;
+    background-size: 25%;
+    border: solid 2px deepskyblue;
+    height: 125px;
+    width: 200px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+}
+
+.adminAddLandlord {
     font-size: 1.2em;
     color: red;
 }
 
-.btn-viaflats
-{
+.btn-viaflats {
     background-color: #9982bb;
     color: #FFFFFF;
 }
-.content
-{
+
+.content {
     margin: 10px 5px 0 0;
     padding: 5px 10px 5px 10px;
 
-
-   // background-color: #ecf0f1;
+/ / background-color: #ecf0f1;
 
     border: 1px solid lightgray;
 }
 
-.profilPic
-{
-    width:auto;
+.profilPic {
+    width: auto;
     height-max: 200px;
     height: auto;
 }
 
-.profile h3
-{
+.profile h3 {
     border-bottom: 1px solid #717172;
     margin-bottom: 30px;
 }
-
-
 
 #wrapper {
     padding-left: 0;
@@ -189,7 +367,7 @@ body {
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-nav li a:active,
@@ -212,7 +390,7 @@ body {
     background: none;
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
     #wrapper {
         padding-left: 250px;
     }
@@ -238,8 +416,131 @@ body {
         position: relative;
         margin-right: 0;
     }
+
+    /* Rules for sizing the icon. */
+    .material-icons.md-18 {
+        font-size: 18px;
+    }
+
+    .material-icons.md-24 {
+        font-size: 24px;
+    }
+
+    .material-icons.md-36 {
+        font-size: 36px;
+    }
+
+    .material-icons.md-48 {
+        font-size: 48px;
+    }
+
+    /* Rules for using icons as black on a light background. */
+    .material-icons.md-dark {
+        color: rgba(0, 0, 0, 0.54);
+    }
+
+    .material-icons.md-dark.md-inactive {
+        color: rgba(0, 0, 0, 0.26);
+    }
+
+    /* Rules for using icons as white on a dark background. */
+    .material-icons.md-light {
+        color: rgba(255, 255, 255, 1);
+    }
+
+    .material-icons.md-light.md-inactive {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    #infoBlock {
+        padding: 0 10px 3px 10px;
+    }
+    /* SLIDE THREE */
+
+
+    .slideThree {
+        width: 115px;
+        height: 26px;
+        background: lightgray;
+        margin: 20px auto;
+        margin-top: 3px;
+
+        -webkit-border-radius: 50px;
+        -moz-border-radius: 50px;
+        border-radius: 50px;
+        position: relative;
+
+        /*-webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);*/
+        /*-moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);*/
+        /*box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);*/
+    }
+
+    .slideThree:after {
+        content: 'Monthly';
+        font: 12px/26px Arial, sans-serif;
+        color: #6bbb67;
+        position: absolute;
+        right: 10px;
+        top:0;
+        z-index: 0;
+        font-weight: bold;
+        text-shadow: 1px 1px 0px rgba(255,255,255,.15);
+    }
+
+    .slideThree:before {
+        content: 'Once';
+        font: 12px/26px Arial, sans-serif;
+        color: #9982bb;
+        position: absolute;
+        left: 10px;
+        z-index: 0;
+        font-weight: bold;
+    }
+
+    .slideThree label {
+        display: block;
+        width: 55px;
+        height: 20px;
+
+        -webkit-border-radius: 50px;
+        -moz-border-radius: 50px;
+        border-radius: 50px;
+
+        -webkit-transition: all .4s ease;
+        -moz-transition: all .4s ease;
+        -o-transition: all .4s ease;
+        -ms-transition: all .4s ease;
+        transition: all .4s ease;
+        cursor: pointer;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        z-index: 1;
+
+        -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+        -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+        box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+        background: #fcfff4;
+
+        background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+        background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+        background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+        background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+        background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
+    }
+
+    .slideThree input[type=checkbox]:checked + label {
+        left: 55px;
+    }
+
+    .delimiter {
+        margin-top: 50px;
+        margin-bottom: 50px;
+
+        width: 100%;
+        height: 1px;
+        background-color: lightgray;
+
+    }
 }
-
-
-
-

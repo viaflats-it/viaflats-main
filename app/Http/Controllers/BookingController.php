@@ -445,55 +445,57 @@ class BookingController extends Controller
         $status = \Input::get('status');
         $countdown = array();
         $pack = array();
-        foreach ($property as $p) {
-            if ($p->rooms()->first() != '') {
-                $var = $p->rooms()->first()->estates()->first();
-
-            } else {
-                $var = $p->estates()->first();
-            }
-            if ($status != 'all') {
-                $book = $var->booking()->get()->where('status', $status);
-            } else {
-                $book = $var->booking()->get();
-            }
-            if (!$book->isEmpty()) {
-                foreach ($book as $b) {
-                    if ($b->idBookingPack != Null) {
-                        if ($b->status == 'pending') {
-                            $count = BookingController::countdown($b->creation_date);
-                            if ($count['status'] == 'expired') {
-                                $b->status = 'expired';
-                                $b->save();
-                            } else {
-                                $countdown[$b->idBookingPack] = $count;
+        if($property){
+            foreach ($property as $p) {
+                if ($p->rooms()->first() != '') {
+                    $var = $p->rooms()->first()->estates()->first();
+                } else {
+                    $var = $p->estates()->first();
+                }
+                if ($status != 'all') {
+                    $book = $var->booking()->get()->where('status', $status);
+                } else {
+                    return $var;
+                    $book = $var->booking()->get();
+                }
+                if (!$book->isEmpty()) {
+                    foreach ($book as $b) {
+                        if ($b->idBookingPack != Null) {
+                            if ($b->status == 'pending') {
+                                $count = BookingController::countdown($b->creation_date);
+                                if ($count['status'] == 'expired') {
+                                    $b->status = 'expired';
+                                    $b->save();
+                                } else {
+                                    $countdown[$b->idBookingPack] = $count;
+                                }
+                            } elseif ($b->status == 'waiting') {
+                                $count = BookingController::countdown($b->confirm_date);
+                                if ($count['status'] == 'expired') {
+                                    $b->status = 'expired';
+                                    $b->save();
+                                } else {
+                                    $countdown[$b->idBookingPack] = $count;
+                                }
                             }
-                        } elseif ($b->status == 'waiting') {
-                            $count = BookingController::countdown($b->confirm_date);
-                            if ($count['status'] == 'expired') {
-                                $b->status = 'expired';
-                                $b->save();
+                            $pack[$b->idBookingPack] = $b->bookingPack()->first();
+                            $packEstate[$b->idBookingPack] = $b->estate()->first();
+                            $packPerson[$b->idBookingPack] = $b->tenant()->first()->person()->first();
+                            $bookingCount[$b->idBookingPack] = $b->bookingPack()->first()->bookings()->count();
+                            $checkin[$b->idBookingPack] = $b->checkin;
+                            $checkout[$b->idBookingPack] = $b->checkout;
+                            $state[$b->idBookingPack] = $b->status;
+                            if ($p->type == 0) {
+                                $title[$b->idBookingPack] = 'House ' . $p->address()->first()->street;
+                            } elseif ($p->type == 1) {
+                                $title[$b->idBookingPack] = 'Apartment ' . $p->address()->first()->street;
                             } else {
-                                $countdown[$b->idBookingPack] = $count;
+                                $title[$b->idBookingPack] = 'Studio ' . $p->address()->first()->street;
                             }
-                        }
-                        $pack[$b->idBookingPack] = $b->bookingPack()->first();
-                        $packEstate[$b->idBookingPack] = $b->estate()->first();
-                        $packPerson[$b->idBookingPack] = $b->tenant()->first()->person()->first();
-                        $bookingCount[$b->idBookingPack] = $b->bookingPack()->first()->bookings()->count();
-                        $checkin[$b->idBookingPack] = $b->checkin;
-                        $checkout[$b->idBookingPack] = $b->checkout;
-                        $state[$b->idBookingPack] = $b->status;
-                        if ($p->type == 0) {
-                            $title[$b->idBookingPack] = 'House ' . $p->address()->first()->street;
-                        } elseif ($p->type == 1) {
-                            $title[$b->idBookingPack] = 'Apartment ' . $p->address()->first()->street;
-                        } else {
-                            $title[$b->idBookingPack] = 'Studio ' . $p->address()->first()->street;
                         }
                     }
+                    usort($pack, array($this, 'compare'));
                 }
-                usort($pack, array($this, 'compare'));
             }
         }
 

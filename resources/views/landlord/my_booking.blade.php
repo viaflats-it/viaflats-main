@@ -44,8 +44,9 @@
                             </p>
                         @endif
                     </div>
+                    <div class="showDetails" id="showDetails{{$p->idBookingPack}}"></div>
                 </div>
-                <div class="showDetails" id="showDetails{{$p->idBookingPack}}"></div>
+
             </div>
         @endforeach
     </div>
